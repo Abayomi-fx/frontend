@@ -47,6 +47,7 @@ export function AmountInput({
   // not on every keystroke while already over cap (fixes #76).
   const [wasOverCap, setWasOverCap] = useState(false)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setWasOverCap(overCap)
   }, [overCap])
 
