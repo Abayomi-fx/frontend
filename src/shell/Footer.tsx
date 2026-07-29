@@ -18,15 +18,6 @@ export function Footer() {
           <span className="hb-footer__wordmark">heliobond</span>
         </div>
         <div className="hb-footer__links">
-          {links.map((l) => (
-            <button key={l} className="hb-textlink hb-footer__link">
-              {l}
-            </button>
-          ))}
-          <button className="hb-textlink hb-footer__link hb-footer__link--strong">
-            {t('talk')}
-          </button>
-          <Link href="/admin" className="hb-textlink hb-footer__admin">
         <nav
           style={{
             display: 'flex',
