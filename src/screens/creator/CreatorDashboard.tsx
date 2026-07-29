@@ -1,6 +1,6 @@
 'use client'
 
-import { type CSSProperties, type ReactNode } from 'react'
+import { type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import { StatBlock, ScoreGauge, Badge } from '@/components'
 import {
