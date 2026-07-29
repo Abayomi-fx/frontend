@@ -95,10 +95,11 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
           >
             {t.rich('impactBody', {
               b: (c: ReactNode) => <b style={{ color: 'var(--ink)' }}>{c}</b>,
+              count: d.you.backed,
             })}
           </p>
           <div style={{ display: 'flex', gap: 24 }}>
-            <StatBlock label={t('projectsBacked')} value="14" size="sm" />
+            <StatBlock label={t('projectsBacked')} value={String(d.you.backed)} size="sm" />
             <StatBlock label={t('weightedGreen')} value="88" size="sm" />
           </div>
         </Card>

@@ -63,7 +63,7 @@ export function RegistryTable({ rows, onSave }: RegistryTableProps) {
   }
 
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div style={{ overflowX: 'auto', maxHeight: 320, overflowY: 'auto' }}>
       <table style={tableStyle}>
         <thead>
           <tr>
@@ -345,6 +345,7 @@ const thBase: CSSProperties = {
   position: 'sticky',
   top: 0,
   whiteSpace: 'nowrap',
+  zIndex: 1,
 }
 
 const tdStyle: CSSProperties = {
