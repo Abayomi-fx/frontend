@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars */
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars */
 
 /**
  * Bundle size checker for the landing route.
