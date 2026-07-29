@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { ProjectCard, Tag } from '../components'
 import { HB_DATA, type Project, type ProjectType } from '../data'
 import { getProjects } from '../lib/api'
@@ -18,10 +19,15 @@ const TYPES: (ProjectType | 'All')[] = ['All', 'Solar', 'Wind', 'Hydro']
 
 export function Explore({ onOpen }: ExploreProps) {
   const t = useTranslations('Explore')
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [apiError, setApiError] = useState(false)
-  const [filter, setFilter] = useState<ProjectType | 'All'>('All')
+  const urlType = searchParams.get('type') as ProjectType | null
+  const [filter, setFilter] = useState<ProjectType | 'All'>(
+    urlType && ['Solar', 'Wind', 'Hydro'].includes(urlType) ? urlType : 'All'
+  )
 
   useEffect(() => {
     getProjects()
@@ -34,6 +40,15 @@ export function Explore({ onOpen }: ExploreProps) {
       })
       .finally(() => setLoading(false))
   }, [])
+
+  const setFilterAndUrl = (next: ProjectType | 'All') => {
+    setFilter(next)
+    if (next === 'All') {
+      router.replace('/explore', { scroll: false })
+    } else {
+      router.replace(`/explore?type=${next}`, { scroll: false })
+    }
+  }
 
   const shown = filter === 'All' ? projects : projects.filter((p) => p.type === filter)
 
@@ -95,7 +110,7 @@ export function Explore({ onOpen }: ExploreProps) {
       >
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {TYPES.map((ty) => (
-            <Tag key={ty} selected={filter === ty} onClick={() => setFilter(ty)}>
+            <Tag key={ty} selected={filter === ty} onClick={() => setFilterAndUrl(ty)}>
               {ty === 'All' ? t('filterAll') : ty}
             </Tag>
           ))}
@@ -167,6 +182,8 @@ export function Explore({ onOpen }: ExploreProps) {
                   fundedLabel={t('cardFundedFromPool')}
                   verifiedLabel={t('cardVerifiedAgo', { ago: '2h' })}
                   onOpen={() => onOpen(p)}
+                  fundingGoal={p.fundingGoal}
+                  fundedAmount={p.fundedAmount}
                 />
               ))}
         </div>

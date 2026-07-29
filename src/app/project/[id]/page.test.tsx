@@ -51,6 +51,8 @@ describe('ProjectDetailPage', () => {
         credit: 80,
         green: 90,
         funded: '$100,000',
+        fundedAmount: 100000,
+        fundingGoal: 200000,
       },
       detail: {
         heroGradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
@@ -58,6 +60,8 @@ describe('ProjectDetailPage', () => {
         story: 'Test story',
         scoreHistory: { credit: [], green: [] },
         fundingTimeline: [],
+        fundedAmount: 100000,
+        fundingGoal: 200000,
       },
     })
     render(<ProjectDetailPage />)
