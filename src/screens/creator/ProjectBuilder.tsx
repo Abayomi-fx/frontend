@@ -2,7 +2,7 @@
 
 import { useId, useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { ProjectCard, Tag } from '@/components'
+import { ProjectCard, Tag, Card, UploadIcon } from '@/components'
 import { PROJECT_TYPES, DRAFT_PROJECT, type ProjectType } from '@/data/creator'
 
 /**
@@ -19,6 +19,18 @@ export function ProjectBuilder() {
   const [story, setStory] = useState(DRAFT_PROJECT.story)
   const [fundingGoal, setFundingGoal] = useState(String(DRAFT_PROJECT.fundingGoal))
   const goalErrorId = useId()
+  const [goalError, setGoalError] = useState<string | null>(null)
+
+  const handleGoalChange = (value: string) => {
+    setFundingGoal(value)
+    const normalized = value.replace(/[^0-9.]/g, '')
+    const num = Number(normalized) || 0
+    if (num <= 0) {
+      setGoalError(t('goalInvalid') ?? 'Enter a funding goal greater than 0')
+    } else {
+      setGoalError(null)
+    }
+  }
 
   const goalNumber = Number(fundingGoal.replace(/[^0-9.]/g, '')) || 0
 
@@ -41,9 +53,7 @@ export function ProjectBuilder() {
       {/* Left — the form */}
       <Card>
         <h3 style={cardTitle}>{t('builderTitle')}</h3>
-        <p style={{ ...subtle, margin: '0 0 20px' }}>
-          {t('builderSub')}
-        </p>
+        <p style={{ ...subtle, margin: '0 0 20px' }}>{t('builderSub')}</p>
 
         <Field label={t('fieldName')} htmlFor="hb-name">
           <input
@@ -74,7 +84,7 @@ export function ProjectBuilder() {
           >
             {PROJECT_TYPES.map((pt) => (
               <Tag key={pt} selected={type === pt} onClick={() => setType(pt)}>
-                {t(`type${pt}` as any)}
+                {t(`type${pt}` as Parameters<typeof t>[0])}
               </Tag>
             ))}
           </div>
@@ -191,9 +201,7 @@ export function ProjectBuilder() {
           verifiedLabel={t('pendingVerified')}
         />
 
-        <p style={{ ...subtle, margin: 0 }}>
-          {t('previewPending', { type: type })}
-        </p>
+        <p style={{ ...subtle, margin: 0 }}>{t('previewPending', { type: type })}</p>
       </div>
     </div>
   )

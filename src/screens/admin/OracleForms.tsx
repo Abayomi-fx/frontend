@@ -73,7 +73,12 @@ export function OracleForms({ projects, liquid, onPushScores, onFund }: OracleFo
       {/* Push score update */}
       <Panel title={t('panelPushTitle')} hint={t('panelPushHint')}>
         <Field label={t('fieldProject')}>
-          <Select value={scoreId} onChange={setScoreId} projects={projects} label={t('fieldProject')} />
+          <Select
+            value={scoreId}
+            onChange={setScoreId}
+            projects={projects}
+            label={t('fieldProject')}
+          />
         </Field>
         <div style={{ display: 'flex', gap: 12 }}>
           <Field label={t('fieldCredit')} style={{ flex: 1 }}>
@@ -110,7 +115,12 @@ export function OracleForms({ projects, liquid, onPushScores, onFund }: OracleFo
       {/* Fund a project */}
       <Panel title={t('panelFundTitle')} hint={t('panelFundHint')}>
         <Field label={t('fieldProject')}>
-          <Select value={fundId} onChange={setFundId} projects={projects} label={t('fieldProject')} />
+          <Select
+            value={fundId}
+            onChange={setFundId}
+            projects={projects}
+            label={t('fieldProject')}
+          />
         </Field>
         <Field label={t('fieldAmount')}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

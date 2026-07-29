@@ -93,7 +93,12 @@ describe('AmountInput', () => {
 
     it('renders localized over-cap action when provided', () => {
       const { getByRole } = render(
-        <AmountInput value="150" cap={100} capMessage="Over limit" capActionLabel="Retirer le maximum disponible" />,
+        <AmountInput
+          value="150"
+          cap={100}
+          capMessage="Over limit"
+          capActionLabel="Retirer le maximum disponible"
+        />,
       )
       expect(getByRole('button', { name: 'Retirer le maximum disponible' })).toBeInTheDocument()
     })

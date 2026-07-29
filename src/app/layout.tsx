@@ -12,7 +12,10 @@ export const metadata: Metadata = {
   title: 'Heliobond — sunlight made financial',
   description:
     'Own a piece of the energy transition. From one dollar. A transparent pool funding verified green projects on Stellar.',
-  icons: { icon: '/assets/favicon.svg' },
+  icons: {
+    icon: '/assets/favicon.svg',
+    apple: '/assets/apple-touch-icon.png',
+  },
 }
 
 export const viewport: Viewport = {

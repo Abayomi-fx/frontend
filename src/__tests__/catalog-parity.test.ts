@@ -24,8 +24,10 @@ describe('Message catalog parity', () => {
     const missingInFr = enKeys.filter((k) => !frKeys.includes(k))
     const missingInEn = frKeys.filter((k) => !enKeys.includes(k))
 
-    const missing = [...missingInFr.map((k) => `Missing in fr.json: ${k}`),
-      ...missingInEn.map((k) => `Missing in en.json: ${k}`)]
+    const missing = [
+      ...missingInFr.map((k) => `Missing in fr.json: ${k}`),
+      ...missingInEn.map((k) => `Missing in en.json: ${k}`),
+    ]
 
     expect(missing).toEqual([])
   })

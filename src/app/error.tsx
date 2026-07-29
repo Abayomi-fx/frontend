@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { Helio } from '../brand/Helio'
 
 /**
@@ -76,8 +77,8 @@ export default function GlobalError({
           margin: '0 0 8px',
         }}
       >
-        The application hit an unexpected problem. You can try recovering, or go
-        back to the home page.
+        The application hit an unexpected problem. You can try recovering, or go back to the home
+        page.
       </p>
 
       {error.digest && (
@@ -119,7 +120,7 @@ export default function GlobalError({
           Try again
         </button>
 
-        <a
+        <Link
           href="/"
           style={{
             display: 'inline-flex',
@@ -140,7 +141,7 @@ export default function GlobalError({
           }}
         >
           Go home
-        </a>
+        </Link>
       </div>
     </main>
   )
