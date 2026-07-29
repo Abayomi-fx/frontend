@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState, type CSSProperties, type ReactNode } from 'react'
+import { useId, useState, useEffect, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { ProjectCard, Tag, Card, UploadIcon } from '@/components'
 import { PROJECT_TYPES, DRAFT_PROJECT, type ProjectType } from '@/data/creator'
@@ -40,6 +40,21 @@ export function ProjectBuilder() {
   }
 
   const goalLabel = getGoalLabel()
+
+  const [debouncedName, setDebouncedName] = useState(name)
+  const [debouncedLocation, setDebouncedLocation] = useState(location)
+  const [debouncedGoalLabel, setDebouncedGoalLabel] = useState(goalLabel)
+  const [debouncedType, setDebouncedType] = useState(type)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedName(name)
+      setDebouncedLocation(location)
+      setDebouncedGoalLabel(goalLabel)
+      setDebouncedType(type)
+    }, 1000)
+    return () => clearTimeout(handler)
+  }, [name, location, goalLabel, type])
 
   return (
     <div
@@ -163,6 +178,8 @@ export function ProjectBuilder() {
 
       {/* Right — the live preview */}
       <div
+        aria-live="polite"
+        aria-atomic="true"
         style={{ position: 'sticky', top: 24, display: 'flex', flexDirection: 'column', gap: 12 }}
       >
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
@@ -192,16 +209,16 @@ export function ProjectBuilder() {
         </div>
 
         <ProjectCard
-          name={name || 'Your project name'}
-          location={location || 'Add a location'}
+          name={debouncedName || 'Your project name'}
+          location={debouncedLocation || 'Add a location'}
           credit={0}
           green={0}
-          funded={goalLabel}
+          funded={debouncedGoalLabel}
           fundedLabel={t('dashFunding')}
           verifiedLabel={t('pendingVerified')}
         />
 
-        <p style={{ ...subtle, margin: 0 }}>{t('previewPending', { type: type })}</p>
+        <p style={{ ...subtle, margin: 0 }}>{t('previewPending', { type: debouncedType })}</p>
       </div>
     </div>
   )

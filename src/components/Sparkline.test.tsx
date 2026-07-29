@@ -74,7 +74,7 @@ describe('Sparkline', () => {
       const { container } = render(<Sparkline points={[10, 20, 30]} />)
       const circle = container.querySelector('circle')
       expect(circle?.getAttribute('r')).toBe('3')
-      expect(circle?.getAttribute('fill')).toBe('#FFB400')
+      expect(circle?.getAttribute('fill')).toBe('var(--solar)')
     })
 
     it('circle is positioned at the last point', () => {
@@ -90,7 +90,7 @@ describe('Sparkline', () => {
       const { container } = render(<Sparkline points={[15]} />)
       const circle = container.querySelector('circle')
       expect(circle).toBeInTheDocument()
-      expect(circle?.getAttribute('fill')).toBe('#FFB400')
+      expect(circle?.getAttribute('fill')).toBe('var(--solar)')
     })
   })
 

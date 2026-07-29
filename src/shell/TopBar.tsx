@@ -277,6 +277,15 @@ function WalletMenu({ address, isDemo }: { address: string; isDemo: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const itemRefs = useRef<(HTMLButtonElement | HTMLAnchorElement | null)[]>([])
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   // Focus first item when menu opens; restore trigger focus when it closes.
   const prevOpen = useRef(false)
@@ -299,14 +308,50 @@ function WalletMenu({ address, isDemo }: { address: string; isDemo: boolean }) {
     return () => document.removeEventListener('mousedown', onDown)
   }, [open])
 
-  const copy = () => {
-    try {
-      navigator.clipboard?.writeText(address)
-    } catch {
-      /* ignore */
+  const copy = async () => {
+    let success = false
+    if (navigator?.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(address)
+        success = true
+      } catch {
+        success = false
+      }
     }
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1400)
+    if (!success) {
+      try {
+        const textarea = document.createElement('textarea')
+        textarea.value = address
+        textarea.style.position = 'fixed'
+        textarea.style.top = '0'
+        textarea.style.left = '0'
+        textarea.style.width = '2em'
+        textarea.style.height = '2em'
+        textarea.style.padding = '0'
+        textarea.style.border = 'none'
+        textarea.style.outline = 'none'
+        textarea.style.boxShadow = 'none'
+        textarea.style.background = 'transparent'
+        document.body.appendChild(textarea)
+        textarea.focus()
+        textarea.select()
+        success = document.execCommand('copy')
+        document.body.removeChild(textarea)
+      } catch {
+        success = false
+      }
+    }
+
+    if (success) {
+      setCopied(true)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false)
+        timeoutRef.current = null
+      }, 1400)
+    }
   }
 
   const handleMenuKeyDown = (e: React.KeyboardEvent) => {

@@ -37,7 +37,7 @@ export function Sparkline({
   const coords = points.map((value, i) => {
     const x = pad + (n > 1 ? (i / (n - 1)) * innerW : innerW / 2)
     // higher value sits higher on screen (smaller y)
-    const y = pad + (1 - (value - min) / span) * innerH
+    const y = pad + (n > 1 ? (1 - (value - min) / span) * innerH : innerH / 2)
     return { x, y }
   })
 

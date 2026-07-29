@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type CSSProperties } from 'react'
+import { useState, useRef, useEffect, type CSSProperties } from 'react'
 import { CheckIcon, CopyIcon, ExternalIcon } from './icons'
 import { useTranslations } from 'next-intl'
 
@@ -29,16 +29,65 @@ export function AddressChip({
   const t = useTranslations('Common')
   const [copied, setCopied] = useState(false)
   const [hover, setHover] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   const truncated =
     value && value.length > lead + tail + 1
       ? `${value.slice(0, lead)}…${value.slice(-tail)}`
       : value
 
-  const copy = () => {
-    if (navigator.clipboard) navigator.clipboard.writeText(value)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1400)
+  const copy = async () => {
+    let success = false
+    if (navigator?.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value)
+        success = true
+      } catch {
+        success = false
+      }
+    }
+    if (!success) {
+      try {
+        const textarea = document.createElement('textarea')
+        textarea.value = value
+        textarea.style.position = 'fixed'
+        textarea.style.top = '0'
+        textarea.style.left = '0'
+        textarea.style.width = '2em'
+        textarea.style.height = '2em'
+        textarea.style.padding = '0'
+        textarea.style.border = 'none'
+        textarea.style.outline = 'none'
+        textarea.style.boxShadow = 'none'
+        textarea.style.background = 'transparent'
+        document.body.appendChild(textarea)
+        textarea.focus()
+        textarea.select()
+        success = document.execCommand('copy')
+        document.body.removeChild(textarea)
+      } catch {
+        success = false
+      }
+    }
+
+    if (success) {
+      setCopied(true)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false)
+        timeoutRef.current = null
+      }, 1400)
+    }
   }
 
   return (
