@@ -60,6 +60,7 @@ export function Deposit({ onDone }: DepositProps) {
 
   const n = parseFloat(amount) || 0
   const price = livePrice
+  const balance = 240
 
   return (
     <main id="main-content" style={{ maxWidth: 520, margin: '0 auto', padding: '48px 24px 80px' }}>
@@ -93,6 +94,10 @@ export function Deposit({ onDone }: DepositProps) {
             balanceLabel={t('balanceLabel')}
             balance="240.00"
             chips={[25, 50, 100]}
+            cap={balance}
+            capMessage={t('capMessage', { cap: balance })}
+            maxChipLabel={t('maxChip')}
+            capActionLabel={t('depositMaxAvailable')}
             preview={
               vaultLoading ? (
                 <span
@@ -137,11 +142,11 @@ export function Deposit({ onDone }: DepositProps) {
             variant="primary"
             size="lg"
             style={{ width: '100%', marginTop: 20 }}
-            disabled={n < 1}
-            reason={n < 1 ? t('reasonMin') : undefined}
+            disabled={n < 1 || n > balance}
+            reason={n > balance ? t('reasonExceeds') : n < 1 ? t('reasonMin') : undefined}
             onClick={() => changeStep('review')}
           >
-            {n >= 1 ? t('investCta', { amount: n }) : t('investCtaEmpty')}
+            {n >= 1 && n <= balance ? t('investCta', { amount: n }) : t('investCtaEmpty')}
           </Button>
         </Panel>
       )}
