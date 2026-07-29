@@ -77,8 +77,8 @@ export default function GlobalError({
           margin: '0 0 8px',
         }}
       >
-        The application hit an unexpected problem. You can try recovering, or go
-        back to the home page.
+        The application hit an unexpected problem. You can try recovering, or go back to the home
+        page.
       </p>
 
       {error.digest && (

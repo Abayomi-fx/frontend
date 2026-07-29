@@ -53,9 +53,7 @@ export function ProjectBuilder() {
       {/* Left — the form */}
       <Card>
         <h3 style={cardTitle}>{t('builderTitle')}</h3>
-        <p style={{ ...subtle, margin: '0 0 20px' }}>
-          {t('builderSub')}
-        </p>
+        <p style={{ ...subtle, margin: '0 0 20px' }}>{t('builderSub')}</p>
 
         <Field label={t('fieldName')} htmlFor="hb-name">
           <input
@@ -203,9 +201,7 @@ export function ProjectBuilder() {
           verifiedLabel={t('pendingVerified')}
         />
 
-        <p style={{ ...subtle, margin: 0 }}>
-          {t('previewPending', { type: type })}
-        </p>
+        <p style={{ ...subtle, margin: 0 }}>{t('previewPending', { type: type })}</p>
       </div>
     </div>
   )

@@ -35,7 +35,9 @@ export function LiveHelio(props: HelioProps & { intensity?: number }) {
         }}
       >
         <ErrorBoundary fallback={<Helio {...props} />}>
-          {(() => { throw new Error('Simulated WebGL Crash'); })()}
+          {(() => {
+            throw new Error('Simulated WebGL Crash')
+          })()}
           <HelioWebGL {...props} onReady={() => setLive(true)} />
         </ErrorBoundary>
       </div>

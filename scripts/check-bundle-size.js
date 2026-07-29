@@ -38,15 +38,17 @@ function findLandingPageChunk() {
     return fileList
   }
 
-  const allFiles = walkSync(chunksDir).filter(f => f.endsWith('.js'))
+  const allFiles = walkSync(chunksDir).filter((f) => f.endsWith('.js'))
 
   // Filter out Next.js internals to isolate application chunks
-  const appChunks = allFiles.filter(f => {
+  const appChunks = allFiles.filter((f) => {
     const name = path.basename(f)
-    return !name.includes('webpack') && 
-           !name.includes('main-app') && 
-           !name.includes('framework') && 
-           !name.includes('polyfills')
+    return (
+      !name.includes('webpack') &&
+      !name.includes('main-app') &&
+      !name.includes('framework') &&
+      !name.includes('polyfills')
+    )
   })
 
   if (appChunks.length === 0) {

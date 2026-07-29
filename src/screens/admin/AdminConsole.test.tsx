@@ -34,18 +34,12 @@ function fundProject(
 }
 
 describe('AdminConsole money formatting helpers', () => {
-  it.each([
-    0,
-    1,
-    42,
-    999,
-    1_000,
-    12_345,
-    500_000,
-    1_500_000,
-  ])('round-trips %i through funded display formatting', (amount) => {
-    expect(parseFundedNum(formatFunded(amount))).toBe(amount)
-  })
+  it.each([0, 1, 42, 999, 1_000, 12_345, 500_000, 1_500_000])(
+    'round-trips %i through funded display formatting',
+    (amount) => {
+      expect(parseFundedNum(formatFunded(amount))).toBe(amount)
+    },
+  )
 
   it('parses funded amounts with thousands separators', () => {
     expect(parseFundedNum(',234,567')).toBe(1_234_567)
@@ -129,4 +123,3 @@ describe('AdminConsole funding and liquid accounting', () => {
     expect(state.liquid + state.deployed).toBe(totalAssets)
   })
 })
-

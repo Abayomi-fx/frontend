@@ -60,7 +60,11 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
         }}
       >
         <Card>
-          <StatBlock label={t('dashFunding')} value={`$${data.fundingReceived.toLocaleString('en-US')}`} size="lg" />
+          <StatBlock
+            label={t('dashFunding')}
+            value={`$${data.fundingReceived.toLocaleString('en-US')}`}
+            size="lg"
+          />
           <div style={{ marginTop: 16 }}>
             <div
               style={{
@@ -92,7 +96,10 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
               >
                 {fundedPct}%
               </span>{' '}
-              {t('dashGoalDeployed', { pct: fundedPct, goal: data.fundingGoal.toLocaleString('en-US') })}
+              {t('dashGoalDeployed', {
+                pct: fundedPct,
+                goal: data.fundingGoal.toLocaleString('en-US'),
+              })}
             </div>
           </div>
         </Card>
@@ -119,11 +126,21 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
           </div>
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-              <ScoreGauge value={data.creditScore} label={t('dashCreditLabel')} size={96} stroke={8} />
+              <ScoreGauge
+                value={data.creditScore}
+                label={t('dashCreditLabel')}
+                size={96}
+                stroke={8}
+              />
               <Sparkline points={data.creditHistory} aria-label={t('dashCreditTrend')} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-              <ScoreGauge value={data.greenScore} label={t('dashGreenLabel')} size={96} stroke={8} />
+              <ScoreGauge
+                value={data.greenScore}
+                label={t('dashGreenLabel')}
+                size={96}
+                stroke={8}
+              />
               <Sparkline points={data.greenHistory} aria-label={t('dashGreenTrend')} />
             </div>
           </div>
@@ -141,9 +158,7 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
       >
         <Card>
           <h4 style={cardTitle}>{t('dashOracleEvalTitle')}</h4>
-          <p style={{ ...subtle, margin: '0 0 16px' }}>
-            {t('dashOracleEvalSub')}
-          </p>
+          <p style={{ ...subtle, margin: '0 0 16px' }}>{t('dashOracleEvalSub')}</p>
           <ul
             style={{
               listStyle: 'none',
