@@ -218,6 +218,7 @@
     "actionSave": "Save"
   },
   "Creator": {
+    "goalInvalid": "Enter a funding goal greater than 0",
     "title": "Creator space",
     "description": "Apply for the whitelist, build your project page, and watch the pool fund it. The oracle scores your credit quality and green impact, and we show you exactly what moves them.",
     "h1": "Creator space",
