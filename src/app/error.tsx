@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { Helio } from '../brand/Helio'
 
 /**
@@ -119,7 +120,7 @@ export default function GlobalError({
           Try again
         </button>
 
-        <a
+        <Link
           href="/"
           style={{
             display: 'inline-flex',
@@ -140,7 +141,7 @@ export default function GlobalError({
           }}
         >
           Go home
-        </a>
+        </Link>
       </div>
     </main>
   )

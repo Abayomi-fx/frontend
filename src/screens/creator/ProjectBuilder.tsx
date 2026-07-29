@@ -86,7 +86,7 @@ export function ProjectBuilder() {
           >
             {PROJECT_TYPES.map((pt) => (
               <Tag key={pt} selected={type === pt} onClick={() => setType(pt)}>
-                {t(`type${pt}` as any)}
+                {t(`type${pt}` as Parameters<typeof t>[0])}
               </Tag>
             ))}
           </div>
