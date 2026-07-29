@@ -2,7 +2,7 @@
 
 import { useId, useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { ProjectCard, Tag } from '@/components'
+import { ProjectCard, Tag, Card, UploadIcon } from '@/components'
 import { PROJECT_TYPES, DRAFT_PROJECT, type ProjectType } from '@/data/creator'
 
 /**
@@ -19,6 +19,18 @@ export function ProjectBuilder() {
   const [story, setStory] = useState(DRAFT_PROJECT.story)
   const [fundingGoal, setFundingGoal] = useState(String(DRAFT_PROJECT.fundingGoal))
   const goalErrorId = useId()
+  const [goalError, setGoalError] = useState<string | null>(null)
+
+  const handleGoalChange = (value: string) => {
+    setFundingGoal(value)
+    const normalized = value.replace(/[^0-9.]/g, '')
+    const num = Number(normalized) || 0
+    if (num <= 0) {
+      setGoalError(t('goalInvalid') ?? 'Enter a funding goal greater than 0')
+    } else {
+      setGoalError(null)
+    }
+  }
 
   const goalNumber = Number(fundingGoal.replace(/[^0-9.]/g, '')) || 0
 
