@@ -4,12 +4,11 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Heliobond',
     short_name: 'Heliobond',
-    description:
-      'Own a piece of the energy transition. From one dollar. A transparent pool funding verified green projects on Stellar.',
+    description: 'Own a piece of the energy transition. From one dollar.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#f3f5f1',
-    theme_color: '#ffb400',
+    background_color: '#f3f5f1', // --canvas
+    theme_color: '#f3f5f1', // --canvas (matches light mode theme color)
     icons: [
       {
         src: '/assets/icon-192x192.png',
