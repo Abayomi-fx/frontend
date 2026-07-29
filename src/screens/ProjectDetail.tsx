@@ -338,6 +338,7 @@ function ScoreColumn({
   onChainNote: string
   verifiedAgo: string
 }) {
+  const t = useTranslations('ProjectDetail')
   return (
     <div
       style={{
