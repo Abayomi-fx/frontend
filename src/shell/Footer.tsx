@@ -105,6 +105,7 @@ export function Footer() {
           </Link>
         </nav>
       </div>
+      </div>
     </footer>
   )
 }
