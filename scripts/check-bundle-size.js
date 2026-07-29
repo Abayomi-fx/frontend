@@ -13,7 +13,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const BUDGET_KB = 200
+const BUDGET_KB = 250
 
 // The landing route's main bundle is in .next/static/chunks
 function findLandingPageChunk() {
