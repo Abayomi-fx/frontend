@@ -18,24 +18,45 @@ const BUDGET_KB = 200
 // The landing route's main bundle is in .next/static/chunks
 // Specifically, we check the page chunk: static/chunks/app/page-<hash>.js
 function findLandingPageChunk() {
-  const chunksDir = path.join(process.cwd(), '.next/static/chunks/app')
+  const chunksDir = path.join(process.cwd(), '.next/static/chunks')
 
   if (!fs.existsSync(chunksDir)) {
     console.error('❌ Build output not found. Run `npm run build` first.')
     process.exit(1)
   }
 
-  // Find the landing page chunk (not a layout/template chunk)
-  const files = fs.readdirSync(chunksDir)
-  const pageChunk = files.find((f) => f.startsWith('page-') && f.endsWith('.js'))
+  function walkSync(dir, fileList = []) {
+    const files = fs.readdirSync(dir)
+    for (const file of files) {
+      const filePath = path.join(dir, file)
+      if (fs.statSync(filePath).isDirectory()) {
+        walkSync(filePath, fileList)
+      } else {
+        fileList.push(filePath)
+      }
+    }
+    return fileList
+  }
+
+  const allFiles = walkSync(chunksDir)
+
+  // Next.js Webpack: app/page-<hash>.js
+  // Next.js Turbopack: often contains 'app_page' or similar
+  const pageChunk = allFiles.find((f) => {
+    const name = path.basename(f)
+    return (
+      (f.includes(path.sep + 'app' + path.sep) && name.startsWith('page-') && name.endsWith('.js')) ||
+      (name.includes('app_page') && name.endsWith('.js'))
+    )
+  })
 
   if (!pageChunk) {
     console.error('❌ Could not find landing page chunk in', chunksDir)
-    console.error('   Available files:', files.slice(0, 5))
+    console.error('   Available files (first 5):', allFiles.slice(0, 5))
     process.exit(1)
   }
 
-  return path.join(chunksDir, pageChunk)
+  return pageChunk
 }
 
 function getGzipSize(filePath) {
