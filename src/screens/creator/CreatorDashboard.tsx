@@ -120,11 +120,11 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
               <ScoreGauge value={data.creditScore} label={t('dashCreditLabel')} size={96} stroke={8} />
-              <Sparkline series={data.creditHistory} label={t('dashCreditTrend')} />
+              <Sparkline points={data.creditHistory} aria-label={t('dashCreditTrend')} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
               <ScoreGauge value={data.greenScore} label={t('dashGreenLabel')} size={96} stroke={8} />
-              <Sparkline series={data.greenHistory} label={t('dashGreenTrend')} />
+              <Sparkline points={data.greenHistory} aria-label={t('dashGreenTrend')} />
             </div>
           </div>
         </Card>
