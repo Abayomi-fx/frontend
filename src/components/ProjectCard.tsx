@@ -41,7 +41,8 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const [hover, setHover] = useState(false)
   const resolvedVerifiedLabel = verifiedLabel ?? verifiedAgo
-  const showProgress = typeof fundedAmount === 'number' && typeof fundingGoal === 'number' && fundingGoal > 0
+  const showProgress =
+    typeof fundedAmount === 'number' && typeof fundingGoal === 'number' && fundingGoal > 0
   const fundedPct = showProgress ? Math.min(100, Math.round((fundedAmount / fundingGoal) * 100)) : 0
 
   return (

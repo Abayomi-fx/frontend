@@ -26,7 +26,7 @@ export function Explore({ onOpen }: ExploreProps) {
   const [apiError, setApiError] = useState(false)
   const urlType = searchParams.get('type') as ProjectType | null
   const [filter, setFilter] = useState<ProjectType | 'All'>(
-    urlType && ['Solar', 'Wind', 'Hydro'].includes(urlType) ? urlType : 'All'
+    urlType && ['Solar', 'Wind', 'Hydro'].includes(urlType) ? urlType : 'All',
   )
 
   useEffect(() => {
