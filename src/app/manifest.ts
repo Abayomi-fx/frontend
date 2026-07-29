@@ -1,0 +1,26 @@
+import type { MetadataRoute } from 'next'
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: 'Heliobond',
+    short_name: 'Heliobond',
+    description:
+      'Own a piece of the energy transition. From one dollar. A transparent pool funding verified green projects on Stellar.',
+    start_url: '/',
+    display: 'standalone',
+    background_color: '#f3f5f1',
+    theme_color: '#ffb400',
+    icons: [
+      {
+        src: '/assets/icon-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        src: '/assets/icon-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+    ],
+  }
+}
