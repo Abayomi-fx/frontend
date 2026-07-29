@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Helio, type HelioProps } from './Helio'
+import { ErrorBoundary } from '../components/ErrorBoundary'
 
 // The live WebGL orb is heavy and browser-only — load it lazily, never on the
 // server. The static <Helio> stays mounted underneath until the WebGL canvas has
@@ -33,7 +34,9 @@ export function LiveHelio(props: HelioProps & { intensity?: number }) {
           transition: 'opacity 600ms var(--ease-out)',
         }}
       >
-        <HelioWebGL {...props} onReady={() => setLive(true)} />
+        <ErrorBoundary fallback={<Helio {...props} />}>
+          <HelioWebGL {...props} onReady={() => setLive(true)} />
+        </ErrorBoundary>
       </div>
     </div>
   )
