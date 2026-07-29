@@ -2,7 +2,7 @@
 
 import { type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
-import { StatBlock, ScoreGauge, Badge, Card } from '@/components'
+import { StatBlock, ScoreGauge, Badge, Card, Sparkline } from '@/components'
 import {
   CREATOR_DASHBOARD,
   type CreatorDashboard as CreatorDashboardModel,
