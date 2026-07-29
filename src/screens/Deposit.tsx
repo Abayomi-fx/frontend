@@ -299,21 +299,26 @@ export function Deposit({ onDone }: DepositProps) {
             {t('successH1')}
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 6px' }}>
-                  <Helio size={160} motes={HB_DATA.pool.projectsFunded} />
-                </div>
-                <h1 style={{ ...h1Style, textAlign: 'center' }}>{t('successH1')}</h1>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-data)',
-                    lineHeight: 1.55,
-                    color: 'var(--ink-60)',
-                    textAlign: 'center',
-                    margin: '0 0 22px',
-                  }}
-                >
-                  {t.rich('successBody', { shares: (n / price).toFixed(4), num, b: strong, count: HB_DATA.pool.projectsFunded })}
-                </p>
+            <Helio size={160} motes={HB_DATA.pool.projectsFunded} />
+          </div>
+          <h1 style={{ ...h1Style, textAlign: 'center' }}>{t('successH1')}</h1>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-data)',
+              lineHeight: 1.55,
+              color: 'var(--ink-60)',
+              textAlign: 'center',
+              margin: '0 0 22px',
+            }}
+          >
+            {t.rich('successBody', {
+              shares: (n / price).toFixed(4),
+              num,
+              b: strong,
+              count: HB_DATA.pool.projectsFunded,
+            })}
+          </p>
           <div style={{ display: 'flex', gap: 10 }}>
             <a
               href={txHash ? `https://stellar.expert/explorer/testnet/tx/${txHash}` : undefined}

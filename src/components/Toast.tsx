@@ -1,6 +1,14 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, useCallback, type CSSProperties, type ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import { CloseIcon } from './icons'
 
 /**
@@ -129,9 +137,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer)
   }, [activeToast])
 
-  const showToast = useCallback((options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
-    setActiveToast(options)
-  }, [])
+  const showToast = useCallback(
+    (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
+      setActiveToast(options)
+    },
+    [],
+  )
 
   const dismiss = useCallback(() => {
     setActiveToast(null)

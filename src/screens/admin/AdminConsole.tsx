@@ -26,7 +26,8 @@ export function AdminConsole() {
   const [deployed, setDeployed] = useState(VAULT_STATS.deployed)
 
   // The pool funds 14 projects: 6 demo projects in the registry plus 8 historical/off-screen projects.
-  const fundedCount = registry.filter((r) => parseFundedNum(r.funded) > 0).length + OFF_SCREEN_PROJECTS_COUNT
+  const fundedCount =
+    registry.filter((r) => parseFundedNum(r.funded) > 0).length + OFF_SCREEN_PROJECTS_COUNT
 
   const updateScores = (id: number, credit: number, green: number) => {
     setRegistry((rows) =>

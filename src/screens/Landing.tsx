@@ -88,7 +88,11 @@ export function Landing({ onConnect, onNav }: LandingProps) {
             <StatBlock label={t('poolValue')} value="$4,862,014" decimals=".55" size="lg" />
           </div>
           <div style={counterCell}>
-            <StatBlock label={t('projectsFunded')} value={String(d.pool.projectsFunded)} size="lg" />
+            <StatBlock
+              label={t('projectsFunded')}
+              value={String(d.pool.projectsFunded)}
+              size="lg"
+            />
           </div>
           <div style={counterCell}>
             <StatBlock label={t('returnRate')} value="7.4" unit="%" size="lg" />
