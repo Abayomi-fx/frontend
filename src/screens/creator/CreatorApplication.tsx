@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button, Tag, Card } from '@/components'
+import { Button, Tag, Card, CheckBoldIcon } from '@/components'
 import {
   PROJECT_TYPES,
   WHITELIST_CRITERIA,
