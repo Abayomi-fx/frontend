@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
+import { useWallet } from '../wallet/WalletProvider'
 
 /**
  * Portfolio — calm dashboard. Headline value with delta since deposit, the
@@ -18,7 +19,33 @@ export interface PortfolioProps {
 
 export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   const t = useTranslations('Portfolio')
+  const { connected, connect } = useWallet()
   const d = HB_DATA
+
+  if (!connected) {
+    return (
+      <main id="main-content" style={{ maxWidth: 1080, margin: '0 auto', padding: '48px 32px 80px' }}>
+        <Card style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>
+          <div className="hb-eyebrow">{t('eyebrow')}</div>
+          <h2 style={{ ...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
+              lineHeight: 1.5,
+              color: 'var(--ink-60)',
+              margin: 0,
+            }}
+          >
+            Your holdings and activity will appear here after you connect.
+          </p>
+          <Button variant="primary" onClick={() => void connect()}>
+            Connect wallet
+          </Button>
+        </Card>
+      </main>
+    )
+  }
 
   return (
     <main id="main-content" style={{ maxWidth: 1080, margin: '0 auto', padding: '48px 32px 80px' }}>

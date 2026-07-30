@@ -56,6 +56,21 @@ describe('CreatorApplication form validation', () => {
     expect(screen.getByText(/in review/i)).toBeInTheDocument()
   })
 
+  it('shows feedback and blocks submit for invalid links', () => {
+    const handleSubmit = vi.fn()
+    render(<CreatorApplication onSubmit={handleSubmit} />)
+    const orgInput = screen.getByLabelText(/organization name/i)
+    const locationInput = screen.getByLabelText(/location/i)
+    const linksInput = screen.getByLabelText(/links/i)
+    fireEvent.change(orgInput, { target: { value: 'Test Org' } })
+    fireEvent.change(locationInput, { target: { value: 'Test City' } })
+    fireEvent.change(linksInput, { target: { value: 'not-a-valid-url' } })
+    const submitButton = screen.getByRole('button', { name: /submit application/i })
+    fireEvent.click(submitButton)
+    expect(screen.getByText(/enter a valid url/i)).toBeInTheDocument()
+    expect(handleSubmit).not.toHaveBeenCalled()
+  })
+
   it('calls onSubmit with form values', () => {
     const handleSubmit = vi.fn()
     render(<CreatorApplication onSubmit={handleSubmit} />)
