@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button, sanitizeAmount } from '@/components'
+import { Button, FormField, FormInput, FormSelect, sanitizeAmount } from '@/components'
 import { type RegistryEntry } from '@/data/admin'
 
 /**
@@ -231,10 +231,9 @@ function Field({
   style?: CSSProperties
 }) {
   return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 6, ...style }}>
-      <span className="hb-eyebrow">{label}</span>
+    <FormField label={label} style={style}>
       {children}
-    </label>
+    </FormField>
   )
 }
 
@@ -250,18 +249,17 @@ function Select({
   label: string
 }) {
   return (
-    <select
+    <FormSelect
       aria-label={label}
       value={value}
       onChange={(e) => onChange(Number(e.target.value))}
-      style={selectStyle}
     >
       {projects.map((p) => (
         <option key={p.id} value={p.id}>
           {p.name}
         </option>
       ))}
-    </select>
+    </FormSelect>
   )
 }
 
@@ -275,7 +273,7 @@ function NumberInput({
   placeholder?: string
 }) {
   return (
-    <input
+    <FormInput
       type="number"
       min={0}
       max={100}
@@ -297,31 +295,11 @@ const panelStyle: CSSProperties = {
 }
 
 const textInput: CSSProperties = {
-  height: 40,
+  minHeight: 40,
   padding: '0 12px',
   fontFamily: 'var(--font-data)',
   fontSize: 'var(--type-small)',
   fontFeatureSettings: '"tnum" 1',
-  color: 'var(--ink)',
-  background: 'var(--surface)',
-  border: '1px solid var(--ink-12)',
-  borderRadius: 'var(--radius-input)',
-  outline: 'none',
-  width: '100%',
-}
-
-const selectStyle: CSSProperties = {
-  height: 40,
-  padding: '0 12px',
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-small)',
-  color: 'var(--ink)',
-  background: 'var(--surface)',
-  border: '1px solid var(--ink-12)',
-  borderRadius: 'var(--radius-input)',
-  outline: 'none',
-  width: '100%',
-  cursor: 'pointer',
 }
 
 const helpText: CSSProperties = {

@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button, Tag, Card, CheckBoldIcon } from '@/components'
+import { Button, Tag, Card, CheckBoldIcon, FormField, FormInput } from '@/components'
 import {
   PROJECT_TYPES,
   WHITELIST_CRITERIA,
@@ -36,6 +36,7 @@ export function CreatorApplication({ stage = 'submitted', onSubmit }: CreatorApp
   const [location, setLocation] = useState('')
   const [links, setLinks] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [linkError, setLinkError] = useState<string | null>(null)
 
   // Once submitted locally, advance the tracker to "in review".
   const activeStage: ApplicationStage = submitted ? 'in_review' : stage
@@ -43,7 +44,13 @@ export function CreatorApplication({ stage = 'submitted', onSubmit }: CreatorApp
   const canSubmit = orgName.trim().length > 0 && location.trim().length > 0
 
   function handleSubmit() {
-    if (!canSubmit) return
+    const trimmedLinks = links.trim()
+    const hasValidLink = trimmedLinks.length === 0 || /^https?:\/\//i.test(trimmedLinks)
+    if (!canSubmit || !hasValidLink) {
+      setLinkError(trimmedLinks.length > 0 && !hasValidLink ? 'Enter a valid URL.' : null)
+      return
+    }
+    setLinkError(null)
     const values: ApplicationFormValues = { orgName, projectType, location, links }
     if (onSubmit) onSubmit(values)
     setSubmitted(true)
@@ -102,15 +109,14 @@ export function CreatorApplication({ stage = 'submitted', onSubmit }: CreatorApp
         <h3 style={cardTitle}>{t('applyTitle')}</h3>
         <p style={{ ...subtle, margin: '0 0 20px' }}>{t('applySub')}</p>
 
-        <Field label={t('fieldOrg')} htmlFor="hb-org">
-          <input
+        <FormField label={t('fieldOrg')} htmlFor="hb-org">
+          <FormInput
             id="hb-org"
             type="text"
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
-            style={inputStyle}
           />
-        </Field>
+        </FormField>
 
         <div style={{ marginBottom: 18 }}>
           <Label htmlFor="">Project type</Label>
@@ -123,26 +129,33 @@ export function CreatorApplication({ stage = 'submitted', onSubmit }: CreatorApp
           </div>
         </div>
 
-        <Field label={t('fieldLocation')} htmlFor="hb-loc">
-          <input
+        <FormField label={t('fieldLocation')} htmlFor="hb-loc">
+          <FormInput
             id="hb-loc"
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            style={inputStyle}
           />
-        </Field>
+        </FormField>
 
-        <Field label={t('fieldLinks')} htmlFor="hb-links">
-          <input
+        <FormField label={t('fieldLinks')} htmlFor="hb-links">
+          <FormInput
             id="hb-links"
             type="url"
             inputMode="url"
             value={links}
-            onChange={(e) => setLinks(e.target.value)}
-            style={inputStyle}
+            onChange={(e) => {
+              setLinks(e.target.value)
+              if (linkError) setLinkError(null)
+            }}
+            aria-invalid={linkError != null}
           />
-        </Field>
+          {linkError && (
+            <p role="alert" style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-caption)', color: 'var(--ember)' }}>
+              {linkError}
+            </p>
+          )}
+        </FormField>
 
         <div style={{ marginTop: 8 }}>
           <Button
@@ -303,23 +316,6 @@ function CheckMark() {
   )
 }
 
-function Field({
-  label,
-  htmlFor,
-  children,
-}: {
-  label: string
-  htmlFor: string
-  children: ReactNode
-}) {
-  return (
-    <div style={{ marginBottom: 18 }}>
-      <Label htmlFor={htmlFor}>{label}</Label>
-      {children}
-    </div>
-  )
-}
-
 function Label({ htmlFor, children }: { htmlFor: string; children: ReactNode }) {
   return (
     <label
@@ -351,17 +347,4 @@ const subtle: CSSProperties = {
   fontSize: 'var(--type-small)',
   lineHeight: 1.5,
   color: 'var(--ink-60)',
-}
-const inputStyle: CSSProperties = {
-  width: '100%',
-  height: 44,
-  padding: '0 14px',
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-data)',
-  color: 'var(--ink)',
-  background: 'var(--surface)',
-  border: '1px solid var(--ink-12)',
-  borderRadius: 'var(--radius-input)',
-  outline: 'none',
-  boxSizing: 'border-box',
 }
