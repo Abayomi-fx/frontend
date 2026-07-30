@@ -12,8 +12,12 @@ export interface Project {
   credit: number
   /** Green Impact, oracle-verified, 0–100 */
   green: number
-  /** Capital deployed to this project from the pool */
+  /** Capital deployed to this project from the pool (display string) */
   funded: string
+  /** Capital deployed, as a number */
+  fundedAmount: number
+  /** Stated funding goal */
+  fundingGoal: number
 }
 
 export interface Activity {
@@ -45,13 +49,91 @@ export interface HeliobondData {
   activity: Activity[]
 }
 
+const INITIAL_PROJECTS: Project[] = [
+  {
+    id: 1,
+    name: 'Sokoto community solar',
+    location: 'Sokoto, Nigeria',
+    type: 'Solar',
+    credit: 82,
+    green: 91,
+    funded: '$420,000',
+    fundedAmount: 420000,
+    fundingGoal: 600000,
+  },
+  {
+    id: 2,
+    name: 'Ría de Vigo tidal array',
+    location: 'Galicia, Spain',
+    type: 'Hydro',
+    credit: 74,
+    green: 88,
+    funded: '$1,180,000',
+    fundedAmount: 1180000,
+    fundingGoal: 1500000,
+  },
+  {
+    id: 3,
+    name: 'Atacama agrivoltaics',
+    location: 'Antofagasta, Chile',
+    type: 'Solar',
+    credit: 88,
+    green: 79,
+    funded: '$640,000',
+    fundedAmount: 640000,
+    fundingGoal: 800000,
+  },
+  {
+    id: 4,
+    name: 'Jämtland wind co-op',
+    location: 'Östersund, Sweden',
+    type: 'Wind',
+    credit: 91,
+    green: 84,
+    funded: '$960,000',
+    fundedAmount: 960000,
+    fundingGoal: 1200000,
+  },
+  {
+    id: 5,
+    name: 'Kerala micro-hydro',
+    location: 'Idukki, India',
+    type: 'Hydro',
+    credit: 69,
+    green: 93,
+    funded: '$310,000',
+    fundedAmount: 310000,
+    fundingGoal: 400000,
+  },
+  {
+    id: 6,
+    name: 'Oaxaca rooftop network',
+    location: 'Oaxaca, Mexico',
+    type: 'Solar',
+    credit: 77,
+    green: 86,
+    funded: '$520,000',
+    fundedAmount: 520000,
+    fundingGoal: 700000,
+  },
+]
+
+// The pool has 14 funded projects in total: 6 active demo projects in the local registry,
+// plus 8 historical or off-screen projects funded in the past.
+export const OFF_SCREEN_PROJECTS_COUNT = 8
+
+const INITIAL_FUNDED_COUNT = INITIAL_PROJECTS.filter((p) => {
+  const n = Number(p.funded.replace(/[^0-9.]/g, ''))
+  return Number.isFinite(n) && n > 0
+}).length
+
 export const HB_DATA: HeliobondData = {
   pool: {
     totalAssets: 4862014.55,
     sharePrice: 1.0058,
     projectedRate: 7.4,
     liquid: 1420300,
-    projectsFunded: 14,
+    projectsFunded: INITIAL_FUNDED_COUNT + OFF_SCREEN_PROJECTS_COUNT,
   },
   you: {
     value: 24180.45,
@@ -60,7 +142,7 @@ export const HB_DATA: HeliobondData = {
     hbs: 24041.231,
     poolSharePct: 0.49,
     weightedGreen: 88,
-    backed: 14,
+    backed: INITIAL_FUNDED_COUNT + OFF_SCREEN_PROJECTS_COUNT,
   },
   projects: [
     {
@@ -71,6 +153,8 @@ export const HB_DATA: HeliobondData = {
       credit: 82,
       green: 91,
       funded: '$420,000',
+      fundedAmount: 420000,
+      fundingGoal: 600000,
     },
     {
       id: 2,
@@ -80,6 +164,8 @@ export const HB_DATA: HeliobondData = {
       credit: 74,
       green: 88,
       funded: '$1,180,000',
+      fundedAmount: 1180000,
+      fundingGoal: 1500000,
     },
     {
       id: 3,
@@ -89,6 +175,8 @@ export const HB_DATA: HeliobondData = {
       credit: 88,
       green: 79,
       funded: '$640,000',
+      fundedAmount: 640000,
+      fundingGoal: 800000,
     },
     {
       id: 4,
@@ -98,6 +186,8 @@ export const HB_DATA: HeliobondData = {
       credit: 91,
       green: 84,
       funded: '$960,000',
+      fundedAmount: 960000,
+      fundingGoal: 1200000,
     },
     {
       id: 5,
@@ -107,6 +197,8 @@ export const HB_DATA: HeliobondData = {
       credit: 69,
       green: 93,
       funded: '$310,000',
+      fundedAmount: 310000,
+      fundingGoal: 400000,
     },
     {
       id: 6,
@@ -116,6 +208,8 @@ export const HB_DATA: HeliobondData = {
       credit: 77,
       green: 86,
       funded: '$520,000',
+      fundedAmount: 520000,
+      fundingGoal: 700000,
     },
   ],
   activity: [

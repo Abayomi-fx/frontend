@@ -31,6 +31,20 @@
     "talk": "Parler à un humain",
     "admin": "Console admin"
   },
+  "Risk": {
+    "title": "Avertissement sur les risques",
+    "body": "Investir dans les énergies vertes comporte des risques. Les rendements ne sont pas garantis, et la valeur de vos parts peut baisser comme augmenter.",
+    "li1": "Les rendements du pool dépendent de la performance des projets et des scores oracle.",
+    "li2": "La liquidité est limitée — vous ne pouvez retirer que ce que le coffre détient en liquide.",
+    "li3": "Les projets peuvent manquer des jalons ou voir leurs coûts augmenter.",
+    "li4": "La performance passée ne prédit pas les rendements futurs."
+  },
+  "Learn": {
+    "title": "Comprendre",
+    "body": "Comprenez comment fonctionne le pool, ce que représentent les jetons HBS et comment les retraits sont gérés.",
+    "howTitle": "Comment ça marche",
+    "howBody": "Un pool finance plusieurs projets vérifiés. Vous déposez des USDC et recevez des parts HBS. Le pool déploie le capital selon les scores oracle et rééquilibre au fur et à mesure que les projets atteignent des jalons."
+  },
   "Landing": {
     "eyebrow": "Obligations vertes · sur Stellar",
     "title": "Possédez une part de la transition énergétique.",
@@ -113,14 +127,14 @@
     "rowReceive": "Vous recevez",
     "rowPrice": "Prix de la part",
     "rowFee": "Frais réseau",
-    "reviewBody": "Vos parts représentent une participation dans tout le pool, qui finance 14 projets vérifiés. Vous pouvez retirer votre part liquide à tout moment.",
+    "reviewBody": "Vos parts représentent une participation dans tout le pool, qui finance {count} projets vérifiés. Vous pouvez retirer votre part liquide à tout moment.",
     "back": "Retour",
     "confirm": "Confirmer dans le portefeuille",
     "pendingH1": "Confirmation de votre dépôt",
     "pendingSub": "Environ 5 secondes sur Stellar.",
     "pendingTx": "tx a91f…3c0d · voir sur Stellar Expert ↗",
     "successH1": "Bienvenue dans le pool",
-    "successBody": "Vous avez reçu <num>{shares} HBS</num> et soutenez désormais <b>14 projets vérifiés</b>.",
+    "successBody": "Vous avez reçu <num>{shares} HBS</num> et soutenez désormais <b>{count} projets vérifiés</b>.",
     "viewExpert": "Voir sur Stellar Expert",
     "goPortfolio": "Aller au portefeuille"
   },
@@ -134,7 +148,7 @@
     "poolShare": "Votre part du pool",
     "liquidCaption": "Votre part liquide. Le reste travaille dans les projets.",
     "impactTitle": "Votre impact",
-    "impactBody": "Votre participation aide à financer <b>14 projets vérifiés</b> dans 6 pays.",
+    "impactBody": "Votre participation aide à financer <b>{count} projets vérifiés</b> dans 6 pays.",
     "projectsBacked": "Projets soutenus",
     "weightedGreen": "Score vert pondéré",
     "activityTitle": "Activité",
@@ -312,6 +326,7 @@
     "onChainNote": "chaque mise à jour oracle est sur la chaîne ↗",
     "verifiedAgo": "vérifié il y a 2h ↗",
     "fundingTitle": "Chronologie de financement",
+    "fundingGoalLabel": "{raised} collectés sur un objectif de {goal}",
     "contributionTitle": "Contribution de ce projet",
     "contributionBody": "Votre rendement est façonné par chaque projet soutenu par le pool. Celui-ci porte une qualité de crédit de <b>{credit}</b> et un impact vert de <b>{green}</b>, tous deux mis à jour sur la chaîne par l'oracle.",
     "calcSummary": "Comment cela est-il calculé ?",

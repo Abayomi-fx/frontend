@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { ThemeProvider } from '../theme/ThemeProvider'
 import { WalletProvider } from '../wallet/WalletProvider'
+import { ToastProvider } from '../components'
 
 /**
  * Client providers that must persist across route changes: theme (After Sunset
@@ -12,7 +13,9 @@ import { WalletProvider } from '../wallet/WalletProvider'
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
-      <WalletProvider>{children}</WalletProvider>
+      <WalletProvider>
+        <ToastProvider>{children}</ToastProvider>
+      </WalletProvider>
     </ThemeProvider>
   )
 }

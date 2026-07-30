@@ -12,6 +12,8 @@ const rows: RegistryEntry[] = [
     credit: 82,
     green: 90,
     funded: '$1,180,000',
+    fundedAmount: 1180000,
+    fundingGoal: 1500000,
     lastVerified: '2 days ago',
   },
   {
@@ -22,6 +24,8 @@ const rows: RegistryEntry[] = [
     credit: 74,
     green: 78,
     funded: '$430,000',
+    fundedAmount: 430000,
+    fundingGoal: 600000,
     lastVerified: '6 days ago',
   },
   {
@@ -32,6 +36,8 @@ const rows: RegistryEntry[] = [
     credit: 91,
     green: 85,
     funded: '$2,750,000',
+    fundedAmount: 2750000,
+    fundingGoal: 3000000,
     lastVerified: '11 days ago',
   },
 ]

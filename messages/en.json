@@ -31,6 +31,20 @@
     "talk": "Talk to a human",
     "admin": "Admin console"
   },
+  "Risk": {
+    "title": "Risk disclosure",
+    "body": "Investing in green energy carries risk. Returns are not guaranteed, and the value of your shares can go down as well as up.",
+    "li1": "Pool returns depend on project performance and oracle scores.",
+    "li2": "Liquidity is limited — you can only withdraw what the vault holds liquid.",
+    "li3": "Projects may miss milestones or see costs rise.",
+    "li4": "Past performance does not predict future returns."
+  },
+  "Learn": {
+    "title": "Learn",
+    "body": "Understand how the pool works, what HBS tokens represent, and how withdrawals are handled.",
+    "howTitle": "How it works",
+    "howBody": "One pool funds many verified projects. You deposit USDC and receive HBS shares. The pool deploys capital based on oracle scores and rebalances as projects hit milestones."
+  },
   "Landing": {
     "eyebrow": "Green bonds · on Stellar",
     "title": "Own a piece of the energy transition.",
@@ -113,14 +127,14 @@
     "rowReceive": "You receive",
     "rowPrice": "Share price",
     "rowFee": "Network fee",
-    "reviewBody": "Your shares represent a stake in the whole pool, which funds 14 verified projects. You can withdraw your liquid share at any time.",
+    "reviewBody": "Your shares represent a stake in the whole pool, which funds {count} verified projects. You can withdraw your liquid share at any time.",
     "back": "Back",
     "confirm": "Confirm in wallet",
     "pendingH1": "Confirming your deposit",
     "pendingSub": "Usually ~5 seconds on Stellar.",
     "pendingTx": "tx a91f…3c0d · view on Stellar Expert ↗",
     "successH1": "Welcome to the pool",
-    "successBody": "You received <num>{shares} HBS</num> and now back <b>14 verified projects</b>.",
+    "successBody": "You received <num>{shares} HBS</num> and now back <b>{count} verified projects</b>.",
     "viewExpert": "View on Stellar Expert",
     "goPortfolio": "Go to portfolio"
   },
@@ -134,7 +148,7 @@
     "poolShare": "Your share of the pool",
     "liquidCaption": "Your liquid share. The rest is working in projects.",
     "impactTitle": "Your impact",
-    "impactBody": "Your stake helps fund <b>14 verified projects</b> across 6 countries.",
+    "impactBody": "Your stake helps fund <b>{count} verified projects</b> across 6 countries.",
     "projectsBacked": "Projects backed",
     "weightedGreen": "Weighted green score",
     "activityTitle": "Activity",
@@ -312,6 +326,7 @@
     "onChainNote": "every oracle update is on-chain ↗",
     "verifiedAgo": "verified 2h ago ↗",
     "fundingTitle": "Funding timeline",
+    "fundingGoalLabel": "{raised} raised of {goal} goal",
     "contributionTitle": "This project's contribution",
     "contributionBody": "Your return is shaped by every project the pool backs. This one carries a credit quality of <b>{credit}</b> and a green impact of <b>{green}</b>, both refreshed on-chain by the oracle.",
     "calcSummary": "How is this calculated?",

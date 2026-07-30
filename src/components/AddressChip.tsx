@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, type CSSProperties } from 'react'
 import { CheckIcon, CopyIcon, ExternalIcon } from './icons'
 import { useTranslations } from 'next-intl'
+import { useToast } from './Toast'
 
 /**
  * Heliobond AddressChip — a Stellar address or tx hash, truncated in the
@@ -27,6 +28,7 @@ export function AddressChip({
   style,
 }: AddressChipProps) {
   const t = useTranslations('Common')
+  const { toast } = useToast()
   const [copied, setCopied] = useState(false)
   const [hover, setHover] = useState(false)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -80,6 +82,11 @@ export function AddressChip({
 
     if (success) {
       setCopied(true)
+      toast({
+        tone: 'success',
+        title: t('copied'),
+        message: value,
+      })
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }

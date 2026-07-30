@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button, AmountInput, LiquidityMeter } from '../components'
+import { Button, AmountInput, LiquidityMeter, useToast } from '../components'
 import { submitWithdraw } from '../wallet/vault'
 import { useWallet } from '../wallet/WalletProvider'
 
@@ -20,6 +20,7 @@ type WithdrawStep = 'amount' | 'pending' | 'success'
 
 export function Withdraw({ onDone, onBack }: WithdrawProps) {
   const t = useTranslations('Withdraw')
+  const { toast } = useToast()
   const { address, sign } = useWallet()
   const liquid = 236 // your liquid share, $
   const [step, setStep] = useState<WithdrawStep>('amount')
@@ -105,6 +106,11 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
                 if (mountedRef.current) {
                   setTxHash(hash)
                   changeStep('success')
+                  toast({
+                    tone: 'success',
+                    title: 'Withdrawal settled',
+                    message: `${n.toFixed(2)} USDC is on its way to your wallet.`,
+                  })
                 }
               } catch (e) {
                 if (mountedRef.current) {

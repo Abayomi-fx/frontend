@@ -46,6 +46,7 @@ export function OracleForms({ projects, liquid, onPushScores, onFund }: OracleFo
 
   const amountN = Number(sanitizeAmount(amount))
   const fundValid = amountN > 0 && amountN <= liquid
+  const overLiquid = amountN > liquid
 
   const target = projects.find((p) => p.id === scoreId)
 
@@ -129,7 +130,12 @@ export function OracleForms({ projects, liquid, onPushScores, onFund }: OracleFo
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(sanitizeAmount(e.target.value))}
-              style={{ ...textInput, flex: 1, fontSize: 18 }}
+              style={{
+                ...textInput,
+                flex: 1,
+                fontSize: 18,
+                borderColor: overLiquid ? 'var(--ember)' : undefined,
+              }}
             />
             <span
               style={{
@@ -141,6 +147,30 @@ export function OracleForms({ projects, liquid, onPushScores, onFund }: OracleFo
               USDC
             </span>
           </div>
+          {overLiquid && (
+            <div
+              role="status"
+              style={{
+                marginTop: 10,
+                padding: '10px 14px',
+                background: 'var(--solar-12)',
+                border: '1px solid var(--solar-24)',
+                borderRadius: 'var(--radius-input)',
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--type-small)',
+                  color: 'var(--ink)',
+                  fontWeight: 600,
+                }}
+              >
+                {t('fundExceeds')}
+              </p>
+            </div>
+          )}
         </Field>
         <p style={helpText}>
           {t('liquidHint')}{' '}

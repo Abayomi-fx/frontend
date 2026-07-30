@@ -1,4 +1,14 @@
-import { type CSSProperties, type ReactNode } from 'react'
+'use client'
+
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import { CloseIcon } from './icons'
 
 /**
@@ -106,4 +116,71 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, sty
       )}
     </div>
   )
+}
+
+export interface ToastContextType {
+  toast: (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => void
+  dismiss: () => void
+}
+
+const ToastContext = createContext<ToastContextType | null>(null)
+
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [activeToast, setActiveToast] = useState<(ToastProps & { duration?: number }) | null>(null)
+
+  useEffect(() => {
+    if (!activeToast || activeToast.duration === 0) return
+    const ms = activeToast.duration ?? 5000
+    const timer = setTimeout(() => {
+      setActiveToast(null)
+    }, ms)
+    return () => clearTimeout(timer)
+  }, [activeToast])
+
+  const showToast = useCallback(
+    (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
+      setActiveToast(options)
+    },
+    [],
+  )
+
+  const dismiss = useCallback(() => {
+    setActiveToast(null)
+  }, [])
+
+  return (
+    <ToastContext.Provider value={{ toast: showToast, dismiss }}>
+      {children}
+      {activeToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: 'fixed',
+            right: 24,
+            bottom: 24,
+            zIndex: 9999,
+          }}
+        >
+          <Toast
+            tone={activeToast.tone}
+            title={activeToast.title}
+            message={activeToast.message}
+            action={activeToast.action}
+            onDismiss={dismiss}
+            style={activeToast.style}
+          />
+        </div>
+      )}
+    </ToastContext.Provider>
+  )
+}
+
+export function useToast() {
+  const context = useContext(ToastContext)
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider')
+  }
+  return context
 }
