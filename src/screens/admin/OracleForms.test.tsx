@@ -13,6 +13,8 @@ const mockProjects: RegistryEntry[] = [
     credit: 85,
     green: 72,
     funded: '$100,000',
+    fundedAmount: 100000,
+    fundingGoal: 200000,
     lastVerified: '2 days ago',
   },
 ]

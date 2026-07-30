@@ -31,6 +31,20 @@
     "talk": "Parler à un humain",
     "admin": "Console admin"
   },
+  "Risk": {
+    "title": "Avertissement sur les risques",
+    "body": "Investir dans les énergies vertes comporte des risques. Les rendements ne sont pas garantis, et la valeur de vos parts peut baisser comme augmenter.",
+    "li1": "Les rendements du pool dépendent de la performance des projets et des scores oracle.",
+    "li2": "La liquidité est limitée — vous ne pouvez retirer que ce que le coffre détient en liquide.",
+    "li3": "Les projets peuvent manquer des jalons ou voir leurs coûts augmenter.",
+    "li4": "La performance passée ne prédit pas les rendements futurs."
+  },
+  "Learn": {
+    "title": "Comprendre",
+    "body": "Comprenez comment fonctionne le pool, ce que représentent les jetons HBS et comment les retraits sont gérés.",
+    "howTitle": "Comment ça marche",
+    "howBody": "Un pool finance plusieurs projets vérifiés. Vous déposez des USDC et recevez des parts HBS. Le pool déploie le capital selon les scores oracle et rééquilibre au fur et à mesure que les projets atteignent des jalons."
+  },
   "Landing": {
     "eyebrow": "Obligations vertes · sur Stellar",
     "title": "Possédez une part de la transition énergétique.",
@@ -104,6 +118,10 @@
     "investCta": "Investir {amount} USDC",
     "investCtaEmpty": "Investir",
     "reasonMin": "Saisissez un montant d'au moins 1 USDC",
+    "capMessage": "Vous détenez un solde de ${cap}. Vous pouvez investir jusqu'à ce montant aujourd'hui.",
+    "maxChip": "Max",
+    "depositMaxAvailable": "Investir le maximum disponible",
+    "reasonExceeds": "Le montant dépasse votre solde — utilisez Max",
     "reviewH1": "Vous investissez {amount} USDC dans le pool",
     "rowPay": "Vous payez",
     "rowReceive": "Vous recevez",
@@ -308,6 +326,7 @@
     "onChainNote": "chaque mise à jour oracle est sur la chaîne ↗",
     "verifiedAgo": "vérifié il y a 2h ↗",
     "fundingTitle": "Chronologie de financement",
+    "fundingGoalLabel": "{raised} collectés sur un objectif de {goal}",
     "contributionTitle": "Contribution de ce projet",
     "contributionBody": "Votre rendement est façonné par chaque projet soutenu par le pool. Celui-ci porte une qualité de crédit de <b>{credit}</b> et un impact vert de <b>{green}</b>, tous deux mis à jour sur la chaîne par l'oracle.",
     "calcSummary": "Comment cela est-il calculé ?",

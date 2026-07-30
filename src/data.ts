@@ -12,8 +12,12 @@ export interface Project {
   credit: number
   /** Green Impact, oracle-verified, 0–100 */
   green: number
-  /** Capital deployed to this project from the pool */
+  /** Capital deployed to this project from the pool (display string) */
   funded: string
+  /** Capital deployed, as a number */
+  fundedAmount: number
+  /** Stated funding goal */
+  fundingGoal: number
 }
 
 export interface Activity {
@@ -128,7 +132,74 @@ export const HB_DATA: HeliobondData = {
     weightedGreen: 88,
     backed: INITIAL_FUNDED_COUNT + OFF_SCREEN_PROJECTS_COUNT,
   },
-  projects: INITIAL_PROJECTS,
+  projects: [
+    {
+      id: 1,
+      name: 'Sokoto community solar',
+      location: 'Sokoto, Nigeria',
+      type: 'Solar',
+      credit: 82,
+      green: 91,
+      funded: '$420,000',
+      fundedAmount: 420000,
+      fundingGoal: 600000,
+    },
+    {
+      id: 2,
+      name: 'Ría de Vigo tidal array',
+      location: 'Galicia, Spain',
+      type: 'Hydro',
+      credit: 74,
+      green: 88,
+      funded: '$1,180,000',
+      fundedAmount: 1180000,
+      fundingGoal: 1500000,
+    },
+    {
+      id: 3,
+      name: 'Atacama agrivoltaics',
+      location: 'Antofagasta, Chile',
+      type: 'Solar',
+      credit: 88,
+      green: 79,
+      funded: '$640,000',
+      fundedAmount: 640000,
+      fundingGoal: 800000,
+    },
+    {
+      id: 4,
+      name: 'Jämtland wind co-op',
+      location: 'Östersund, Sweden',
+      type: 'Wind',
+      credit: 91,
+      green: 84,
+      funded: '$960,000',
+      fundedAmount: 960000,
+      fundingGoal: 1200000,
+    },
+    {
+      id: 5,
+      name: 'Kerala micro-hydro',
+      location: 'Idukki, India',
+      type: 'Hydro',
+      credit: 69,
+      green: 93,
+      funded: '$310,000',
+      fundedAmount: 310000,
+      fundingGoal: 400000,
+    },
+    {
+      id: 6,
+      name: 'Oaxaca rooftop network',
+      location: 'Oaxaca, Mexico',
+      type: 'Solar',
+      credit: 77,
+      green: 86,
+      funded: '$520,000',
+      fundedAmount: 520000,
+      fundingGoal: 700000,
+    },
+  ],
   activity: [
     {
       kind: 'Deposit',
