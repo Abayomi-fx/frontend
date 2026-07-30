@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button, AmountInput } from '../components'
+import { Button, AmountInput, useToast } from '../components'
 import { Helio } from '../brand/Helio'
 import { submitDeposit } from '../wallet/vault'
 import { useVault } from '../wallet/useVault'
 import { useWallet } from '../wallet/WalletProvider'
+import { HB_DATA } from '../data'
 
 /**
  * Deposit — the flow that must be perfect. One column, one decision per step:
@@ -28,6 +29,7 @@ const strong = (chunks: ReactNode) => <b style={{ color: 'var(--ink)' }}>{chunks
 
 export function Deposit({ onDone }: DepositProps) {
   const t = useTranslations('Deposit')
+  const { toast } = useToast()
   const { address, sign } = useWallet()
   const { sharePrice: livePrice, loading: vaultLoading, error: vaultError } = useVault()
   const [step, setStep] = useState<DepositStep>('amount')
@@ -179,7 +181,7 @@ export function Deposit({ onDone }: DepositProps) {
               margin: '0 0 20px',
             }}
           >
-            {t('reviewBody')}
+            {t('reviewBody', { count: HB_DATA.pool.projectsFunded })}
           </p>
           <div style={{ display: 'flex', gap: 10 }}>
             <Button variant="ghost" onClick={() => changeStep('amount')}>
@@ -199,6 +201,11 @@ export function Deposit({ onDone }: DepositProps) {
                   if (mountedRef.current) {
                     setTxHash(hash)
                     changeStep('success')
+                    toast({
+                      tone: 'success',
+                      title: 'Deposit confirmed',
+                      message: `Successfully invested ${n} USDC in the pool.`,
+                    })
                   }
                 } catch (e) {
                   if (mountedRef.current) {
@@ -297,7 +304,7 @@ export function Deposit({ onDone }: DepositProps) {
             {t('successH1')}
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 6px' }}>
-            <Helio size={160} motes={14} />
+            <Helio size={160} motes={HB_DATA.pool.projectsFunded} />
           </div>
           <h1 style={{ ...h1Style, textAlign: 'center' }}>{t('successH1')}</h1>
           <p
@@ -310,7 +317,12 @@ export function Deposit({ onDone }: DepositProps) {
               margin: '0 0 22px',
             }}
           >
-            {t.rich('successBody', { shares: (n / price).toFixed(4), num, b: strong })}
+            {t.rich('successBody', {
+              shares: (n / price).toFixed(4),
+              num,
+              b: strong,
+              count: HB_DATA.pool.projectsFunded,
+            })}
           </p>
           <div style={{ display: 'flex', gap: 10 }}>
             <a

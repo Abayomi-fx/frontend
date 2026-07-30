@@ -2,11 +2,11 @@
 
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Badge, Button, AddressChip, Toast } from '@/components'
-import { type ToastTone } from '@/components'
+import { Badge, Button, AddressChip, useToast } from '@/components'
 import { VAULT_STATS, REGISTRY, WHITELIST, type RegistryEntry, type Creator } from '@/data/admin'
 import { RegistryTable } from './RegistryTable'
 import { OracleForms } from './OracleForms'
+import { OFF_SCREEN_PROJECTS_COUNT } from '@/data'
 
 /**
  * AdminConsole — the internal admin / oracle surface. Same design system as the
@@ -15,29 +15,26 @@ import { OracleForms } from './OracleForms'
  * All interactivity is local in-memory state — these stand in for privileged
  * InvestmentVault + ProjectRegistry writes. Honest, plain-language confirms.
  */
-interface ToastState {
-  tone: ToastTone
-  title: string
-  message: string
-}
 
 export function AdminConsole() {
   const t = useTranslations('Admin')
+  const { toast } = useToast()
   const [registry, setRegistry] = useState<RegistryEntry[]>(REGISTRY)
   const [whitelist, setWhitelist] = useState<Creator[]>(WHITELIST)
   // Vault liquid + deployed shift as the oracle funds projects.
   const [liquid, setLiquid] = useState(VAULT_STATS.liquid)
   const [deployed, setDeployed] = useState(VAULT_STATS.deployed)
-  const [toast, setToast] = useState<ToastState | null>(null)
 
-  const fundedCount = registry.filter((r) => parseFundedNum(r.funded) > 0).length
+  // The pool funds 14 projects: 6 demo projects in the registry plus 8 historical/off-screen projects.
+  const fundedCount =
+    registry.filter((r) => parseFundedNum(r.funded) > 0).length + OFF_SCREEN_PROJECTS_COUNT
 
   const updateScores = (id: number, credit: number, green: number) => {
     setRegistry((rows) =>
       rows.map((r) => (r.id === id ? { ...r, credit, green, lastVerified: 'just now' } : r)),
     )
     const name = registry.find((r) => r.id === id)?.name ?? 'project'
-    setToast({
+    toast({
       tone: 'success',
       title: t('toastScoresTitle'),
       message: t('toastScoresMsg', { name, credit, green }),
@@ -54,7 +51,7 @@ export function AdminConsole() {
     setLiquid((l) => l - safe)
     setDeployed((d) => d + safe)
     const name = registry.find((r) => r.id === id)?.name ?? 'project'
-    setToast({
+    toast({
       tone: 'solar',
       title: t('toastFundTitle'),
       message: t('toastFundMsg', { name, amount: safe.toLocaleString('en-US') }),
@@ -64,7 +61,7 @@ export function AdminConsole() {
   const setCreatorStatus = (address: string, status: Creator['status']) => {
     setWhitelist((list) => list.map((c) => (c.address === address ? { ...c, status } : c)))
     const c = whitelist.find((x) => x.address === address)
-    setToast({
+    toast({
       tone: status === 'approved' ? 'success' : 'neutral',
       title: status === 'approved' ? t('toastApprovedTitle') : t('toastRevokedTitle'),
       message:
@@ -191,18 +188,6 @@ export function AdminConsole() {
           ))}
         </div>
       </Section>
-
-      {/* Transient confirmation */}
-      {toast && (
-        <div style={{ position: 'fixed', right: 24, bottom: 24, zIndex: 50 }}>
-          <Toast
-            tone={toast.tone}
-            title={toast.title}
-            message={toast.message}
-            onDismiss={() => setToast(null)}
-          />
-        </div>
-      )}
     </div>
   )
 }

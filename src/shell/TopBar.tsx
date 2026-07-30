@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Button } from '../components'
+import { Button, useToast } from '../components'
 import { Mark } from '../brand/Mark'
 import { useLocaleSwitcher } from '../i18n/LocaleProvider'
 import { useWallet, shortAddress } from '../wallet/WalletProvider'
@@ -270,6 +270,7 @@ function SunIcon() {
 /** The connected wallet pill + its account menu (incl. Disconnect / sign out). */
 function WalletMenu({ address, isDemo }: { address: string; isDemo: boolean }) {
   const t = useTranslations('Nav')
+  const { toast } = useToast()
   const router = useRouter()
   const { disconnect } = useWallet()
   const [open, setOpen] = useState(false)
@@ -344,6 +345,11 @@ function WalletMenu({ address, isDemo }: { address: string; isDemo: boolean }) {
 
     if (success) {
       setCopied(true)
+      toast({
+        tone: 'success',
+        title: t('copied'),
+        message: address,
+      })
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
