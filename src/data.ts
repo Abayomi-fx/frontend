@@ -12,8 +12,12 @@ export interface Project {
   credit: number
   /** Green Impact, oracle-verified, 0–100 */
   green: number
-  /** Capital deployed to this project from the pool */
+  /** Capital deployed to this project from the pool (display string) */
   funded: string
+  /** Capital deployed, as a number */
+  fundedAmount: number
+  /** Stated funding goal */
+  fundingGoal: number
 }
 
 export interface Activity {
@@ -71,6 +75,8 @@ export const HB_DATA: HeliobondData = {
       credit: 82,
       green: 91,
       funded: '$420,000',
+      fundedAmount: 420000,
+      fundingGoal: 600000,
     },
     {
       id: 2,
@@ -80,6 +86,8 @@ export const HB_DATA: HeliobondData = {
       credit: 74,
       green: 88,
       funded: '$1,180,000',
+      fundedAmount: 1180000,
+      fundingGoal: 1500000,
     },
     {
       id: 3,
@@ -89,6 +97,8 @@ export const HB_DATA: HeliobondData = {
       credit: 88,
       green: 79,
       funded: '$640,000',
+      fundedAmount: 640000,
+      fundingGoal: 800000,
     },
     {
       id: 4,
@@ -98,6 +108,8 @@ export const HB_DATA: HeliobondData = {
       credit: 91,
       green: 84,
       funded: '$960,000',
+      fundedAmount: 960000,
+      fundingGoal: 1200000,
     },
     {
       id: 5,
@@ -107,6 +119,8 @@ export const HB_DATA: HeliobondData = {
       credit: 69,
       green: 93,
       funded: '$310,000',
+      fundedAmount: 310000,
+      fundingGoal: 400000,
     },
     {
       id: 6,
@@ -116,6 +130,8 @@ export const HB_DATA: HeliobondData = {
       credit: 77,
       green: 86,
       funded: '$520,000',
+      fundedAmount: 520000,
+      fundingGoal: 700000,
     },
   ],
   activity: [

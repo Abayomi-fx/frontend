@@ -31,6 +31,20 @@
     "talk": "Talk to a human",
     "admin": "Admin console"
   },
+  "Risk": {
+    "title": "Risk disclosure",
+    "body": "Investing in green energy carries risk. Returns are not guaranteed, and the value of your shares can go down as well as up.",
+    "li1": "Pool returns depend on project performance and oracle scores.",
+    "li2": "Liquidity is limited — you can only withdraw what the vault holds liquid.",
+    "li3": "Projects may miss milestones or see costs rise.",
+    "li4": "Past performance does not predict future returns."
+  },
+  "Learn": {
+    "title": "Learn",
+    "body": "Understand how the pool works, what HBS tokens represent, and how withdrawals are handled.",
+    "howTitle": "How it works",
+    "howBody": "One pool funds many verified projects. You deposit USDC and receive HBS shares. The pool deploys capital based on oracle scores and rebalances as projects hit milestones."
+  },
   "Landing": {
     "eyebrow": "Green bonds · on Stellar",
     "title": "Own a piece of the energy transition.",
@@ -312,6 +326,7 @@
     "onChainNote": "every oracle update is on-chain ↗",
     "verifiedAgo": "verified 2h ago ↗",
     "fundingTitle": "Funding timeline",
+    "fundingGoalLabel": "{raised} raised of {goal} goal",
     "contributionTitle": "This project's contribution",
     "contributionBody": "Your return is shaped by every project the pool backs. This one carries a credit quality of <b>{credit}</b> and a green impact of <b>{green}</b>, both refreshed on-chain by the oracle.",
     "calcSummary": "How is this calculated?",

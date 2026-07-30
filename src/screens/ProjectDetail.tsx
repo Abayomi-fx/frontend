@@ -168,7 +168,58 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
       {/* Funding timeline */}
       <section style={{ marginBottom: 40 }}>
         <h2 style={sectionTitle}>{t('fundingTitle')}</h2>
-        <div style={cardStyle}>
+        <div style={{ ...cardStyle, paddingBottom: 16 }}>
+          {(() => {
+            const goal = detail.fundingGoal
+            const raised = detail.fundedAmount
+            const pct = goal > 0 ? Math.min(100, Math.round((raised / goal) * 100)) : 0
+            return (
+              <>
+                <div
+                  style={{
+                    height: 8,
+                    borderRadius: 'var(--radius-pill)',
+                    background: 'var(--ink-06)',
+                    border: '1px solid var(--ink-12)',
+                    overflow: 'hidden',
+                    marginBottom: 10,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${pct}%`,
+                      height: '100%',
+                      background: 'var(--solar)',
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--type-small)',
+                    color: 'var(--ink-60)',
+                    marginBottom: 14,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-data)',
+                      color: 'var(--ink)',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {pct}%
+                  </span>{' '}
+                  {t('fundingGoalLabel', {
+                    raised: raised.toLocaleString('en-US'),
+                    goal: goal.toLocaleString('en-US'),
+                  })}
+                </div>
+              </>
+            )
+          })()}
+        </div>
+        <div style={{ ...cardStyle, paddingTop: 0 }}>
           {detail.fundingTimeline.map((event, i) => (
             <div
               key={event.hash}

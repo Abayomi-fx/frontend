@@ -20,6 +20,8 @@ export interface ProjectCardProps {
   verifiedLabel?: string
   onOpen?: () => void
   style?: CSSProperties
+  fundingGoal?: number
+  fundedAmount?: number
 }
 
 export function ProjectCard({
@@ -34,9 +36,14 @@ export function ProjectCard({
   verifiedLabel,
   onOpen,
   style,
+  fundingGoal,
+  fundedAmount,
 }: ProjectCardProps) {
   const [hover, setHover] = useState(false)
   const resolvedVerifiedLabel = verifiedLabel ?? verifiedAgo
+  const showProgress =
+    typeof fundedAmount === 'number' && typeof fundingGoal === 'number' && fundingGoal > 0
+  const fundedPct = showProgress ? Math.min(100, Math.round((fundedAmount / fundingGoal) * 100)) : 0
 
   return (
     <article
@@ -137,6 +144,37 @@ export function ProjectCard({
             >
               {funded}
             </div>
+            {showProgress && (
+              <div style={{ marginTop: 10 }}>
+                <div
+                  style={{
+                    height: 6,
+                    borderRadius: 'var(--radius-pill)',
+                    background: 'var(--ink-06)',
+                    border: '1px solid var(--ink-12)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${fundedPct}%`,
+                      height: '100%',
+                      background: 'var(--solar)',
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-data)',
+                    fontSize: 'var(--type-fine)',
+                    color: 'var(--ink-40)',
+                    marginTop: 4,
+                  }}
+                >
+                  {fundedPct}% of {fundingGoal!.toLocaleString('en-US')}
+                </div>
+              </div>
+            )}
           </div>
           {resolvedVerifiedLabel && (
             <span

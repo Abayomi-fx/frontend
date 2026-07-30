@@ -26,6 +26,10 @@ export interface ProjectDetail {
   }
   /** Capital events, most recent last. */
   fundingTimeline: FundingEvent[]
+  /** Total capital deployed to this project from the pool. */
+  fundedAmount: number
+  /** Stated funding goal. */
+  fundingGoal: number
   /** A tasteful CSS gradient for the hero photo placeholder. */
   heroGradient: string
 }
@@ -69,6 +73,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
       },
       { date: '21 May 2026', label: 'Funded from the pool', amount: '$100,000', hash: 'a91f…3c0d' },
     ],
+    fundedAmount: 420000,
+    fundingGoal: 600000,
     heroGradient:
       'radial-gradient(120% 120% at 72% 8%, var(--solar-24), transparent 60%), linear-gradient(150deg, var(--solar-12), var(--ink-06))',
   },
@@ -110,6 +116,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
       },
       { date: '27 May 2026', label: 'Funded from the pool', amount: '$100,000', hash: '04cd…62f8' },
     ],
+    fundedAmount: 1180000,
+    fundingGoal: 1500000,
     heroGradient:
       'radial-gradient(130% 110% at 24% 12%, var(--solar-12), transparent 58%), linear-gradient(165deg, var(--ink-06), var(--solar-12))',
   },
@@ -145,6 +153,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
       },
       { date: '30 Apr 2026', label: 'Funded from the pool', amount: '$120,000', hash: '0e93…a6d2' },
     ],
+    fundedAmount: 640000,
+    fundingGoal: 800000,
     heroGradient:
       'radial-gradient(120% 130% at 78% 6%, var(--solar-24), transparent 62%), linear-gradient(140deg, var(--solar-12), var(--ink-06))',
   },
@@ -181,6 +191,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
       },
       { date: '22 May 2026', label: 'Funded from the pool', amount: '$80,000', hash: '0b4d…63e1' },
     ],
+    fundedAmount: 960000,
+    fundingGoal: 1200000,
     heroGradient:
       'radial-gradient(125% 115% at 20% 10%, var(--solar-12), transparent 56%), linear-gradient(170deg, var(--ink-06), var(--solar-12))',
   },
@@ -216,6 +228,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
       },
       { date: '11 May 2026', label: 'Funded from the pool', amount: '$60,000', hash: '0a73…e6d2' },
     ],
+    fundedAmount: 310000,
+    fundingGoal: 400000,
     heroGradient:
       'radial-gradient(130% 120% at 74% 10%, var(--solar-12), transparent 60%), linear-gradient(155deg, var(--solar-12), var(--ink-06))',
   },
@@ -251,6 +265,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
       },
       { date: '25 Apr 2026', label: 'Funded from the pool', amount: '$100,000', hash: '0c93…46d2' },
     ],
+    fundedAmount: 520000,
+    fundingGoal: 700000,
     heroGradient:
       'radial-gradient(120% 125% at 76% 8%, var(--solar-24), transparent 60%), linear-gradient(145deg, var(--solar-12), var(--ink-06))',
   },
