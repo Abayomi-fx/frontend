@@ -64,10 +64,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <LocaleProvider initialLocale={locale as Locale} initialMessages={messages as Messages}>
           <Providers>
-            <a
-              href="#main-content"
-              className="hb-skip-link"
-            >
+            <a href="#main-content" className="hb-skip-link">
               Skip to content
             </a>
             <TopBar />
