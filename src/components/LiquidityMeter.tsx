@@ -22,8 +22,7 @@ export function LiquidityMeter({
   style,
 }: LiquidityMeterProps) {
   const pct = total > 0 ? Math.max(0, Math.min(1, liquid / total)) : 0
-  const fmt = (n: number) =>
-    formatMoney(n, { includeSymbol: true, symbol: currency })
+  const fmt = (n: number) => formatMoney(n, { includeSymbol: true, symbol: currency })
 
   return (
     <div style={{ ...style }}>

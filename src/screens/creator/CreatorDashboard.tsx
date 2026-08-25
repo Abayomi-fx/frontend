@@ -10,7 +10,6 @@ import {
 } from '@/data/creator'
 import { formatMoney } from '@/lib/format'
 
-
 /**
  * CreatorDashboard — the creator's calm read on their project. Funding received,
  * the two live oracle scores, tiny score-history sparklines, an honest "what the

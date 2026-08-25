@@ -7,7 +7,6 @@ import { type RegistryEntry } from '@/data/admin'
 import { clampScore } from './utils'
 import { formatMoney } from '@/lib/format'
 
-
 /**
  * OracleForms — the two privileged write paths, side by side:
  *   1. Push score update — re-verify a project's credit + green on-chain.
@@ -35,8 +34,6 @@ export function OracleForms({ projects, liquid, onPushScores, onFund }: OracleFo
   // Fund form state.
   const [fundId, setFundId] = useState(first)
   const [amount, setAmount] = useState('')
-
-
 
   const creditN = Number(credit)
   const greenN = Number(green)

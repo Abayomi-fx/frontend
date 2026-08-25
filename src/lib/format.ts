@@ -8,7 +8,7 @@ export function formatMoney(
     includeSymbol?: boolean
     symbol?: string
     locale?: string
-  }
+  },
 ): string {
   const locale = options?.locale ?? 'en-US'
   const formatted = amount.toLocaleString(locale, {

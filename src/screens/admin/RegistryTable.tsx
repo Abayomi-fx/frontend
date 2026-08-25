@@ -6,7 +6,6 @@ import { Button } from '@/components'
 import { type RegistryEntry } from '@/data/admin'
 import { clampScore, parseFundedNum } from './utils'
 
-
 /**
  * RegistryTable — the dense project registry. A real <table> with a tinted,
  * sticky-feeling header. Numbers are mono / tabular / right-aligned. Column
@@ -21,8 +20,6 @@ export interface RegistryTableProps {
   rows: RegistryEntry[]
   onSave: (id: number, credit: number, green: number) => void
 }
-
-
 
 export function RegistryTable({ rows, onSave }: RegistryTableProps) {
   const t = useTranslations('Admin')
@@ -238,8 +235,6 @@ function Row({
     setGreen(String(row.green))
     onEdit()
   }
-
-
 
   return (
     <>
