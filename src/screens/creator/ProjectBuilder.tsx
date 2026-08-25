@@ -6,7 +6,6 @@ import { ProjectCard, Tag, Card, UploadIcon } from '@/components'
 import { PROJECT_TYPES, DRAFT_PROJECT, type ProjectType } from '@/data/creator'
 import { formatMoney } from '@/lib/format'
 
-
 /**
  * ProjectBuilder — the off-chain metadata builder. The form on the left writes
  * straight into a live ProjectCard preview on the right, so a creator sees the

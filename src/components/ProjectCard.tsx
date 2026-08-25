@@ -3,7 +3,6 @@ import { ScoreGauge } from './ScoreGauge'
 import { PinIcon } from './icons'
 import { formatMoney } from '../lib/format'
 
-
 /**
  * Heliobond ProjectCard — a project in the living atlas. Photo, name, location,
  * the two sun-arc scores, funding received from the vault, and a verified

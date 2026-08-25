@@ -27,7 +27,6 @@ export const SIMULATED_DEPOSIT_DELAY_MS = 2000
 /** Simulated pending delay for withdraw transactions in demo mode. */
 export const SIMULATED_WITHDRAW_DELAY_MS = 2000
 
-
 export interface DepositPreview {
   shares: number
   sharePrice: number
