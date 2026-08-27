@@ -163,16 +163,17 @@ To add a new namespace for a new screen or surface:
 - **Bugs:** open a **Bug report** issue with steps to reproduce.
 - **Security:** please do **not** open a public issue. Use GitHub's **"Report a vulnerability"** (Security tab) for a private advisory.
 
-## Pre-commit hooks (optional)
+## Pre-commit hooks
 
-The project ships a pre-commit hook via **Husky** + **lint-staged** that runs the TypeScript
-type-checker on staged files before each commit. Install it:
+The project ships a pre-commit hook via **Husky** that runs the TypeScript
+type-checker, ESLint, Prettier format check, and the full test suite on every
+commit. Install it:
 
 ```bash
 bun run prepare
 ```
 
-To opt out, skip the `prepare` step — the hook is **not** installed unless you run it.
-Contributors who opt out are still expected to run `bun run build` before opening a PR.
+To opt out, skip the `prepare` step — the hook is **not** installed unless you run
+it. Contributors who opt out are still expected to run `bun run build` before opening a PR.
 
 By contributing, you agree to abide by the [Code of Conduct](./CODE_OF_CONDUCT.md).

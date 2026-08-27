@@ -25,12 +25,8 @@
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "bundle:check": "node scripts/check-bundle-size.js",
+    "typecheck:coverage": "node scripts/check-type-coverage.js",
     "prepare": "husky"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "bash -c \"tsc --noEmit\""
-    ]
   },
   "dependencies": {
     "@creit.tech/stellar-wallets-kit": "^2.3.0",
@@ -59,7 +55,6 @@
     "eslint-config-next": "^16.2.9",
     "husky": "^9.1.7",
     "jsdom": "^24.0.0",
-    "lint-staged": "^15.5.2",
     "prettier": "^3.9.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
