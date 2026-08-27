@@ -21,6 +21,9 @@
     "copied": "Copié",
     "viewOnExplorer": "Voir sur Stellar Expert",
     "disconnect": "Se déconnecter",
+    "disconnectConfirm": "Oui, se déconnecter",
+    "disconnectConfirmBody": "La déconnexion termine votre session. Vos actifs sur la chaîne sont en sécurité sur Stellar, mais vous devrez reconnecter votre portefeuille pour accéder à votre portefeuille, investir ou retirer.",
+    "disconnectCancel": "Annuler",
     "demoSession": "Session démo"
   },
   "Footer": {
