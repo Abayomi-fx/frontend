@@ -44,6 +44,9 @@ jobs:
       - name: Type-check
         run: bun run typecheck
 
+      - name: Type coverage
+        run: bun run typecheck:coverage
+
       - name: Lint
         run: bun run lint
 
