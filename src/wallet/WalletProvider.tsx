@@ -15,6 +15,7 @@ interface WalletContextValue {
   connected: boolean
   connecting: boolean
   isDemo: boolean
+  restoring: boolean
   connectionError: string | null
   retryCount: number
   connect: () => Promise<void>
@@ -48,6 +49,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [address, setAddress] = useState<string | null>(null)
   const [connecting, setConnecting] = useState(false)
   const [isDemo, setIsDemo] = useState(false)
+  const [restoring, setRestoring] = useState(true)
   const [connectionError, setConnectionError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
 
@@ -77,9 +79,13 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
-    if (!saved) return
+    if (!saved) {
+      setRestoring(false)
+      return
+    }
     setAddress(saved)
     setIsDemo(savedWallet === 'demo')
+    setRestoring(false)
 
     if (savedWallet && savedWallet !== 'demo') {
       void (async () => {
@@ -191,6 +197,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         connected: address !== null,
         connecting,
         isDemo,
+        restoring,
         connectionError,
         retryCount,
         connect,

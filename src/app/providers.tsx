@@ -15,9 +15,9 @@ function SessionWatcher() {
     onTimeout: () => {
       disconnect()
       toast({
-        tone: 'ember',
+        tone: 'error',
         title: 'Session expired',
-        description: 'You have been disconnected due to inactivity.',
+        message: 'You have been disconnected due to inactivity.',
       })
     },
   })

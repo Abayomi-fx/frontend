@@ -18,6 +18,13 @@ export interface ExploreProps {
 
 const TYPES: (ProjectType | 'All')[] = ['All', 'Solar', 'Wind', 'Hydro']
 
+/**
+ * Projects rendered per page. Twelve fills the widest grid with whole rows at
+ * every breakpoint (the grid runs 1–4 columns), so a page boundary never leaves
+ * a ragged half-row.
+ */
+const PAGE_SIZE = 6
+
 export function Explore({ onOpen }: ExploreProps) {
   const t = useTranslations('Explore')
   const router = useRouter()
@@ -29,6 +36,7 @@ export function Explore({ onOpen }: ExploreProps) {
   const [filter, setFilter] = useState<ProjectType | 'All'>(
     urlType && ['Solar', 'Wind', 'Hydro'].includes(urlType) ? urlType : 'All',
   )
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     getProjects()
@@ -44,6 +52,7 @@ export function Explore({ onOpen }: ExploreProps) {
 
   const setFilterAndUrl = (next: ProjectType | 'All') => {
     setFilter(next)
+    setCurrentPage(1)
     if (next === 'All') {
       router.replace('/explore', { scroll: false })
     } else {
@@ -52,8 +61,6 @@ export function Explore({ onOpen }: ExploreProps) {
   }
 
   const shown = filter === 'All' ? projects : projects.filter((p) => p.type === filter)
-  const PAGE_SIZE = 6
-  const [currentPage, setCurrentPage] = useState(1)
   const totalPages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE))
   const paged = shown.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 

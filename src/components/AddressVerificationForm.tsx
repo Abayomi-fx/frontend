@@ -19,8 +19,6 @@ interface Props {
   initial?: Partial<AddressValues>
 }
 
-const REQUIRED_FIELDS: Array<keyof AddressValues> = ['street', 'city', 'state', 'zip', 'country']
-
 export function AddressVerificationForm({ onSubmit, initial }: Props) {
   const [values, setValues] = useState<AddressValues>({
     street: initial?.street ?? '',
