@@ -332,5 +332,5 @@ const panelHeaderStyle: CSSProperties = {
 const panelBodyStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 12,
+  gap: 'var(--form-gap)',
 }

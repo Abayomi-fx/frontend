@@ -14,9 +14,10 @@ export interface ConnectProps {
   onWallet: () => void
   onNew: () => void
   onCancel: () => void
+  onBiometric?: () => void
 }
 
-export function Connect({ onWallet, onNew, onCancel }: ConnectProps) {
+export function Connect({ onWallet, onNew, onCancel, onBiometric }: ConnectProps) {
   const t = useTranslations('Connect')
   const { connectionError, connecting, retry } = useWallet()
   const edu = [1, 2, 3] as const
@@ -74,6 +75,17 @@ export function Connect({ onWallet, onNew, onCancel }: ConnectProps) {
           chips={['Email', 'Passkey', t('addFunds')]}
         />
       </div>
+
+      {onBiometric && (
+        <Button
+          variant="secondary"
+          size="lg"
+          style={{ width: '100%', marginBottom: 28 }}
+          onClick={onBiometric}
+        >
+          Face ID / Touch ID
+        </Button>
+      )}
 
       <div className="hb-edu-grid">
         {edu.map((i) => (

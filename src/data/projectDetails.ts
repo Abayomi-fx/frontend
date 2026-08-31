@@ -14,6 +14,8 @@ export interface FundingEvent {
 export interface ProjectDetail {
   /** 2–3 plain sentences in the brand voice. */
   story: string
+  name: string
+  location: string
   creator: {
     name: string
     verified: true
@@ -44,6 +46,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
   1: {
     story:
       'Sokoto community solar lights homes, clinics, and a grain market that ran on diesel for a generation. Local technicians keep the array running and own a share of what it earns. Every kilowatt-hour is metered and reported back to the pool.',
+    name: 'Sokoto Community Solar',
+    location: 'Sokoto, Nigeria',
     creator: { name: 'Sahel Energy Cooperative', verified: true, since: '2025' },
     scoreHistory: {
       credit: [
@@ -81,6 +85,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
   2: {
     story:
       'The Ría de Vigo tidal array turns the slow breathing of the estuary into steady power for the fishing towns along its shore. It was built to sit quietly with the rías ecosystem, not against it. Output rises and falls with the tide, and the pool tracks every cycle.',
+    name: 'Ría de Vigo Tidal Array',
+    location: 'Ría de Vigo, Spain',
     creator: { name: 'Atlántica Mareas SCG', verified: true, since: '2025' },
     scoreHistory: {
       credit: [
@@ -124,6 +130,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
   3: {
     story:
       'Atacama agrivoltaics grows shade-loving crops beneath panels in one of the driest places on earth. The panels shelter the soil; the soil cools the panels. Two harvests from one patch of desert, both verified and reported on-chain.',
+    name: 'Atacama Agrivoltaics',
+    location: 'Atacama Desert, Chile',
     creator: { name: 'Pampa Solar Andina', verified: true, since: '2025' },
     scoreHistory: {
       credit: [
@@ -161,6 +169,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
   4: {
     story:
       'The Jämtland wind co-op is owned by the farms and villages it powers, with turbines spaced to keep the reindeer trails open. Snow, wind, and long winter nights make for some of the most reliable output in the pool. Members vote on every reinvestment.',
+    name: 'Jämtland Wind Co-op',
+    location: 'Jämtland, Sweden',
     creator: { name: 'Jämtland Vindkraft Ek. för.', verified: true, since: '2025' },
     scoreHistory: {
       credit: [
@@ -199,6 +209,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
   5: {
     story:
       'Kerala micro-hydro runs a hillside stream through a small powerhouse and back to the river, lighting villages that the grid never reached. It is modest by megawatts and large by lives changed. Flow is gauged daily and the readings are public.',
+    name: 'Kerala Micro-Hydro',
+    location: 'Idukki, Kerala, India',
     creator: { name: 'Idukki Hill Hydro Society', verified: true, since: '2025' },
     scoreHistory: {
       credit: [
@@ -236,6 +248,8 @@ export const PROJECT_DETAILS: Record<number, ProjectDetail> = {
   6: {
     story:
       'The Oaxaca rooftop network turns hundreds of small roofs — homes, a bakery, a school — into one shared power plant. Neighbors who could never afford panels alone now own a slice of the whole. Each rooftop meter reports to the pool independently.',
+    name: 'Oaxaca Rooftop Network',
+    location: 'Oaxaca, Mexico',
     creator: { name: 'Techos Solares de Oaxaca', verified: true, since: '2025' },
     scoreHistory: {
       credit: [

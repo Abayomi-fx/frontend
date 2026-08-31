@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button, AmountInput, LiquidityMeter, useToast } from '../components'
+import { Button, AmountInput, LiquidityMeter, AddressChip, useToast } from '../components'
 import { submitWithdraw } from '../wallet/vault'
 import { useWallet } from '../wallet/WalletProvider'
 import { formatDecimal, parseAmount } from '../lib/format'
@@ -55,6 +55,10 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
   const n = parseAmount(amount)
 
   const renderStep = (currentStep: WithdrawStep) => {
+    const txExplorerUrl = txHash
+      ? `https://stellar.expert/explorer/testnet/tx/${txHash}`
+      : undefined
+
     switch (currentStep) {
       case 'amount':
         return (
@@ -231,19 +235,11 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
             </p>
             {txHash && (
               <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                <a
-                  href={`https://stellar.expert/explorer/testnet/tx/${txHash}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    fontFamily: 'var(--font-data)',
-                    fontSize: 'var(--type-caption)',
-                    color: 'var(--ink-40)',
-                    textDecoration: 'none',
-                  }}
-                >
-                  {txHash} ↗
-                </a>
+                <AddressChip
+                  value={txHash}
+                  explorerUrl={txExplorerUrl}
+                  label={t('transactionHashLabel')}
+                />
               </div>
             )}
             <Button variant="primary" size="lg" style={{ width: '100%' }} onClick={onDone}>

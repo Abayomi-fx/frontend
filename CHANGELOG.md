@@ -42,6 +42,8 @@ once it cuts its first tagged release (it currently ships continuously from
 
 ### Fixed
 
+- Fixed transaction hashes wrapping awkwardly on mobile and made them easier to
+  copy (#418).
 - Investment form leading zeros, a nav prop mismatch, and decimal rounding.
 - Text link and "Forgot Password" contrast on dark backgrounds (#351).
 - Password reset emails now include an explicit token expiration time (#354).

@@ -101,6 +101,8 @@
   "Explore": {
     "title": "Where the pool works",
     "sub": "Every project the pool funds, with oracle-verified scores. Explore freely — connecting a wallet comes later.",
+    "searchPlaceholder": "Search by name or location",
+    "searchAriaLabel": "Search projects",
     "filterAll": "All",
     "countSorted": "{count} projects",
     "cardFundedFromPool": "Funded from the pool",
@@ -176,6 +178,7 @@
     "pendingSub": "Usually ~5 seconds on Stellar. tx 4d2c…9af1 ↗",
     "successH1": "Withdrawal settled",
     "successBody": "<num>${amount} USDC</num> is on its way to your wallet. Thanks for being part of the pool.",
+    "transactionHashLabel": "hash de transacción",
     "backToPortfolio": "Back to portfolio"
   },
   "Admin": {

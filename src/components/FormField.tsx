@@ -13,6 +13,13 @@ export interface FormFieldProps {
   htmlFor?: string
   children: ReactNode
   style?: CSSProperties
+  /**
+   * Override the bottom margin applied to the field wrapper.
+   * Defaults to `var(--form-gap)` (20 px from the spacing scale).
+   * Pass `0` when the parent already controls spacing via `hb-form-stack`
+   * or a flex/grid gap.
+   */
+  spacing?: string | number
 }
 
 export function FormField({
@@ -22,9 +29,13 @@ export function FormField({
   style,
   required,
   optionalHint,
+  spacing,
 }: FormFieldProps) {
+  // Use the token by default; allow explicit override (e.g. spacing={0} inside
+  // an hb-form-stack that already provides gap).
+  const marginBottom = spacing !== undefined ? spacing : 'var(--form-gap)'
   return (
-    <div data-field-wrapper>
+    <div data-field-wrapper style={{ marginBottom }}>
       <label
         htmlFor={htmlFor}
         style={{ display: 'flex', flexDirection: 'column', gap: 6, ...style }}

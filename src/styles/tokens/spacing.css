@@ -31,6 +31,10 @@
   --gutter-mobile: 20px;
   --grid-columns: 12; /* @kind other */
 
+  /* --- Form spacing --------------------------------------------------- */
+  /* Consistent field-to-field gap used by hb-form-stack and FormField wrappers. */
+  --form-gap: 20px;
+
   /* --- Hit target ----------------------------------------------------- */
   --touch-min: 44px; /* never smaller */
 
