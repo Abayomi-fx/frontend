@@ -3,7 +3,7 @@
  * Never surface raw codes like 'insufficient_balance' to users.
  */
 
-const ERROR_CODE_MAP = {
+const ERROR_CODE_MAP: Record<string, string> = {
   insufficient_balance: 'Not enough funds - your balance is too low for this amount.',
   insufficient_funds: 'Not enough funds - your balance is too low for this amount.',
   amount_too_low: 'Enter an amount of at least 1 USDC.',
@@ -25,7 +25,7 @@ const STELLAR_UNREACHABLE_MESSAGE = ERROR_CODE_MAP.stellar_unreachable
 const NETWORK_ERROR_PATTERNS = [
   'network', 'socket', 'fetch', 'connection', 'connect',
   'unreachable', 'refused', 'dns', 'timed out', 'timeout',
-  'ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUD', 'EAIOFOUND',
+  'ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT', 'EAA_AGAIN',
 ]
 
 function normalizeCode(code: string): string {
@@ -44,7 +44,7 @@ export function getFriendlyErrorMessage(codeOrMessage: string): string {
 
   // If the error looks like a network/connection issue, degrade gracefully.
   if (looksLikeNetworkError(codeOrMessage)) {
-    return STELLAR_UNREAHCABLE_MESSAGE
+    return STELLAR_UNREACHABLE_MESSAGE
   }
 
   // If message already looks friendly contains spaces and no underscores), return as-is
