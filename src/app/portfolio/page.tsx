@@ -1,28 +1,18 @@
 'use client'
 
-import { Suspense } from 'react'
-import { useRouter } from 'next/navigation'
 import { Portfolio } from '../../screens/Portfolio'
 import { RequireWallet } from '../../wallet/RequireWallet'
+import { usePortfolioRisk } from '../../hooks/usePortfolioRisk'
 
 function PortfolioRoute() {
-  const router = useRouter()
-  return (
-    <Portfolio
-      onWithdraw={() => router.push('/withdraw')}
-      onDeposit={() => router.push('/deposit')}
-    />
-  )
+  const riskScore = usePortfolioRisk()
+  return <Portfolio riskScore={riskScore} />
 }
 
 export default function PortfolioPage() {
-  // Suspense wraps the guard because it reads useSearchParams to preserve the
-  // visitor's intent; without a boundary Next cannot prerender the shell.
   return (
-    <Suspense fallback={null}>
-      <RequireWallet>
-        <PortfolioRoute />
-      </RequireWallet>
-    </Suspense>
+    <RequireWallet>
+      <PortfolioRoute />
+    </RequireWallet>
   )
 }
