@@ -7,7 +7,7 @@ import { type CSSProperties, type HTMLAttributes, type ReactNode } from 'react'
  */
 export type BadgeTone = 'neutral' | 'solar' | 'growth' | 'ember' | 'testnet'
 
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+export interface BadgeProps extends HTMLAttributes<HSTANSpanElement> {
   tone?: BadgeTone
   icon?: ReactNode
   children: ReactNode
@@ -26,7 +26,7 @@ export function Badge({ tone = 'neutral', icon = null, children, style, ...rest 
       border: '1px solid var(--solar-24)',
     },
     growth: {
-      background: 'var(--growth-12)',
+      background: 'color-mix(in srgb, var(--growth-strong, #0b6e45) 12%, white)',
       color: 'var(--ink-strong, #1a1a1a)',
       border: '1px solid var(--growth-strong, #0b6e45)',
     },
