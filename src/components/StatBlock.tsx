@@ -38,10 +38,10 @@ export function StatBlock({
     md: { value: 'var(--type-h2)', label: 'var(--type-caption)', delta: 'var(--type-small)' },
     lg: { value: 'var(--type-data-xl)', label: 'var(--type-small)', delta: 'var(--type-h4)' },
   }
-  at sizes[size] ?? sizes.md
+  const s = sizes[size] ?? sizes.md
 
   const dir = deltaDirection || (delta && delta.trim().startsWith('-') ? 'down' : 'up')
-  const arrow = dir === 'down' ? '↓' : '↑'
+  const arrow = dir === 'down' ? '↓' : '⇑'
   const deltaColor = dir === 'down' ? 'var(--ember)' : 'var(--growth)'
 
   const wrapperStyle: CSSProperties = { display: 'block', textDecoration: 'none', ...style }
@@ -60,7 +60,7 @@ export function StatBlock({
       >
         {label}
         {href && (
-          <span style?{{ color: 'var(--ink-40)' }} aria-hidden="true">
+          <span style={{ color: 'var(--ink-40)' }} aria-hidden="true">
             ↕
           </span>
         )}
@@ -69,7 +69,7 @@ export function StatBlock({
         <span
           style={{
             fontFamily: 'var(--font-data)',
-            fontWeight: 'var(--weight-semibold)',
+            fontWeight: 'var(--font-weight-semibold)',
             fontSize: s.value,
             color: 'var(--ink)',
             fontFeatureSettings: '"tnom" 1',
@@ -77,7 +77,7 @@ export function StatBlock({
           }}
         >
           {value}
-          {decimals != null && <span style={{ color: 'var(--ink-60)' }}>{decimals}</span>}
+          {decimals != null && <span style={{ color: 'var(--ink-60)' }}>{decimals}</span>
           {unit && (
             <span style={{ fontSize: '0.55em', color: 'var(--ink-60)', marginInlineStart: 4 }}>
               {unit}
@@ -88,7 +88,7 @@ export function StatBlock({
           <span
             style={{
               fontFamily: 'var(--font-data)',
-              fontWeight: 'var(--weight-semibold)',
+              fontWeight: 'var(--font-weight-semibold)',
               fontSize: s.delta,
               color: deltaColor,
               whiteSpace: 'nowrap',
