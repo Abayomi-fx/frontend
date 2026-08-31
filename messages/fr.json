@@ -102,6 +102,8 @@
   "Explore": {
     "title": "Là où le pool agit",
     "sub": "Chaque projet financé par le pool, avec des scores vérifiés par l'oracle. Explorez librement — la connexion du portefeuille vient plus tard.",
+    "searchLabel": "Rechercher",
+    "searchPlaceholder": "Rechercher par nom ou localisation",
     "filterAll": "Tous",
     "countSorted": "{count} projets",
     "cardFundedFromPool": "Financé par le pool",
