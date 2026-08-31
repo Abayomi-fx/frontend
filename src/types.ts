@@ -1,11 +1,11 @@
 export type Screen =
   | 'landing' // /
-  | 'connect' // /connect
-  | 'explore' // /explore
-  | 'project' // /project/[id]
-  | 'deposit' // /deposit
-  | 'portfolio' // /portfolio
-  | 'withdraw' // /withdraw
+  | 'connect' / /connect
+  | 'explore' / /explore
+  | 'project' / /project/[id]
+  | 'deposit' / /deposit
+  | 'portfolio' / /portfolio
+  | 'withdraw' / /withdraw
 
 export interface Project {
   id: string;
@@ -34,4 +34,5 @@ export interface Portfolio {
   name: string;
   holdings: Bond[];
   riskScore: RiskScore;
+  referralLink: string | null;
 }
