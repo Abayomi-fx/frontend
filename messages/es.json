@@ -24,7 +24,8 @@
     "disconnectConfirm": "Yes, disconnect",
     "disconnectConfirmBody": "Disconnecting ends your current session. Your on-chain assets are safe on Stellar, but you will need to reconnect your wallet to access your portfolio, invest, or withdraw.",
     "disconnectCancel": "Cancel",
-    "demoSession": "Demo session"
+    "demoSession": "Demo session",
+    "referralProgramShareLink": "Enlace para compartir el programa de referidos"
   },
   "Footer": {
     "trustLinks": "Trust links",
