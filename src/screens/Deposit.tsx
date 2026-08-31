@@ -367,7 +367,7 @@ export function Deposit({ onDone }: DepositProps) {
                   color: 'var(--ember)',
                 }}
               >
-                Exchange rate is more than 30 seconds old — please refresh to get the latest price
+                Exchange rate is more than {RATE_STALE_AFTER_SECONDS} seconds old — please refresh to get the latest price
                 before confirming.
               </div>
             )}
