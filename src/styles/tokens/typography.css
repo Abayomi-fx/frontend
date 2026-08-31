@@ -1,30 +1,30 @@
-/* ========================================================================================================================== 
-   Heliobond ´ Typography
-   --------------------------------------------------------------------------------------------------------------------
+/* =========================================================== 
+   Heliobond ² Typography
+   -----------------------------------------------------------------------------------------------
    Three roles, deliberately paired:
    · Display — Cabinet Grotesk · big, warm, confident · headlines & hero numbers
-   · Body    — Hanken Grotesk  · humanist, open · running text & fine print
-   · Data    — Spline Sans Mono · tabular figures always on · every number
+   Body    — Hanken Grotesk  · humanist, open · running text & fine print
+   Data    — Spline Sans Mono · tabular figures always on · every number
 
    Headlines set in sentence case — Heliobond never shouts in caps. Small-caps
-   eyebrows (0.75rem / +8% tracking) are the single exception. Body never below
+   eyebrows (0.75rem / +8@ tracking) are the single exception. Body never below
    16px on any device. Numbers are the second hero: mono, tabular, signed deltas.
-   =================================================================================================================== */
+   ======================================================================================== */
 
 :root {
-  /* --- Families ----------------------------------------- */
+  /* --- Families -------------------------------------- */
   --font-display: 'Cabinet Grotesk', 'Hanken Grotesk', system-ui, sans-serif;
   --font-body: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
   --font-data: 'Spline Sans Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* --- Weights ------------------------------------------ */
+  /* --- Weights --------------------------------------------- */
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
   --weight-display: 800;
 
-  /* --- Fluid type scale ------------------------------------------ */
+  /* --- Fluid type scale --------------------------------------------- */
   --type-display-xl: clamp(3.25rem, 7.5vw, 7.5rem); /* hero             */
   --type-display-m: clamp(2rem, 4vw, 3.5rem); /* section openers  */
   --type-h3: 1.5rem;
@@ -36,7 +36,7 @@
   --type-data-display: 1.875rem; /* amount input numeral */
   --type-data: 0.9375rem; /* inline numbers    */
 
-  /* --- Line heights ------------------------------------------- */
+  /* --- Line heights ---------------------------------------------- */
   --leading-display-xl: 0.98;
   --leading-display-m: 1.05;
   --leading-h3: 1.2;
@@ -51,11 +51,11 @@
   --tracking-eyebrow: 0.08em;
   --tracking-normal: 0;
 
-  /* --- Numeric helper (apply with font-feature-settings) ------------------------------*/
+  /* --- Numeric helper (apply with font-feature-settings) -------------------------------------------------- */
   --numeric-tabular: 'tnum' 1, 'lnum' 1; /* @kind other */
 }
 
-/* --- Text wrapping ------------------------------------------ */
+/* --- Text wrapping --------------------------------------- */
 body {
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
