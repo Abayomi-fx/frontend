@@ -94,7 +94,7 @@ export function EmailAuthModal({ open, onClose, onSuccess, onSocialLogin }: Emai
         top: 0,
         insetInline: 0,
         bottom: 0,
-        backgroundColor: 'rgba(11, 43, 35, 0.65)',
+        backgroundColor: 'var(--backdrop)',
         backdropFilter: 'blur(6px)',
         WebkitBackdropFilter: 'blur(6px)',
         display: 'flex',
