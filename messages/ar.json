@@ -178,6 +178,7 @@
     "pendingSub": "عادةً حوالي 5 ثوانٍ على Stellar. tx 4d2c…9af1 ↗",
     "successH1": "تم السحب",
     "successBody": "<num>${amount} USDC</num> في طريقها إلى محفظتك. شكراً لكونك جزءاً من المجمع.",
+    "transactionHashLabel": "هاش المعاملة",
     "backToPortfolio": "رجوع إلى المحفظة"
   },
   "Admin": {

@@ -194,6 +194,7 @@
     "pendingSub": "Environ 5 secondes sur Stellar. tx 4d2c…9af1 ↗",
     "successH1": "Retrait réglé",
     "successBody": "<num>${amount} USDC</num> sont en route vers votre portefeuille. Merci de faire partie du pool.",
+    "transactionHashLabel": "le hash de transaction",
     "backToPortfolio": "Retour au portefeuille"
   },
   "Admin": {
