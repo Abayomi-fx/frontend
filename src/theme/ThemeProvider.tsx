@@ -4,6 +4,9 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 
 export type Theme = 'light' | 'dark'
 
+const THEME_STORAGE_KEY = 'hb-theme'
+const DARK_MODE_QUERY = '(prefers-color-scheme: dark)'
+
 interface ThemeContextValue {
   theme: Theme
   toggle: () => void
@@ -11,6 +14,23 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
+
+function isTheme(value: unknown): value is Theme {
+  return value === 'light' || value === 'dark'
+}
+
+function readStoredTheme(): Theme | null {
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY)
+    return isTheme(stored) ? stored : null
+  } catch {
+    return null
+  }
+}
+
+function applyTheme(theme: Theme) {
+  document.documentElement.dataset.theme = theme
+}
 
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext)
@@ -30,16 +50,48 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('light')
 
   useEffect(() => {
-    const current = (document.documentElement.dataset.theme as Theme) || 'light'
+    const media =
+      typeof window.matchMedia === 'function' ? window.matchMedia(DARK_MODE_QUERY) : null
+    const fromDom = document.documentElement.dataset.theme
+    const current =
+      readStoredTheme() ?? (isTheme(fromDom) ? fromDom : media?.matches ? 'dark' : 'light')
+    applyTheme(current)
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeState(current)
+
+    const syncSystemTheme = (event: MediaQueryListEvent) => {
+      // Once a person makes an explicit choice it wins. Until then, follow a
+      // live OS theme change instead of requiring a reload.
+      if (readStoredTheme()) return
+      const next: Theme = event.matches ? 'dark' : 'light'
+      applyTheme(next)
+      setThemeState(next)
+    }
+
+    const syncOtherTabs = (event: StorageEvent) => {
+      if (event.key !== THEME_STORAGE_KEY) return
+      const next: Theme = isTheme(event.newValue)
+        ? event.newValue
+        : media?.matches
+          ? 'dark'
+          : 'light'
+      applyTheme(next)
+      setThemeState(next)
+    }
+
+    media?.addEventListener('change', syncSystemTheme)
+    window.addEventListener('storage', syncOtherTabs)
+    return () => {
+      media?.removeEventListener('change', syncSystemTheme)
+      window.removeEventListener('storage', syncOtherTabs)
+    }
   }, [])
 
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next)
-    document.documentElement.dataset.theme = next
+    applyTheme(next)
     try {
-      localStorage.setItem('hb-theme', next)
+      localStorage.setItem(THEME_STORAGE_KEY, next)
     } catch {
       /* private mode / storage disabled — theme just won't persist */
     }
@@ -48,9 +100,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggle = useCallback(() => {
     setThemeState((prev) => {
       const next: Theme = prev === 'dark' ? 'light' : 'dark'
-      document.documentElement.dataset.theme = next
+      applyTheme(next)
       try {
-        localStorage.setItem('hb-theme', next)
+        localStorage.setItem(THEME_STORAGE_KEY, next)
       } catch {
         /* ignore */
       }

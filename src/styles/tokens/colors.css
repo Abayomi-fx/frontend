@@ -13,6 +13,8 @@
    =========================================================================== */
 
 :root {
+  color-scheme: light;
+
   /* --- Base palette --------------------------------------------------- */
   --ink: #0b2b23; /* deep pine — all text, icons, strokes          */
   --canvas: #f3f5f1; /* morning air — page background                 */
@@ -67,6 +69,8 @@
 
 /* === After Sunset — dark theme (token swap only) ======================= */
 :root[data-theme='dark'] {
+  color-scheme: dark;
+
   --ink: #edf2ec; /* light text now carries the "ink" role        */
   --canvas: #0d1714;
   --surface: #13201b;
