@@ -10,17 +10,18 @@ interface Props {
 interface State {
   hasError: boolean
   error: Error | null
+  isOffline: boolean
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = { hasError: false, error: null }
+    this.state = { hasError: false, error: null, isOffline: false }
   }
 
   // eslint-disable-next-line @typescript/eslint/no-unused-vars
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error }
+    return { hasError: true, error, isOffline: false }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -42,13 +43,14 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   handleOnline = () => {
+    this.setState({ isOffline: false })
     if (this.state.hasError) {
       this.reset()
     }
   }
 
   handleOffline = () => {
-    // Optional: set a flag to show offline banner even without error
+    this.setState({ isOffline: true })
   }
 
   reset = () => {
@@ -81,6 +83,29 @@ export class ErrorBoundary extends React.Component<Props, State> {
       )
     }
 
-    return this.props.children
+    return (
+      >
+        {this.state.isOffline && (
+          <div
+            style={{
+              position: 'sticky',
+              top: 0,
+              width: '100%',
+              padding: '0.5rem',
+              textAlign: 'center',
+              background: '#fff3cd',
+              color: '#856404',
+              fontSize: '0.9rem',
+              zIndex: 1000,
+              borderBottom: '1px solid #ffc107',
+            }}
+            role="banner"
+          >
+            Offline — Stellar cached data
+          </div>
+        )}
+        {this.props.children}
+      </>
+    )
   }
 }
