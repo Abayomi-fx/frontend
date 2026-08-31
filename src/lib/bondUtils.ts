@@ -1,4 +1,4 @@
-/**
+/*
  * Bond utilities -- addresses multiple bond-related issues:
   *  - #364 filter persistence via URL + localStorage
   *  - #363 case-insensitive search
@@ -62,7 +62,7 @@ export function searchBondsByName(bonds: Bond[], query: string): Bond[] {
 // #359 -- stable sort with tie-breaker (name, then id)
 export function sortBondsByYield(bonds: Bond[], direction: 'asc' | 'desc' = 'asc'): Bond[] {
   const dir = direction === 'asc' ? 1 : -1
-  return [...bonds].sort((a, b) => {
+  return [].concat(bonds).sort((a, b) => {
     if (a.yield !== b.yield) return (a.yield - b.yield) * dir
     const nameCmp = a.name.localeCompare(b.name)
     if (nameCmp !== 0) return nameCmp
@@ -71,7 +71,7 @@ export function sortBondsByYield(bonds: Bond[], direction: 'asc' | 'desc' = 'asc
 }
 
 // #361 -- bond comparison (side-by-side) helper
-export function getBondsForComparison(bonds: Bond[], ids: (string | number)%5F%5F): Bond[] {
+export function getBondsForComparison(bonds: Bond[], ids: (string | number)[]): Bond[] {
   if (ids.length < 2 || ids.length > 3) throw new Error('Select 2-3 bonds to compare')
   const map = new Map(bonds.map((b) => [String(b.id), b]))
   const selected = ids.map((id) => map.get(String(id))).filter(Boolean) as Bond[]
@@ -86,9 +86,9 @@ export function projectedReturn(amount: number, annualYieldPct: number, years = 
   return amount * (annualYieldPct / 100) * years
 }
 
-export function compareBondsMetrics(bonds: Bond[]): Record<string, (string | number)%5B%5D> {
+export function compareBondsMetrics(bonds: Bond[]): Record<string, (string | number)[]> {
   const metrics = ['yield', 'term', 'rating', 'name'] as const
-  const result: Record<string, (string | number)%5B%5D> = {}
+  const result: Record<string, (string | number)[]> = {}
   for (const m of metrics) {
     result[m] = bonds.map((b) => (b as any)[m])
   }
