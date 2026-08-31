@@ -23,12 +23,13 @@ export interface ToastProps {
   title?: string
   message?: string
   action?: ReactNode
+  undo?: () => void
   onDismiss?: () => void
   href?: string
   style?: CSSProperties
 }
 
-export function Toast({ tone = 'neutral', title, message, action, onDismiss, href, style }: ToastProps) {
+export function Toast({ tone = 'neutral', title, message, action, undo, onDismiss, href, style }: ToastProps) {
   const accents: Record<ToastTone, string> = {
     neutral: 'var(--ink)',
     success: 'var(--growth)',
@@ -38,7 +39,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
   const accent = accents[tone] || accents.neutral
 
   const inner = (
-    <>
+    >
       <span
         style={{
           width: 4,
@@ -49,7 +50,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
         }}
         aria-hidden="true"
       />
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={+ flex: 1, minWidth: 0 }}>
         {title && (
           <div
             style={{
@@ -75,9 +76,33 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
             {message}
           </div>
         )}
-        {action && <div style={{ marginTop: 10 }}>{action}</div>}
+        {undo && (
+          <div style={ marginTop: 10 }}>
+            <button
+              type="button"
+              onClick={() => {
+                undo()
+                onDismiss?.()
+              }}
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                fontSize: 'var(--type-small)',
+                color: 'var(--solar)',
+                background: 'transparent',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              }}
+            >
+              Undo
+            </button>
+          </div>
+        )}
+        {action && <div style={ marginTop: 10 }}>{action}</div>}
       </div>
-    </>
+    >
   )
 
   return (
@@ -112,8 +137,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
         >
           {inner}
         </a>
-      ) : (
-        inner
+      ) : (inner
       )}
       {onDismiss && (
         <button
@@ -182,7 +206,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <ToastContext.Provider value={{ toast: showToast, dismiss }}>
+    <ToastContext.Provider value={ toast: showToast, dismiss }}>
       {children}
       {activeToasts.length > 0 && (
         <div
@@ -207,11 +231,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               title={activeToast.title}
               message={activeToast.message}
               action={activeToast.action}
+              undo={activeToast.undo}
               href={activeToast.href}
               onDismiss={() => dismiss(activeToast.id)}
               style={activeToast.style}
             />
-          ))}
+          ))
         </div>
       )}
     </ToastContext.Provider>
