@@ -44,7 +44,7 @@ export function Deposit({ onDone }: DepositProps) {
   } = useVault()
   const [step, setStep] = useState<DepositStep>('amount')
   const [amount, setAmount] = useState('100')
-  const [txHash, setTxHash] = useState<string | null>(null)
+  const [investmentId, setInvestmentId] = useState<string | null>(null)
   const [txError, setTxError] = useState<string | null>(null)
   const priceFetchedAt = fetchedAt ?? new Date()
   const [now, setNow] = useState(() => Date.now())
@@ -317,9 +317,9 @@ export function Deposit({ onDone }: DepositProps) {
                   const controller = new AbortController()
                   abortControllerRef.current = controller
                   try {
-                    const hash = await submitDeposit(n, address ?? '', sign, controller.signal)
+                    const { investmentId } = await submitDeposit(n, address ?? '', sign, controller.signal)
                     if (mountedRef.current) {
-                      setTxHash(hash)
+                      setInvestmentId(investmentId)
                       changeStep('success')
                       toast({
                         tone: 'success',
@@ -327,7 +327,7 @@ export function Deposit({ onDone }: DepositProps) {
                         message: (
                           <>
                             Successfully invested {n} USDC in the pool.{' '}
-                            <a href={`/investments/${hash}`}>View investment</a>
+                            <a href={`/investments/${investmentId}`}>View investment</a>
                           </>
                         ),
                       })
@@ -453,7 +453,7 @@ export function Deposit({ onDone }: DepositProps) {
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
               <a
-                href={txHash ? `/investments/${txHash}` : undefined}
+                href={investmentId ? `/investments/${investmentId}` : undefined}
                 style={{
                   flex: 1,
                   display: 'inline-flex',
