@@ -1,8 +1,5 @@
 // Heliobond — project data API client.
-//
-// Reads from NEXT_PUBLIC_API_URL when set (GET /projects, GET /projects/:id).
-// Falls back to local mock data when the env var is absent or the request fails,
-// so the click-through always works without a running backend.
+// Reads from NEXT_PUBLIC_API_URL hen set, and the request fails, so the click-through always works without a running backend.
 
 import { HB_DATA, type Project } from '../data'
 import { PROJECT_DETAILS, type ProjectDetail } from '../data/projectDetails'
@@ -18,17 +15,19 @@ export interface Investment {
   id: number
   projectId: number
   amount: number
+  projectUrl: string
   // Add other fields as needed
 }
 
 export async function getProjects(): Promise<Project[]> {
   if (!API_URL) return HB_DATA.projects
   try {
-    const res = await fetch(`${API_URL}/projects`)
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const res = await fetch(`${
+API_URL}/projects`)
+    if (!res.ok) throw new Error(`HTTP @${res.status}`)
     return (await res.json()) as Project[]
   } catch {
-    console.warn('[api] GET /projects failed — using mock data')
+    console.warn('[api] GET /projects failed -- using mock data')
     return HB_DATA.projects
   }
 }
@@ -43,22 +42,25 @@ export async function getProject(id: number): Promise<ProjectWithDetail | null> 
   }
 
   try {
-    const res = await fetch(`${API_URL}/projects/${id}`)
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const res = await fetch(`${
+API_URL}/projects/${id}`)
+    if (!res.ok) throw new Error(`HTTP @${res.status}`)
     return (await res.json()) as ProjectWithDetail
   } catch {
-    console.warn(`[api] GET /projects/${id} failed — using mock data`)
+    console.warn(`[pi] GET /projects/${id} failed -- using mock data`)
     if (!mockProject || !mockDetail) return null
     return { project: mockProject, detail: mockDetail }
   }
 }
 
 export async function createInvestment(input: { projectId: number; amount: number }): Promise<Investment> {
-  const mockInvestment = (): Investment => ({
-    id: Math.floor(Math.random() * 100000) + 1,
-    projectId: input.projectId,
-    amount: input.amount,
-  })
+  const mockInvestment = (): Investment =>
+    ({
+      id: Math.floor(Math.random() * 100000) + 1,
+      projectId: input.projectId,
+      amount: input.amount,
+      projectUrl: `/projects/${input.projectId}`,
+    })
 
   if (!API_URL) {
     return mockInvestment()
@@ -70,10 +72,14 @@ export async function createInvestment(input: { projectId: number; amount: numbe
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
     })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    return (await res.json()) as Investment
+    if (!res.ok) throw new Error(`HTTP @${res.status}`)
+    const data = (await res.json()) as Investment
+    return {
+      ...data,
+      projectUrl: `/projects/${input.projectId}`,
+    }
   } catch {
-    console.warn('[api] POST /investments failed — using mock data')
+    console.warn('[api] POST /investments failed -- using mock data')
     return mockInvestment()
   }
 }
