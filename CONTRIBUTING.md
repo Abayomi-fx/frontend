@@ -198,7 +198,14 @@ To add a new namespace for a new screen or surface:
 ## Quality bar
 
 - **Builds and type-checks clean.** `bun run build` is the gate; no `any` to paper over types, no `@ts-ignore` without a comment.
-- **Follow the design system.** Use the CSS custom properties (`var(--ink)`, `var(--solar)`, …) — never hardcode colours. Honour the brand rules: sentence case (no all-caps headlines), mono tabular numerals for figures, every delta carries a +/− sign and arrow (colour is never the sole carrier), solar is never text on a light background and never the only carrier of meaning, no emoji in the product, no exclamation marks on financial copy. See `README.md` and `src/styles/tokens/`.
+- **Follow the design system.** Use the CSS custom properties (`var(--ink)`, `var(--solar)`, …) — never hardcode colours. See `README.md` and `src/styles/tokens/`.
+- **Brand rules checklist.** Every PR touching UI copy or design must meet all of the following:
+  - Sentence case — no all-caps headlines.
+  - Mono tabular numerals for figures.
+  - Every delta carries a `+`/`−` sign and arrow; colour is never the sole carrier.
+  - Solar is never the sole carrier of meaning (and never text on a light background).
+  - No emoji in the product.
+  - No exclamation marks on financial copy.
 - **User-facing strings are translated.** If you add or change copy in the shell or translated screens, add the key to **both** `messages/en.json` and `messages/fr.json` (they must stay in parity).
 - **Accessibility is not optional.** Keyboard operable, visible focus, semantic landmarks, `prefers-reduced-motion` respected, touch targets ≥ 44px.
 - **No secrets** in the repo or in client code.
