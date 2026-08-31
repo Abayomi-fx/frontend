@@ -370,9 +370,25 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
           {t('investNote')}
         </p>
         {investmentUrl && (
-          <a href={investmentUrl} style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--type-small)', fontWeight: 600, textAlign: 'center' }}>
-            {t('viewInvestment')}
-          </a>
+          <div role="status">
+            <a
+              href={investmentUrl}
+              style={{
+                display: 'block',
+                padding: '14px 20px',
+                borderRadius: 'var(--radius-card)',
+                background: 'var(--growth)',
+                color: 'var(--surface)',
+                textAlign: 'center',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--type-data)',
+                fontWeight: 700,
+                textDecoration: 'none',
+              }}
+            >
+              {t('viewInvestment')}
+            </a>
+          </div>
         )}
         {onBack && (
           <div style={{ textAlign: 'center' }}>
