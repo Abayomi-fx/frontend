@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock } from '../components'
-import { HB_DATA } from '../data'
+import { HB_DATA, formatCurrency, formatNumber } from '../data'
 
 const LiveHelio = dynamic(() => import('../brand/LiveHelio').then((m) => m.LiveHelio), {
   ssr: false,
@@ -88,17 +88,21 @@ export function Landing({ onConnect, onExplore }: LandingProps) {
           }}
         >
           <div style={counterCell}>
-            <StatBlock label={t('poolValue')} value="$4,862,014" decimals=".55" size="lg" />
-          </div>
-          <div style={counterCell}>
             <StatBlock
-              label={t('projectsFunded')}
-              value={String(d.pool.projectsFunded)}
+              label={t('poolValue')}
+              value={formatCurrency(d.pool.totalAssets)}
               size="lg"
             />
           </div>
           <div style={counterCell}>
-            <StatBlock label={t('returnRate')} value="7.4" unit="%" size="lg" />
+            <StatBlock
+              label={t('projectsFunded')}
+              value={formatNumber(d.pool.projectsFunded)}
+              size="lg"
+            />
+          </div>
+          <div style={counterCell}>
+            <StatBlock label={t('returnRate')} value={formatNumber(d.pool.returnRate)} unit="%" size="lg" />
           </div>
         </div>
         <p
