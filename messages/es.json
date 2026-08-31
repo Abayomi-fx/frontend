@@ -206,6 +206,7 @@
     "actionRevoke": "Revoke",
     "actionApprove": "Approve",
     "actionConfirmRevoke": "Sí, revocar",
+    "actionCancel": "Cancelar",
     "revokeConfirmBody": "{name} ya no podrá registrar nuevos proyectos. Esta acción puede deshacerse.",
     "toastRevokedUndo": "Deshacer",
     "toastScoresTitle": "Scores written on-chain",
