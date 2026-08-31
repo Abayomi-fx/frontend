@@ -175,7 +175,7 @@
     "impactBody": "Your stake helps fund <b>{count} verified projects</b> across 6 countries.",
     "projectsBacked": "Projects backed",
     "weightedGreen": "Weighted green score",
-    "riskScore": "Risk score",
+    "riskScore": "Portfolio risk score",
     "riskTierConservative": "Conservative",
     "riskTierModerate": "Moderate",
     "riskTierAggressive": "Aggressive",
