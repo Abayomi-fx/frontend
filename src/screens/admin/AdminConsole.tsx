@@ -60,16 +60,30 @@ export function AdminConsole() {
     })
   }
 
-  const setCreatorStatus = (address: string, status: Creator['status']) => {
-    setWhitelist((list) => list.map((c) => (c.address === address ? { ...c, status } : c)))
+  const setCreatorStatus = (address: string, status: Creator['status'], rejectionReason?: string) => {
+    setWhitelist((list) => 
+      list.map((c) => 
+        c.address === address 
+          ? { ...c, status, rejectionReason: status === 'rejected' ? rejectionReason : undefined } 
+          : c
+      )
+    )
     const c = whitelist.find((x) => x.address === address)
+    const toneMap = { approved: 'success' as const, rejected: 'ember' as const, pending: 'neutral' as const }
+    const titleMap = { 
+      approved: t('toastApprovedTitle'), 
+      rejected: t('toastRevokedTitle'),
+      pending: t('toastRevokedTitle')
+    }
+    const messageMap = {
+      approved: t('toastApprovedMsg', { name: c?.name ?? 'Creator' }),
+      rejected: t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
+      pending: t('toastRevokedMsg', { name: c?.name ?? 'Creator' })
+    }
     toast({
-      tone: status === 'approved' ? 'success' : 'neutral',
-      title: status === 'approved' ? t('toastApprovedTitle') : t('toastRevokedTitle'),
-      message:
-        status === 'approved'
-          ? t('toastApprovedMsg', { name: c?.name ?? 'Creator' })
-          : t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
+      tone: toneMap[status],
+      title: titleMap[status],
+      message: messageMap[status],
     })
   }
 

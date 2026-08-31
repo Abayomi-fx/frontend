@@ -21,6 +21,8 @@ export interface CreatorApplicationProps {
   stage?: ApplicationStage
   /** Called with the form values on submit; falls back to local state. */
   onSubmit?: (values: ApplicationFormValues) => void
+  /** Rejection reason, shown when stage is 'rejected'. */
+  rejectionReason?: string
 }
 
 export interface ApplicationFormValues {
@@ -30,7 +32,7 @@ export interface ApplicationFormValues {
   links: string
 }
 
-export function CreatorApplication({ stage = 'submitted', onSubmit }: CreatorApplicationProps) {
+export function CreatorApplication({ stage = 'submitted', onSubmit, rejectionReason }: CreatorApplicationProps) {
   const t = useTranslations('Creator')
   const [orgName, setOrgName] = useState('')
   const [projectType, setProjectType] = useState<ProjectType>(PROJECT_TYPES[0])
@@ -101,7 +103,7 @@ export function CreatorApplication({ stage = 'submitted', onSubmit }: CreatorApp
 
         <Card>
           <h3 style={cardTitle}>{t('standTitle')}</h3>
-          <Stepper activeStage={activeStage} />
+          <Stepper activeStage={activeStage} rejectionReason={activeStage === 'rejected' ? rejectionReason : undefined} />
         </Card>
       </div>
 
@@ -192,10 +194,10 @@ export function CreatorApplication({ stage = 'submitted', onSubmit }: CreatorApp
   )
 }
 
-function Stepper({ activeStage }: { activeStage: ApplicationStage }) {
+function Stepper({ activeStage, rejectionReason }: { activeStage: ApplicationStage; rejectionReason?: string }) {
   const t = useTranslations('Creator')
   const order: ApplicationStage[] = ['submitted', 'in_review', 'approved']
-  const activeIndex = order.indexOf(activeStage)
+  const activeIndex = order.indexOf(activeStage === 'rejected' ? 'approved' : activeStage)
 
   // We use the ordered ids but get labels/hints from the catalog
   const stepMeta = order.map((id) => {
@@ -219,70 +221,109 @@ function Stepper({ activeStage }: { activeStage: ApplicationStage }) {
         margin: 0,
         padding: 0,
         display: 'flex',
-        alignItems: 'flex-start',
+        flexDirection: 'column',
+        gap: 16,
       }}
     >
-      {stepMeta.map((step, i) => {
-        const done = i <= activeIndex
-        const last = i === stepMeta.length - 1
-        return (
-          <li
-            key={step.id}
-            style={{
-              flex: last ? '0 0 auto' : 1,
-              display: 'flex',
-              alignItems: 'flex-start',
-              minWidth: 0,
-            }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0 }}>
-              <Dot done={done} />
-              <div style={{ minWidth: 0, paddingRight: 8 }}>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-small)',
-                    fontWeight: 600,
-                    color: done ? 'var(--ink)' : 'var(--ink-40)',
-                  }}
-                >
-                  {step.label}
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-eyebrow)',
-                    color: 'var(--ink-60)',
-                    lineHeight: 1.45,
-                    marginTop: 2,
-                  }}
-                >
-                  {step.hint}
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+        {stepMeta.map((step, i) => {
+          const done = i <= activeIndex
+          const last = i === stepMeta.length - 1
+          return (
+            <li
+              key={step.id}
+              style={{
+                flex: last ? '0 0 auto' : 1,
+                display: 'flex',
+                alignItems: 'flex-start',
+                minWidth: 0,
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0 }}>
+                <Dot done={done} isRejected={activeStage === 'rejected' && last} />
+                <div style={{ minWidth: 0, paddingRight: 8 }}>
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--type-small)',
+                      fontWeight: 600,
+                      color: done ? 'var(--ink)' : 'var(--ink-40)',
+                    }}
+                  >
+                    {step.label}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--type-eyebrow)',
+                      color: 'var(--ink-60)',
+                      lineHeight: 1.45,
+                      marginTop: 2,
+                    }}
+                  >
+                    {step.hint}
+                  </div>
                 </div>
               </div>
-            </div>
-            {!last && (
-              <div
-                aria-hidden="true"
-                style={{
-                  flex: 1,
-                  height: 2,
-                  marginTop: 9,
-                  minWidth: 16,
-                  background: i < activeIndex ? 'var(--solar)' : 'var(--ink-12)',
-                  borderRadius: 1,
-                }}
-              />
-            )}
-          </li>
-        )
-      })}
+              {!last && (
+                <div
+                  aria-hidden="true"
+                  style={{
+                    flex: 1,
+                    height: 2,
+                    marginTop: 9,
+                    minWidth: 16,
+                    background: i < activeIndex ? 'var(--solar)' : 'var(--ink-12)',
+                    borderRadius: 1,
+                  }}
+                />
+              )}
+            </li>
+          )
+        })}
+      </div>
+      {activeStage === 'rejected' && rejectionReason && (
+        <div
+          style={{
+            marginTop: 8,
+            padding: 12,
+            background: 'var(--ember-12)',
+            border: '1px solid var(--ember-24)',
+            borderRadius: 'var(--radius-card)',
+          }}
+        >
+          <div
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
+              fontWeight: 600,
+              color: 'var(--ember)',
+              marginBottom: 4,
+            }}
+          >
+            {t('rejectionReason')}:
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
+              color: 'var(--ink)',
+              lineHeight: 1.5,
+            }}
+          >
+            {rejectionReason}
+          </div>
+        </div>
+      )}
     </ol>
   )
 }
 
-/** Solar dot for completed stages, always paired with the ink label above. */
-function Dot({ done }: { done: boolean }) {
+/** Solar dot for completed stages, ember for rejected, always paired with the ink label above. */
+function Dot({ done, isRejected }: { done: boolean; isRejected?: boolean }) {
+  const bgColor = isRejected ? 'var(--ember)' : done ? 'var(--solar)' : 'transparent'
+  const borderColor = isRejected ? 'var(--ember)' : done ? 'var(--solar)' : 'var(--ink-12)'
+  
   return (
     <span
       aria-hidden="true"
@@ -293,12 +334,12 @@ function Dot({ done }: { done: boolean }) {
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: done ? 'var(--solar)' : 'transparent',
-        border: done ? '1px solid var(--solar)' : '1px solid var(--ink-12)',
+        background: bgColor,
+        border: `1px solid ${borderColor}`,
         flexShrink: 0,
       }}
     >
-      {done && <CheckBoldIcon size={12} style={{ color: 'var(--ink)' }} />}
+      {(done || isRejected) && <CheckBoldIcon size={12} style={{ color: 'var(--ink)' }} />}
     </span>
   )
 }
