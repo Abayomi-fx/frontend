@@ -10,6 +10,10 @@ import {
   type ProjectType,
 } from '@/data/creator'
 
+const MAX_ORG_NAME_LENGTH = 2000
+const MAX_LOCATION_LENGTH = 5000
+const MAX_LINKS_LENGTH = 10000
+
 /**
  * CreatorApplication — the whitelist door for project creators. Plain criteria
  * up front, a labelled form (never placeholder-as-label), an honest review
@@ -124,6 +128,7 @@ export function CreatorApplication({
             type="text"
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
+            maxLength={MAX_ORG_NAME_LENGTH}
           />
         </FormField>
 
@@ -144,6 +149,7 @@ export function CreatorApplication({
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            maxLength={MAX_LOCATION_LENGTH}
           />
         </FormField>
 
@@ -157,6 +163,7 @@ export function CreatorApplication({
               setLinks(e.target.value)
               if (linkError) setLinkError(null)
             }}
+            maxLength={MAX_LINKS_LENGTH}
             aria-invalid={linkError != null}
           />
           {linkError && (
