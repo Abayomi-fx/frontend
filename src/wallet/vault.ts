@@ -147,6 +147,7 @@ async function sorobanSimulate(sourceAddress: string, method: string, args: unkn
  */
 export async function fetchSharePrice(sourceAddress: string): Promise<number> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
+  if (offline) return cachedSharePrice
   const { scValToNative } = await import('@stellar/stellar-sdk')
   try {
     const retval = await sorobanSimulate(sourceAddress, 'share_price')
@@ -164,6 +165,7 @@ export async function fetchSharePrice(sourceAddress: string): Promise<number> {
  */
 export async function fetchTotalAssets(sourceAddress: string): Promise<number> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
+  if (offline) return cachedTotalAssets ?? 0
   const { scValToNative } = await import('@stellar/stellar-sdk')
   try {
     const retval = await sorobanSimulate(sourceAddress, 'total_assets')
@@ -237,6 +239,8 @@ export async function submitDeposit(
       }
     })
   }
+
+  if (offline) throw new Error('Stellar node is offline')
 
   const { rpc, Contract, TransactionBuilder, Networks, Horizon, nativeToScVal, Transaction } =
     await import('@stellar/stellar-sdk')
@@ -315,6 +319,8 @@ export async function submitWithdraw(
       }
     })
   }
+
+  if (offline) throw new Error('Stellar node is offline')
 
   const { rpc, Contract, TransactionBuilder, Networks, Horizon, nativeToScVal, Transaction } =
     await import('@stellar/stellar-sdk')
