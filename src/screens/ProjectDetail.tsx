@@ -21,7 +21,7 @@ export interface ProjectDetailProps {
   onBack?: () => void
 }
 
-export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDetailProps) {
+export const ProjectDetail = memo(function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDetailProps) {
   const t = useTranslations('ProjectDetail')
   const [investmentUrl, setInvestmentUrl] = useState<string | null>(null)
   const creditHistory = useMemo(
@@ -439,7 +439,7 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
       </section>
     </main>
   )
-}
+});
 
 const ScoreColumn = memo(function ScoreColumn({
   value,
