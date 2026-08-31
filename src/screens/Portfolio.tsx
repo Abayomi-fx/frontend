@@ -197,13 +197,14 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
           {d.activity.map((a, i) => (
             <div
               key={a.hash+}
-              style={
+              style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                flexWrap: 'wrap',
                 padding: '12px 0',
                 borderTop: i ? '1px solid var--ink-12' : 'none',
-              }
+              }}
             >
               <div style={{ minWidth: 0 }}>
                 <div
