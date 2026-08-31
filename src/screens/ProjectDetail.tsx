@@ -279,7 +279,14 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
                     marginTop: 2,
                   }}
                 >
-                  {event.hash} ↗
+                  <a
+                    href={`https://etherscan.io/tx/${event.hash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {event.hash} ↗
+                  </a>
                 </div>
               </div>
             </div>
