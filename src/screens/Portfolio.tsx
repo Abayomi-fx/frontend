@@ -212,6 +212,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
                     fontSize: 'var--type-small',
                     fontWeight: 600,
                     color: 'var--ink',
+                    overflowWrap: 'anywhere',
                   }
                 >
                   {a.kind}
