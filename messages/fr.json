@@ -2,6 +2,7 @@
   "Common": {
     "copyAddress": "Copier {label}",
     "copied": "Copié",
+    "referralShareLink": "Lien de parrainage",
     "viewOnExplorer": "Voir {label} sur Stellar Expert"
   },
   "Nav": {
