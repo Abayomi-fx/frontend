@@ -104,6 +104,7 @@ export function TopBar() {
   const themeToggleLabel = isDarkTheme ? t('switchToLight') : t('switchToDark')
 
   return (
+    <>
     <header
       style={{
         position: 'sticky',
@@ -221,6 +222,29 @@ export function TopBar() {
         )}
       </div>
     </header>
+    {!networkOnline && (
+      <div
+        role="alert"
+        style={{
+          position: 'sticky',
+          top: 68,
+          zIndex: 199,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          padding: '8px 16px',
+          background: 'var(--ember)',
+          color: '#fff',
+          fontFamily: 'var(--font-body)',
+          fontSize: 13,
+          fontWeight: 500,
+        }}
+      >
+        Offline — showing cached data
+      </div>
+    )}
+    </>
   )
 }
 
