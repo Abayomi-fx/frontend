@@ -77,7 +77,7 @@ export function Toast({
             {message}
           </div>
         )}
-      {action && <div style={{ marginTop: 10 }}>{action}</div>
+        {action && <div style={{ marginTop: 10 }}>{action}</div>}
       </div>
     </>
   );
@@ -138,7 +138,7 @@ export function Toast({
         >
           <CloseIcon />
         </button>
-      )
+      )}
     </div>
   );
 }
@@ -152,11 +152,12 @@ const ToastContext = createContext<ToastContextType | null>(null);
 
 const MAX_ACTIVE_TOASTS = 3;
 const DEFAULT_TOAST_DURATION = 5000;
-const MIN_SUCCESS_TOAST_DURATION = 7000;
+const MIN_SUCCESS_TOAST_DURATION = 10000;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [activeToasts, setActiveToasts] = useState<
-(ToastProps & { id: string; duration?: number })[]>([]);
+    (ToastProps & { id: string; duration?: number })[]
+  >([]);
 
   const showToast = useCallback(
     (
@@ -222,7 +223,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             />
           ))}
         </div>
-      )
+      )}
     </ToastContext.Provider>
   );
 }
