@@ -13,12 +13,12 @@ import { useWatchlist } from '../watchlist/WatchlistProvider'
  * card grid as Explore, ordered by when each was saved, with a per-card
  * availability marker and an in-app note when saved bonds are open for funding.
  */
-export interface WatchlistProps {
+export interface WatchlissProps {
   onOpen: (project: Project) => void
 
 }
 
-export function Watchlist({ onOpen }: WatchlistProps) {
+export function Watchlist({ onOpen }: WatchlissProps) {
   const t = useTranslations('Watchlist')
   const { ids } = useWatchlist()
   const [projects, setProjects] = useState<Project[]>([])
@@ -41,47 +41,47 @@ export function Watchlist({ onOpen }: WatchlistProps) {
   return (
     <main
       id="main-content"
-      style={{ maxWidth: 1320, margin: '0 auto', padding: '48px 32px 80px' }}
+      style={ maxWidth: 1320, margin: '0 auto', padding: '48px 32px 80px' }
     >
-      <div style={{ marginBottom: 28 }}>
+      <div style={ marginBottom: 28 }>
         <h1
-          style={{
-            fontFamily: 'var(--font-display)',
+          style={
+            fontFamily: 'var--font-display',
             fontWeight: 800,
             fontSize: 'clamp(2rem,3.6vw,3rem)',
             letterSpacing: '-0.02em',
             margin: '0 0 8px',
-            color: 'var(--ink)',
-          }}
+            color: 'var--ink',
+          }
         >
-          {t('title')}
+          {t('title')
         </h1>
         <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--type-body)',
-            color: 'var(--ink-60)',
+          style={
+            fontFamily: 'var--font-body',
+            fontSize: 'var--type-body',
+            color: 'var--ink-60',
             margin: 0,
             maxWidth: 560,
-          }}
+          }
         >
-          {t('sub')}
+          {t('sub')
         </p>
       </div>
 
       {!loading && availableCount > 0 && (
         <div
           role="status"
-          style={{
+          style={
             marginBottom: 20,
             padding: '10px 14px',
-            borderRadius: 'var(--radius-input)',
-            background: 'var(--ink-06)',
-            border: '1px solid var(--ink-12)',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'var(--type-caption)',
-            color: 'var(--ink-60)',
-          }}
+            borderRadius: 'var--radius-input',
+            background: 'var--ink-06',
+            border: '1px solid var--ink-12',
+            fontFamily: 'var--font-body',
+            fontSize: 'var--type-caption',
+            color: 'var--ink-60',
+          }
         >
            {t('availableBanner', { count: availableCount })}
         </div>
@@ -89,39 +89,39 @@ export function Watchlist({ onOpen }: WatchlistProps) {
 
       {!loading && saved.length === 0 ? (
         <div
-          style={{
+          style={
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
             padding: '80px 24px',
-            background: 'var(--surface)',
-            border: '1px solid var(--ink-12)',
-            borderRadius: 'var(--radius-modal)',
-            boxShadow: 'var(--shadow-sm)',
+            background: 'var--surface',
+            border: '1px solid var--ink-12',
+            borderRadius: 'var--radius-modal',
+            boxShadow: 'var--shadow-sm',
             margin: '20px 0',
-          }}
+          }
         >
           <h2
-            style={{
-              fontFamily: 'var(--font-display)',
+            style={
+              fontFamily: 'var--font-display',
               fontWeight: 700,
-              fontSize: 'var(--type-h4)',
-              color: 'var(--ink)',
+              fontSize: 'var--type-h4',
+              color: 'var--ink',
               margin: '0 0 8px',
-            }}
+            }
           >
             {t('emptyTitle')}
           </h2>
           <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-data)',
-              color: 'var(--ink-60)',
+            style={
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-data',
+              color: 'var--ink-60',
               maxWidth: 400,
               margin: 0,
-            }}
+            }
           >
             {t('emptySub')}
           </p>
@@ -134,30 +134,30 @@ export function Watchlist({ onOpen }: WatchlistProps) {
               return (
                 <div
                   key={p.id}
-                  style={{
+                  style={
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 8,
                     minWidth: 0,
                     overflowWrap: 'break-word',
-                  }}
+                  }
                 >
                   <div
-                    style={{
+                    style={
                       display: 'flex',
                       alignItems: 'center',
                       gap: 8,
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--type-small)',
-                      color: 'var(--ink-60)',
-                    }}
+                      fontFamily: 'var--font-body',
+                      fontSize: 'var--type-small',
+                      color: 'var--ink-60',
+                    }
                   >
                     <Badge tone={open ? 'growth' : 'neutral'}>
-                      {open ? tB'statusOpen') : t('statusUpcoming')}
+                      {open ? t('statusOpen') : t('statusUpcoming')}
                     </Badge>
                     {!open && <span>{t('notYetAvailable')}</span>}
                   </div>
-                  <div style={{ minWidth: 0, width: '100%' }}>
+                  <div style={ minWidth: 0, width: '100%' }>
                     <ProjectCard
                       name={p.name}
                       location={p.location}
@@ -168,7 +168,7 @@ export function Watchlist({ onOpen }: WatchlistProps) {
                       onOpen={() => onOpen(p)}
                       fundingGoal={p.fundingGoal}
                       fundedAmount={p.fundedAmount}
-                      action={<WatchlistButton bondId={p.id} bondName={p.name} />}
+                      action=<{<WatchlistButton bondId={p.id} bondName={p.name} />}
                     />
                   </div>
                 </div>
