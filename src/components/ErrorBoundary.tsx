@@ -61,19 +61,19 @@ export class ErrorBoundary extends React.Component<Props, State> {
         return this.props.fallback
       }
       return (
-        <div style={ padding: '1rem', textAlign: 'center', fontFamily: 'sans-serif' }>
-          <p style={ fontSize: '1.25rem', marginBottom: '0.5rem' }>
+        <div style={{ padding: '1rem', textAlign: 'center', fontFamily: 'sans-serif' }}>
+          <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>
             You seem to be offline or the Stellar node is unreachable.
           </p>
-          <p style={ marginBottom: '1rem' }>Please check your connection.</p>
+          <p style={{ marginBottom: '1rem' }}>Please check your connection.</p>
           <button
             type="button"
             onClick={this.reset}
-            style={
+            style={{
               padding: '0.5rem 1rem',
               fontSize: '1rem',
-              cursor: 'pointer'
-            }
+              cursor: 'pointer',
+            }}
           >
             Try Again
           </button>
