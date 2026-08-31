@@ -1,7 +1,8 @@
-import { useState, type CSSProperties } from 'react'
+import { memo, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon, WatchlistButton } from '../components'
-import { Sparkline } from '../components/Sparkline'
+import { Sparkline as SparklineUnmemoized } from '../components/Sparkline'
+const Sparkline = memo(SparklineUnmemoized)
 import { formatMoney } from '../lib/format'
 
 import { type Project } from '../data'
