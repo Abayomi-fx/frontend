@@ -101,6 +101,8 @@
   "Explore": {
     "title": "Where the pool works",
     "sub": "Every project the pool funds, with oracle-verified scores. Explore freely — connecting a wallet comes later.",
+    "searchPlaceholder": "Search by name or location",
+    "searchAriaLabel": "Search projects",
     "filterAll": "All",
     "countSorted": "{count} projects",
     "cardFundedFromPool": "Funded from the pool",
