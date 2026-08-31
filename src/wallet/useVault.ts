@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { HB_DATA } from '../data'
+import { HB_DATA from '../data'
 import { fetchSharePrice, fetchTotalAssets } from './vault'
 import { useWallet } from './WalletProvider'
 
@@ -15,7 +15,7 @@ export interface VaultState {
 }
 
 export function useVault(): VaultState {
-  const { address, isDemo, network: walletNetwork } = useWallet()
+  const { address, isDemo, network: walletNetwork = useWallet()
   const network = walletNetwork.toLowerCase() as 'public' | 'testnet'
   const [sharePrice, setSharePrice] = useState(HB_DATA.pool.sharePrice)
   const [totalAssets, setTotalAssets] = useState(HB_DATA.pool.totalAssets)
