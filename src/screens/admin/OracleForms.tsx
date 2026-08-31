@@ -3,6 +3,22 @@
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, FormField, FormInput, FormSelect, sanitizeAmount } from '@/components'
+import {
+  panelStyle,
+  textInput,
+  helpText,
+  gridStyle,
+  formRowStyle,
+  fieldGrowStyle,
+  inputGroupStyle,
+  dataCaptionStyle,
+  warningBoxStyle,
+  warningTextStyle,
+  moneyStyle,
+  panelTitleStyle,
+  panelHeaderStyle,
+  panelBodyStyle,
+} from '@/theme'
 import { type RegistryEntry } from '@/data/admin'
 import { clampScore, validateScores } from './utils'
 import { formatMoney, parseAmount } from '@/lib/format'
@@ -129,31 +145,17 @@ export function OracleForms({ projects, liquid, onPushScores, onFund }: OracleFo
                 borderColor: overLiquid ? 'var(--ember)' : undefined,
               }}
             />
-            <span style={dataCaptionStyle}>
-              USDC
-            </span>
+            <span style={dataCaptionStyle}>USDC</span>
           </div>
           {overLiquid && (
-            <div
-              role="status"
-              style={warningBoxStyle}
-            >
-              <p
-                style={warningTextStyle}
-              >
-                {t('fundExceeds')}
-              </p>
+            <div role="status" style={warningBoxStyle}>
+              <p style={warningTextStyle}>{t('fundExceeds')}</p>
             </div>
           )}
         </Field>
         <p style={helpText}>
-          {t('liquidHint')}{' '}
-          <span
-            style={moneyStyle}
-          >
-            ${formatMoney(liquid)}
-          </span>
-          . {amountN > liquid ? t('fundExceeds') : t('fundOk')}
+          {t('liquidHint')} <span style={moneyStyle}>${formatMoney(liquid)}</span>.{' '}
+          {amountN > liquid ? t('fundExceeds') : t('fundOk')}
         </p>
         <Button
           size="sm"
@@ -173,9 +175,7 @@ function Panel({ title, hint, children }: { title: string; hint: string; childre
   return (
     <div style={panelStyle}>
       <div style={panelHeaderStyle}>
-        <h3 style={panelTitleStyle}>
-          {title}
-        </h3>
+        <h3 style={panelTitleStyle}>{title}</h3>
         <p style={{ ...helpText, marginTop: 4 }}>{hint}</p>
       </div>
       <div style={panelBodyStyle}>{children}</div>
@@ -242,95 +242,4 @@ function NumberInput({
       style={textInput}
     />
   )
-}
-
-const panelStyle: CSSProperties = {
-  background: 'var(--surface)',
-  border: '1px solid var(--ink-12)',
-  borderRadius: 'var(--radius-card)',
-  padding: 16,
-  boxShadow: 'var(--shadow-sm)',
-}
-
-const textInput: CSSProperties = {
-  minHeight: 40,
-  padding: '0 12px',
-  fontFamily: 'var(--font-data)',
-  fontSize: 'var(--type-small)',
-  fontFeatureSettings: '"tnum" 1',
-}
-
-const helpText: CSSProperties = {
-  margin: 0,
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-caption)',
-  lineHeight: 1.5,
-  color: 'var(--ink-60)',
-}
-
-const gridStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-  gap: 16,
-}
-
-const formRowStyle: CSSProperties = {
-  display: 'flex',
-  gap: 12,
-}
-
-const fieldGrowStyle: CSSProperties = {
-  flex: 1,
-}
-
-const inputGroupStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-}
-
-const dataCaptionStyle: CSSProperties = {
-  fontFamily: 'var(--font-data)',
-  fontSize: 'var(--type-caption)',
-  color: 'var(--ink-60)',
-}
-
-const warningBoxStyle: CSSProperties = {
-  marginTop: 10,
-  padding: '10px 14px',
-  background: 'var(--solar-12)',
-  border: '1px solid var(--solar-24)',
-  borderRadius: 'var(--radius-input)',
-}
-
-const warningTextStyle: CSSProperties = {
-  margin: 0,
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-small)',
-  color: 'var(--ink)',
-  fontWeight: 600,
-}
-
-const moneyStyle: CSSProperties = {
-  fontFamily: 'var(--font-data)',
-  fontFeatureSettings: '"tnum" 1',
-  color: 'var(--ink)',
-}
-
-const panelTitleStyle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: 700,
-  fontSize: 'var(--type-body)',
-  margin: 0,
-  color: 'var(--ink)',
-}
-
-const panelHeaderStyle: CSSProperties = {
-  marginBottom: 12,
-}
-
-const panelBodyStyle: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 12,
 }

@@ -1,8 +1,9 @@
 'use client'
 
-import { type CSSProperties, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
+import { cardTitleLg as cardTitle } from '@/theme'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
 import { useWallet } from '../wallet/WalletProvider'
@@ -233,12 +234,4 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
       </div>
     </main>
   )
-}
-
-const cardTitle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: 700,
-  fontSize: 'var(--type-body-lg)',
-  margin: '0 0 10px',
-  color: 'var(--ink)',
 }

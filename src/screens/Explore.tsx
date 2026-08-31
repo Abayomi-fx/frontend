@@ -4,7 +4,6 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { ProjectCard, Tag, WatchlistButton } from '../components'
-import { Pagination } from '../components/Pagination'
 import { HB_DATA, type Project, type ProjectType } from '../data'
 import { getProjects } from '../lib/api'
 
@@ -23,7 +22,7 @@ const TYPES: (ProjectType | 'All')[] = ['All', 'Solar', 'Wind', 'Hydro']
  * every breakpoint (the grid runs 1–4 columns), so a page boundary never leaves
  * a ragged half-row.
  */
-const PAGE_SIZE = 6
+const PAGE_SIZE = 12
 
 export function Explore({ onOpen }: ExploreProps) {
   const t = useTranslations('Explore')
@@ -36,7 +35,6 @@ export function Explore({ onOpen }: ExploreProps) {
   const [filter, setFilter] = useState<ProjectType | 'All'>(
     urlType && ['Solar', 'Wind', 'Hydro'].includes(urlType) ? urlType : 'All',
   )
-  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     getProjects()
@@ -52,7 +50,7 @@ export function Explore({ onOpen }: ExploreProps) {
 
   const setFilterAndUrl = (next: ProjectType | 'All') => {
     setFilter(next)
-    setCurrentPage(1)
+    setVisibleCount(PAGE_SIZE)
     if (next === 'All') {
       router.replace('/explore', { scroll: false })
     } else {
@@ -61,11 +59,13 @@ export function Explore({ onOpen }: ExploreProps) {
   }
 
   const shown = filter === 'All' ? projects : projects.filter((p) => p.type === filter)
-  const totalPages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE))
-  const paged = shown.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const paged = shown.slice(0, visibleCount)
+  const remaining = shown.length - visibleCount
+  const nextChunk = Math.min(PAGE_SIZE, remaining)
 
   useEffect(() => {
-    setCurrentPage(1)
+    setVisibleCount(PAGE_SIZE)
   }, [filter, projects.length])
 
   return (
@@ -206,13 +206,48 @@ export function Explore({ onOpen }: ExploreProps) {
                 ))}
           </div>
           {!loading && shown.length > 0 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={shown.length}
-              pageSize={PAGE_SIZE}
-              onPageChange={setCurrentPage}
-            />
+            <div
+              style={{
+                marginTop: 36,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <div
+                role="status"
+                aria-live="polite"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--type-small)',
+                  color: 'var(--ink-60)',
+                }}
+              >
+                {t('showingCount', { shown: paged.length, total: shown.length })}
+              </div>
+              {remaining > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
+                  style={{
+                    height: 44,
+                    padding: '0 24px',
+                    borderRadius: 'var(--radius-pill)',
+                    border: '1px solid var(--ink)',
+                    background: 'var(--surface)',
+                    color: 'var(--ink)',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--type-small)',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'background var(--dur-press) var(--ease-out)',
+                  }}
+                >
+                  {t('loadMore', { count: nextChunk })}
+                </button>
+              )}
+            </div>
           )}
         </>
       )}
