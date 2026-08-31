@@ -40,6 +40,8 @@ export function AdminConsole() {
       tone: 'success',
       title: t('toastScoresTitle'),
       message: t('toastScoresMsg', { name, credit, green }),
+      duration: 5000,
+      stackable: true,
     })
   }
 
@@ -57,6 +59,8 @@ export function AdminConsole() {
       tone: 'solar',
       title: t('toastFundTitle'),
       message: t('toastFundMsg', { name, amount: sharedFormatMoney(safe) }),
+      duration: 5000,
+      stackable: true,
     })
   }
 
@@ -92,6 +96,8 @@ export function AdminConsole() {
       tone: toneMap[status],
       title: titleMap[status],
       message: messageMap[status],
+      duration: 5000,
+      stackable: true,
     })
   }
 
