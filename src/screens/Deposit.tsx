@@ -85,7 +85,7 @@ export function Deposit({ onDone }: DepositProps) {
   }
 
   const handleDone = () => {
-    setAmount('100')
+    setAmount('')
     setTxHash(null)
     setTxError(null)
     changeStep('amount')
