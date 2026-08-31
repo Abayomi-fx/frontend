@@ -11,7 +11,7 @@ export interface DobValidationResult {
 const DATE_REGEXES = [
   /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/, // MM/DD/YYYY
   /^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-(19|20)\d{2}$/, // MM-DD-YYYY
-  /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, // YYYY-MM-DD
+  /^(19|20)\d{,2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, // YYYY-MM-DD
 ];
 
 export function validateDobFormat(value: string): DobValidationResult {
@@ -94,3 +94,28 @@ export function validateAddress(values: AddressValues): AddressErrors {
   return errors;
 }
 
+export interface DocumentValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
+const ALLOWED_DOCUMENT_TYPES = ["image/jpeg", "application/pdf"];
+const ALLOWED_DOCUMENT_EXTENSIONS = ["jpg", "jpeg", "pdf"];
+
+/**
+ * Validates document upload file type before sending to server.
+ * Accepts JPG and PDF. Uses MIME type if present, falls back to extension
+ * for cases where MIME is missing or generic (application/octet-stream).
+ */
+export function validateDocumentFile(file: File): DocumentValidationResult {
+  if (!file) return { valid: false, error: "Document is required" };
+  const type = file.type.toLowerCase();
+  const extension = file.name.slice(file.name.lastIndexOf(".") + 1).toLowerCase();
+  const validType = ALLOWED_DOCUMENT_TYPES.includes(type);
+  if (validType) return { valid: true };
+  const validExt = ALLOWED_DOCUMENT_EXTENSIONS.includes(extension);
+  if (validExt && (type === "" || type === "application/octet-stream")) {
+    return { valid: true };
+  }
+  return { valid: false, error: "Only JPG or PDF files are allowed" };
+}
