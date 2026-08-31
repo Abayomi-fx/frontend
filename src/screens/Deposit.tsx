@@ -84,6 +84,14 @@ export function Deposit({ onDone }: DepositProps) {
     }
   }
 
+  const handleDone = () => {
+    setAmount('')
+    setTxHash(null)
+    setTxError(null)
+    changeStep('amount')
+    onDone()
+  }
+
   // Consolidate amount parsing with parseAmount helper (#417).
   const n = parseAmount(amount)
   const price = livePrice
@@ -470,7 +478,7 @@ export function Deposit({ onDone }: DepositProps) {
               >
                 {t('viewExpert')}
               </a>
-              <Button variant="primary" style={{ flex: 1 }} onClick={onDone}>
+              <Button variant="primary" style={{ flex: 1 }} onClick={handleDone}>
                 {t('goPortfolio')}
               </Button>
             </div>
