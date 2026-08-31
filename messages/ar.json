@@ -2,7 +2,8 @@
   "Common": {
     "copyAddress": "نسخ {label}",
     "copied": "تم النسخ",
-    "viewOnExplorer": "عرض {label} على Stellar Expert"
+    "viewOnExplorer": "عرض {label} على Stellar Expert",
+    "shareLink": "مشاركة الرابط"
   },
   "Referral": {
     "title": "برنامج الإحالة",
