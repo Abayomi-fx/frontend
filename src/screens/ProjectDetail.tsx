@@ -1,4 +1,4 @@
-import { type CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon, WatchlistButton } from '../components'
 import { Sparkline } from '../components/Sparkline'
@@ -16,12 +16,13 @@ import { type ProjectDetail as ProjectDetailData } from '../data/projectDetails'
 export interface ProjectDetailProps {
   project: Project
   detail: ProjectDetailData
-  onInvest: () => void
+  onInvest: () => Promise<string>
   onBack?: () => void
 }
 
 export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDetailProps) {
   const t = useTranslations('ProjectDetail')
+  const [investmentUrl, setInvestmentUrl] = useState<string | null>(null)
   return (
     <main id="main-content" style={{ maxWidth: 860, margin: '0 auto', padding: '40px 24px 96px' }}>
       {onBack && (
@@ -346,7 +347,15 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
 
       {/* Primary CTA — honest pooled framing */}
       <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <Button variant="primary" size="lg" onClick={onInvest} style={{ width: '100%' }}>
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={async () => {
+            const url = await onInvest()
+            setInvestmentUrl(url)
+          }}
+          style={{ width: '100%' }}
+        >
           {t('investCta')}
         </Button>
         <p
@@ -360,6 +369,11 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
         >
           {t('investNote')}
         </p>
+        {investmentUrl && (
+          <a href={investmentUrl} style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 'var(--type-small)', fontWeight: 600, textAlign: 'center' }}>
+            {t('viewInvestment')}
+          </a>
+        )}
         {onBack && (
           <div style={{ textAlign: 'center' }}>
             <button
