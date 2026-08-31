@@ -12,6 +12,7 @@ export interface Project {
   name: string;
   location: string;
   type: string;
+  referralLink: string | null;
 }
 
 export interface ProjectFilters {
