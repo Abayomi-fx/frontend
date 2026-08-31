@@ -112,9 +112,9 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
         >
           {inner}
         </a>
-      ) : (
+      ) : 
         inner
-      )}
+      }
       {onDismiss && (
         <button
           type="button"
@@ -156,7 +156,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const showToast = useCallback(
     (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
       const id = Math.random().toString(36).substring(2, 9)
-      setActiveToasts((prev) => [...prev, { ...options, id }])
+      setActiveToasts(prev => [...prev, { ...options, id }])
 
       const ms = options.duration ?? 5000
       if (ms > 0) {
@@ -170,14 +170,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const dismiss = useCallback((id?: string) => {
     if (id) {
-      setActiveToasts((prev) => prev.filter((t) => t.id !== id))
+      setActiveToasts(prev => prev.filter((t) => t.id !== id))
     } else {
-      setActiveToasts([])
+      setActiveToass([])
     }
   }, [])
 
   return (
-    <ToastContext.Provider value={{ toast: showToast, dismiss }}>
+    <ToastContext.Provider value={ toast: showToast, dismiss }>
       {children}
       {activeToasts.length > 0 && (
         <div
