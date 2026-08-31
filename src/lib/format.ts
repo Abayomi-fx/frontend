@@ -77,3 +77,27 @@ export const SHARE_PRICE_DECIMALS = 4
 export function formatSharePrice(value: number): string {
   return formatDecimal(value, SHARE_PRICE_DECIMALS)
 }
+
+/** Data shape for the landing pool counters. */
+export interface PoolData {
+  tvl: number
+  investors: number
+  apy: number
+}
+
+/**
+ * Formats the landing pool counters from the source data.
+ * This drives the live counters from `HB_DATA.pool` rather than
+ * hardcoded strings, preventing drift from the data source.
+ */
+export function formatPoolCounters(pool: PoolData): {
+  tvl: string
+  investors: string
+  apy: string
+} {
+  return {
+    tvl: formatMoney(pool.tvl, { includeSymbol: true }),
+    investors: String(pool.investors),
+    apy: formatDecimal(pool.apy, 1),
+  }
+}

@@ -1,11 +1,3 @@
-/* ===========================================================================
-   Heliobond Design System · global entry point
-   ---------------------------------------------------------------------------
-   Consumers link THIS one file. It is an import list only — every token, font,
-   and base rule is reached transitively from here. Order matters: fonts and
-   tokens first, base reset, then the app-shell responsive layer last.
-   =========================================================================== */
-
 @import './tokens/fonts.css';
 @import './tokens/colors.css';
 @import './tokens/typography.css';
@@ -14,3 +6,5 @@
 @import './tokens/base.css';
 @import './app.css';
 @import './shell.css';
+@import './fixes.css';
+@import './grid-fix.css';

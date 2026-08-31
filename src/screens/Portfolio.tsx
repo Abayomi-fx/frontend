@@ -1,12 +1,16 @@
 'use client'
 
-import { type CSSProperties, type ReactNode } from 'react'
+import { memo, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
 import { getPortfolioRisk } from '../lib/bondUtils'
 import { useWallet } from '../wallet/WalletProvider'
+
+const MemoizedHelio = memo(Helio)
+
+const MemoizedLiquidityMeter = memo(LiquidityMeter)
 
 /**
  * Portfolio — calm dashboard. Headline value with delta since deposit, the
@@ -18,7 +22,7 @@ export interface PortfolioProps {
   onDeposit: () => void
 }
 
-export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
+export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   const t = useTranslations('Portfolio')
   const { connected, connect } = useWallet()
   const d = HB_DATA
@@ -96,7 +100,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Helio size={108} motes={d.you.backed} />
+          <MemoizedHelio size={108} motes={d.you.backed} />
           <div style={{ display: 'flex', gap: 10 }}>
             <Button variant="secondary" onClick={onWithdraw}>
               {t('withdraw')}
@@ -117,7 +121,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
           <StatBlock label={t('poolShare')} value="0.49" unit="%" size="md" />
         </Card>
         <Card style={{ padding: 22 }}>
-          <LiquidityMeter liquid={236} total={482} currency="$" showExplanation={false} />
+          <MemoizedLiquidityMeter liquid={236} total={482} currency="$" showExplanation={false} />
           <p
             style={{
               fontFamily: 'var--font-body',
@@ -174,7 +178,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
         </Card>
 
         {/* Activity */}
-        <Card style={ padding: 22 }>
+        <Card style={{ minWidth: 0, padding: 22 }}>
           <div
             style={
               display: 'flex',
@@ -197,21 +201,23 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
           {d.activity.map((a, i) => (
             <div
               key={a.hash+}
-              style={
+              style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                flexWrap: 'wrap',
                 padding: '12px 0',
                 borderTop: i ? '1px solid var--ink-12' : 'none',
-              }
+              }}
             >
-              <div>
+              <div style={{ minWidth: 0 }}>
                 <div
                   style={
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-small',
                     fontWeight: 600,
                     color: 'var--ink',
+                    overflowWrap: 'anywhere',
                   }
                 >
                   {a.kind}
@@ -253,7 +259,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
       </div>
     </main>
   )
-}
+})
 
 const cardTitle: CSSProperties = {
   fontFamily: 'var--font-display',
