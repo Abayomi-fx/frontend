@@ -4,6 +4,13 @@
     "copied": "تم النسخ",
     "viewOnExplorer": "عرض {label} على Stellar Expert"
   },
+  "Referral": {
+    "title": "برنامج الإحالة",
+    "description": "ادعُ أصدقاءك واربح مكافآت",
+    "shareLink": "مشاركة الرابط",
+    "copyLink": "نسخ رابط الإحالة",
+    "copied": "تم نسخ رابط الإحالة"
+  },
   "Nav": {
     "explore": "استكشاف",
     "how": "كيف يعمل",
