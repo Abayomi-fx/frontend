@@ -194,6 +194,7 @@
     "pendingSub": "Usually ~5 seconds on Stellar. tx 4d2c…9af1 ↗",
     "successH1": "Withdrawal settled",
     "successBody": "<num>${amount} USDC</num> is on its way to your wallet. Thanks for being part of the pool.",
+    "transactionHashLabel": "transaction hash",
     "backToPortfolio": "Back to portfolio"
   },
   "Admin": {
