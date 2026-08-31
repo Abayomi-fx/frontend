@@ -23,7 +23,6 @@ export function Landing({ onConnect, onExplore }: LandingProps) {
   const d = HB_DATA
   const steps = [1, 2, 3, 4] as const
   const intensity = Math.min(1, d.pool.totalAssets / 6_000_000)
-  const [poolValue, poolDecimals = ''] = formatCurrency(d.pool.totalAssets).split('.')
 
   return (
     <main id="main-content">
@@ -91,8 +90,7 @@ export function Landing({ onConnect, onExplore }: LandingProps) {
           <div style={counterCell}>
             <StatBlock
               label={t('poolValue')}
-              value={poolValue}
-              decimals={poolDecimals ? `.${poolDecimals}` : undefined}
+              value={formatCurrency(d.pool.totalAssets)}
               size="lg"
             />
           </div>
