@@ -143,3 +143,21 @@ export function UploadIcon({ size = 22, ...rest }: IconProps) {
     </Icon>
   )
 }
+
+/** Outline star — "not on your watchlist yet". */
+export function StarIcon({ size = 18, ...rest }: IconProps) {
+  return (
+    <Icon size={size} {...rest}>
+      <path d="m12 3.5 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.25 6.62 20.13l1.03-6L3.3 9.9l6-.9L12 3.5Z" />
+    </Icon>
+  )
+}
+
+/** Filled star — "saved to your watchlist". */
+export function StarFilledIcon({ size = 18, ...rest }: IconProps) {
+  return (
+    <Icon size={size} fill="currentColor" {...rest}>
+      <path d="m12 3.5 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.25 6.62 20.13l1.03-6L3.3 9.9l6-.9L12 3.5Z" />
+    </Icon>
+  )
+}

@@ -3,6 +3,14 @@
 
 export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
 
+/**
+ * Whether a project ("bond", in investor-facing copy) is currently open for
+ * funding from the pool. Used by the watchlist to tell people which of their
+ * saved bonds they can act on now. `upcoming` = not yet available;
+ * `funded` = fully funded, no further capacity.
+ */
+export type BondStatus = 'open' | 'upcoming' | 'funded'
+
 export interface Project {
   id: number
   name: string
@@ -18,6 +26,12 @@ export interface Project {
   fundedAmount: number
   /** Stated funding goal */
   fundingGoal: number
+  /**
+   * Funding availability. Optional so remote API rows without it stay valid;
+   * `getBondStatus()` in `src/lib/watchlist.ts` derives a fallback from the
+   * funding numbers.
+   */
+  status?: BondStatus
 }
 
 export interface Activity {
@@ -60,6 +74,7 @@ const INITIAL_PROJECTS: Project[] = [
     funded: '$420,000',
     fundedAmount: 420000,
     fundingGoal: 600000,
+    status: 'open',
   },
   {
     id: 2,
@@ -71,6 +86,7 @@ const INITIAL_PROJECTS: Project[] = [
     funded: '$1,180,000',
     fundedAmount: 1180000,
     fundingGoal: 1500000,
+    status: 'upcoming',
   },
   {
     id: 3,
@@ -82,6 +98,7 @@ const INITIAL_PROJECTS: Project[] = [
     funded: '$640,000',
     fundedAmount: 640000,
     fundingGoal: 800000,
+    status: 'open',
   },
   {
     id: 4,
@@ -93,6 +110,7 @@ const INITIAL_PROJECTS: Project[] = [
     funded: '$960,000',
     fundedAmount: 960000,
     fundingGoal: 1200000,
+    status: 'open',
   },
   {
     id: 5,
@@ -104,6 +122,7 @@ const INITIAL_PROJECTS: Project[] = [
     funded: '$310,000',
     fundedAmount: 310000,
     fundingGoal: 400000,
+    status: 'upcoming',
   },
   {
     id: 6,
@@ -115,6 +134,7 @@ const INITIAL_PROJECTS: Project[] = [
     funded: '$520,000',
     fundedAmount: 520000,
     fundingGoal: 700000,
+    status: 'open',
   },
 ]
 
@@ -144,74 +164,8 @@ export const HB_DATA: HeliobondData = {
     weightedGreen: 88,
     backed: INITIAL_FUNDED_COUNT + OFF_SCREEN_PROJECTS_COUNT,
   },
-  projects: [
-    {
-      id: 1,
-      name: 'Sokoto community solar',
-      location: 'Sokoto, Nigeria',
-      type: 'Solar',
-      credit: 82,
-      green: 91,
-      funded: '$420,000',
-      fundedAmount: 420000,
-      fundingGoal: 600000,
-    },
-    {
-      id: 2,
-      name: 'Ría de Vigo tidal array',
-      location: 'Galicia, Spain',
-      type: 'Hydro',
-      credit: 74,
-      green: 88,
-      funded: '$1,180,000',
-      fundedAmount: 1180000,
-      fundingGoal: 1500000,
-    },
-    {
-      id: 3,
-      name: 'Atacama agrivoltaics',
-      location: 'Antofagasta, Chile',
-      type: 'Solar',
-      credit: 88,
-      green: 79,
-      funded: '$640,000',
-      fundedAmount: 640000,
-      fundingGoal: 800000,
-    },
-    {
-      id: 4,
-      name: 'Jämtland wind co-op',
-      location: 'Östersund, Sweden',
-      type: 'Wind',
-      credit: 91,
-      green: 84,
-      funded: '$960,000',
-      fundedAmount: 960000,
-      fundingGoal: 1200000,
-    },
-    {
-      id: 5,
-      name: 'Kerala micro-hydro',
-      location: 'Idukki, India',
-      type: 'Hydro',
-      credit: 69,
-      green: 93,
-      funded: '$310,000',
-      fundedAmount: 310000,
-      fundingGoal: 400000,
-    },
-    {
-      id: 6,
-      name: 'Oaxaca rooftop network',
-      location: 'Oaxaca, Mexico',
-      type: 'Solar',
-      credit: 77,
-      green: 86,
-      funded: '$520,000',
-      fundedAmount: 520000,
-      fundingGoal: 700000,
-    },
-  ],
+  // Same six demo projects as the local registry above.
+  projects: INITIAL_PROJECTS,
   activity: [
     {
       kind: 'Deposit',

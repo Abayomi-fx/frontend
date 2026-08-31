@@ -17,6 +17,7 @@
     "switchToLight": "Switch to light",
     "language": "Language",
     "account": "Account",
+    "watchlist": "Watchlist",
     "copyAddress": "Copy address",
     "copied": "Copied",
     "viewOnExplorer": "View on Stellar Expert",
@@ -109,6 +110,21 @@
     "emptySub": "There are no projects matching the \"{filter}\" category in the pool right now.",
     "loadMore": "Show {count} more",
     "showingCount": "Showing {shown} of {total} projects"
+  },
+  "Watchlist": {
+    "title": "Your watchlist",
+    "sub": "Bonds you're tracking. Saving one doesn't invest — it just keeps it close, and flags when it opens for funding.",
+    "cardFundedFromPool": "Funded from the pool",
+    "emptyTitle": "Nothing saved yet",
+    "emptySub": "Open a bond from Explore and tap the star to add it here. We'll show you when a saved bond is open for funding.",
+    "added": "Added to watchlist",
+    "removed": "Removed from watchlist",
+    "saveLabel": "Add {name} to watchlist",
+    "removeLabel": "Remove {name} from watchlist",
+    "availableBanner": "{count, plural, one {# saved bond is open for funding right now.} other {# saved bonds are open for funding right now.}}",
+    "statusOpen": "Open for funding",
+    "statusUpcoming": "Not yet available",
+    "notYetAvailable": "We'll flag it here when it opens."
   },
   "Deposit": {
     "stepAmount": "Amount",

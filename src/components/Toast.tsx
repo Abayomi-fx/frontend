@@ -4,7 +4,6 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   useCallback,
   type CSSProperties,
   type ReactNode,
@@ -126,7 +125,9 @@ export interface ToastContextType {
 const ToastContext = createContext<ToastContextType | null>(null)
 
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [activeToasts, setActiveToasts] = useState<(ToastProps & { id: string; duration?: number })[]>([])
+  const [activeToasts, setActiveToasts] = useState<
+    (ToastProps & { id: string; duration?: number })[]
+  >([])
 
   const showToast = useCallback(
     (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {

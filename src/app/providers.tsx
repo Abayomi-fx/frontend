@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { ThemeProvider } from '../theme/ThemeProvider'
 import { WalletProvider, useWallet } from '../wallet/WalletProvider'
 import { ToastProvider, SessionTimeoutModal, useToast } from '../components'
+import { WatchlistProvider } from '../watchlist/WatchlistProvider'
 import { useSessionTimeout } from '../hooks/useSessionTimeout'
 
 function SessionWatcher() {
@@ -42,8 +43,10 @@ export function Providers({ children }: { children: ReactNode }) {
     <ThemeProvider>
       <WalletProvider>
         <ToastProvider>
-          <SessionWatcher />
-          {children}
+          <WatchlistProvider>
+            <SessionWatcher />
+            {children}
+          </WatchlistProvider>
         </ToastProvider>
       </WalletProvider>
     </ThemeProvider>

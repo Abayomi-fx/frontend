@@ -474,6 +474,17 @@ function WalletMenu({ address, isDemo }: { address: string; isDemo: boolean }) {
             }}
             onClick={() => {
               setOpen(false)
+              router.push('/watchlist')
+            }}
+          >
+            {t('watchlist')}
+          </MenuItem>
+          <MenuItem
+            ref={(el) => {
+              itemRefs.current.push(el)
+            }}
+            onClick={() => {
+              setOpen(false)
               router.push('/portfolio')
             }}
           >

@@ -3,7 +3,7 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { ProjectCard, Tag } from '../components'
+import { ProjectCard, Tag, WatchlistButton } from '../components'
 import { Pagination } from '../components/Pagination'
 import { HB_DATA, type Project, type ProjectType } from '../data'
 import { getProjects } from '../lib/api'
@@ -201,6 +201,7 @@ export function Explore({ onOpen }: ExploreProps) {
                     onOpen={() => onOpen(p)}
                     fundingGoal={p.fundingGoal}
                     fundedAmount={p.fundedAmount}
+                    action={<WatchlistButton bondId={p.id} bondName={p.name} />}
                   />
                 ))}
           </div>

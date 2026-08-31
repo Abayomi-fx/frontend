@@ -17,6 +17,7 @@
     "switchToLight": "Passer en clair",
     "language": "Langue",
     "account": "Compte",
+    "watchlist": "Liste de suivi",
     "copyAddress": "Copier l'adresse",
     "copied": "Copié",
     "viewOnExplorer": "Voir sur Stellar Expert",
@@ -109,6 +110,21 @@
     "emptySub": "Il n'y a aucun projet correspondant à la catégorie \"{filter}\" dans le pool en ce moment.",
     "loadMore": "Afficher {count} de plus",
     "showingCount": "{shown} projets sur {total} affichés"
+  },
+  "Watchlist": {
+    "title": "Votre liste de suivi",
+    "sub": "Les obligations que vous suivez. En sauvegarder une n'investit pas — cela la garde à portée de main et signale son ouverture au financement.",
+    "cardFundedFromPool": "Financé par le pool",
+    "emptyTitle": "Rien de sauvegardé pour l'instant",
+    "emptySub": "Ouvrez une obligation depuis Explorer et touchez l'étoile pour l'ajouter ici. Nous vous indiquerons quand une obligation sauvegardée est ouverte au financement.",
+    "added": "Ajouté à la liste de suivi",
+    "removed": "Retiré de la liste de suivi",
+    "saveLabel": "Ajouter {name} à la liste de suivi",
+    "removeLabel": "Retirer {name} de la liste de suivi",
+    "availableBanner": "{count, plural, one {# obligation suivie est ouverte au financement en ce moment.} other {# obligations suivies sont ouvertes au financement en ce moment.}}",
+    "statusOpen": "Ouverte au financement",
+    "statusUpcoming": "Pas encore disponible",
+    "notYetAvailable": "Nous le signalerons ici dès son ouverture."
   },
   "Deposit": {
     "stepAmount": "Montant",

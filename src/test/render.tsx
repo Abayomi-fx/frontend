@@ -6,13 +6,19 @@
 import { render, type RenderOptions } from '@testing-library/react'
 import { LocaleProvider } from '@/i18n/LocaleProvider'
 import { ThemeProvider } from '@/theme/ThemeProvider'
+import { ToastProvider } from '@/components'
+import { WatchlistProvider } from '@/watchlist/WatchlistProvider'
 import type { ReactNode } from 'react'
 import en from '../../messages/en.json'
 
 function AllProviders({ children }: { children: ReactNode }) {
   return (
     <LocaleProvider initialLocale="en" initialMessages={en}>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <ToastProvider>
+          <WatchlistProvider>{children}</WatchlistProvider>
+        </ToastProvider>
+      </ThemeProvider>
     </LocaleProvider>
   )
 }
