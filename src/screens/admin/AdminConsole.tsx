@@ -69,6 +69,10 @@ export function AdminConsole() {
     status: Creator['status'],
     rejectionReason?: string,
   ) => {
+    if (status === 'pending') {
+      const c = whitelist.find((x) => x.address === address)
+      if (!window.confirm(`${t('actionRevoke')} ${c?.name ?? 'Creator'}?`)) return
+    }
     setWhitelist((list) =>
       list.map((c) =>
         c.address === address
@@ -96,6 +100,13 @@ export function AdminConsole() {
       tone: toneMap[status],
       title: titleMap[status],
       message: messageMap[status],
+      action:
+        status === 'pending'
+          ? {
+              label: t('actionApprove'),
+              onClick: () => setCreatorStatus(address, 'approved'),
+            }
+          : undefined,
       duration: 5000,
       stackable: true,
     })
