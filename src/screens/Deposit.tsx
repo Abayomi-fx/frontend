@@ -324,8 +324,12 @@ export function Deposit({ onDone }: DepositProps) {
                       toast({
                         tone: 'success',
                         title: 'Deposit confirmed',
-                      action: <a href={`/investments/${hash}`}>View investment</a>,
-                        message: `Successfully invested ${n} USDC in the pool.`,
+                        message: (
+                          <>
+                            Successfully invested {n} USDC in the pool.{' '}
+                            <a href={`/investments/${hash}`}>View investment</a>
+                          </>
+                        ),
                       })
                     }
                   } catch (e) {
