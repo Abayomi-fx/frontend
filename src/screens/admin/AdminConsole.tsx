@@ -9,6 +9,7 @@ import { OracleForms } from './OracleForms'
 import { OFF_SCREEN_PROJECTS_COUNT } from '@/data'
 import { parseFundedNum } from './utils'
 import { formatMoney as sharedFormatMoney } from '@/lib/format'
+import { formatSharePrice } from '@/wallet/vault'
 
 /**
  * AdminConsole — the internal admin / oracle surface. Same design system as the
@@ -126,7 +127,7 @@ export function AdminConsole() {
           />
           <StatCell
             label={t('statSharePrice')}
-            value={VAULT_STATS.sharePrice.toFixed(4)}
+            value={formatSharePrice(VAULT_STATS.sharePrice)}
             unit="USDC/HBS"
           />
           <StatCell label={t('statHbsSupply')} value={sharedFormatMoney(VAULT_STATS.hbsSupply)} />
