@@ -358,6 +358,22 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
         >
           {t('investCta')}
         </Button>
+        {investmentUrl && (
+          <a
+            href={investmentUrl}
+            style={{
+              display: 'block',
+              textAlign: 'center',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
+              fontWeight: 600,
+              color: 'var(--brand)',
+              textDecoration: 'none',
+            }}
+          >
+            View investment →
+          </a>
+        )}
         <p
           style={{
             fontFamily: 'var(--font-body)',
