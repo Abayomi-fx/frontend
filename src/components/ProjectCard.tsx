@@ -76,7 +76,7 @@ export function ProjectCard({
         <span
           style={{
             position: 'absolute',
-            left: 12,
+            insetInlineStart: 12,
             bottom: 12,
             display: 'inline-flex',
             alignItems: 'center',

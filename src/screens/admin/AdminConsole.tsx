@@ -176,7 +176,7 @@ export function AdminConsole() {
               <Badge tone={c.status === 'approved' ? 'growth' : 'neutral'}>
                 {c.status === 'approved' ? t('statusApproved') : t('statusPending')}
               </Badge>
-              <div style={{ display: 'flex', gap: 8, marginLeft: 'auto' }}>
+              <div style={{ display: 'flex', gap: 8, marginInlineStart: 'auto' }}>
                 {c.status === 'approved' ? (
                   <Button
                     size="sm"
@@ -250,7 +250,7 @@ function StatCell({
         flex: '1 1 0',
         minWidth: 140,
         padding: '14px 16px',
-        borderRight: last ? 'none' : '1px solid var(--ink-12)',
+        borderInlineEnd: last ? 'none' : '1px solid var(--ink-12)',
       }}
     >
       <div className="hb-eyebrow" style={{ marginBottom: 6 }}>

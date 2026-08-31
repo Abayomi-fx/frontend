@@ -4,11 +4,13 @@ import { cookies } from 'next/headers'
 // Heliobond launches native in English and French (per the brief). Locale is
 // chosen by a cookie (set by the in-app language switcher); no [locale] URL
 // segment, so existing routes are untouched.
-export const LOCALES = ['en', 'fr'] as const
+export const LOCALES = ['en', 'fr', 'ar'] as const
 export type Locale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: Locale = 'en'
 
-export const LOCALE_LABELS: Record<Locale, string> = { en: 'EN', fr: 'FR' }
+export const LOCALE_LABELS: Record<Locale, string> = { en: 'EN', fr: 'FR', ar: 'AR' }
+
+export const RTL_LOCALES: ReadonlySet<Locale> = new Set(['ar'] as const)
 
 export default getRequestConfig(async () => {
   const store = await cookies()

@@ -236,7 +236,7 @@ function Stepper({ activeStage }: { activeStage: ApplicationStage }) {
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0 }}>
               <Dot done={done} />
-              <div style={{ minWidth: 0, paddingRight: 8 }}>
+              <div style={{ minWidth: 0, paddingInlineEnd: 8 }}>
                 <div
                   style={{
                     fontFamily: 'var(--font-body)',

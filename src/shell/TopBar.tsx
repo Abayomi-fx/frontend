@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { Button, useToast } from '../components'
 import { Mark } from '../brand/Mark'
 import { useLocaleSwitcher } from '../i18n/LocaleProvider'
+import { LOCALE_LABELS, type Locale } from '../i18n/request'
 import { useWallet, shortAddress } from '../wallet/WalletProvider'
 import { useTheme } from '../theme/ThemeProvider'
 
@@ -27,7 +28,7 @@ export function TopBar() {
   const pathname = usePathname()
   const router = useRouter()
   const t = useTranslations('Nav')
-  const { locale, switchLocale } = useLocaleSwitcher()
+  useLocaleSwitcher()
   const { connected, address, connecting, isDemo } = useWallet()
   const { theme, toggle } = useTheme()
 
@@ -103,7 +104,7 @@ export function TopBar() {
         </span>
       </Link>
 
-      <nav className="hb-topbar-nav" style={{ display: 'flex', gap: 4, marginLeft: 8 }}>
+      <nav className="hb-topbar-nav" style={{ display: 'flex', gap: 4, marginInlineStart: 8 }}>
         {NAV.map(({ href, key }) => {
           const active = href.includes('#')
             ? pathname === '/' && activeHash === href.slice(href.indexOf('#'))
@@ -129,7 +130,7 @@ export function TopBar() {
         })}
       </nav>
 
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ marginInlineStart: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
         <span
           role="status"
           aria-label={t('networkStatus')}
@@ -166,23 +167,7 @@ export function TopBar() {
           {mounted ? isDarkTheme ? <SunIcon /> : <MoonIcon /> : null}
         </button>
 
-        <button
-          type="button"
-          onClick={switchLocale}
-          aria-label={t('language')}
-          style={{
-            ...iconBtnStyle,
-            width: 'auto',
-            gap: 5,
-            padding: '0 6px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 14,
-            color: 'var(--ink-60)',
-          }}
-        >
-          {locale.toUpperCase()}
-          <ChevronDown />
-        </button>
+        <LocaleDropdown />
 
         {connected && address ? (
           <WalletMenu address={address} isDemo={isDemo} />
@@ -213,6 +198,113 @@ const iconBtnStyle = {
   cursor: 'pointer',
   color: 'var(--ink-60)',
 } as const
+
+function LocaleDropdown() {
+  const t = useTranslations('Nav')
+  const { locale, switchLocale } = useLocaleSwitcher()
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [open])
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => {
+        const items = ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]')
+        items?.[0]?.focus()
+      }, 0)
+    }
+  }, [open])
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setOpen(false)
+      triggerRef.current?.focus()
+    }
+  }
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button
+        ref={triggerRef}
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={t('language')}
+        style={{
+          ...iconBtnStyle,
+          width: 'auto',
+          gap: 5,
+          padding: '0 6px',
+          fontFamily: 'var(--font-body)',
+          fontSize: 14,
+          color: 'var(--ink-60)',
+        }}
+      >
+        {LOCALE_LABELS[locale]}
+        <ChevronDown />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          aria-orientation="vertical"
+          onKeyDown={handleKeyDown}
+          style={{
+            position: 'absolute',
+            top: 48,
+            insetInlineEnd: 0,
+            minWidth: 120,
+            background: 'var(--surface)',
+            border: '1px solid var(--ink-12)',
+            borderRadius: 'var(--radius-card)',
+            boxShadow: 'var(--shadow-md)',
+            padding: 6,
+            zIndex: 400,
+          }}
+        >
+          {(Object.keys(LOCALE_LABELS) as Locale[]).map((code) => (
+            <button
+              key={code}
+              role="menuitem"
+              tabIndex={-1}
+              type="button"
+              onClick={() => {
+                switchLocale(code)
+                setOpen(false)
+              }}
+              style={{
+                display: 'block',
+                width: '100%',
+                textAlign: 'start',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '9px 10px',
+                borderRadius: 'var(--radius-input)',
+                fontFamily: 'var(--font-body)',
+                fontSize: 14,
+                fontWeight: locale === code ? 600 : 500,
+                color: locale === code ? 'var(--ink)' : 'var(--ink-60)',
+                background: 'transparent',
+              }}
+            >
+              {LOCALE_LABELS[code]}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 function ChevronDown() {
   return (
@@ -445,7 +537,7 @@ function WalletMenu({ address, isDemo }: { address: string; isDemo: boolean }) {
           style={{
             position: 'absolute',
             top: 48,
-            right: 0,
+            insetInlineEnd: 0,
             minWidth: 224,
             background: 'var(--surface)',
             border: '1px solid var(--ink-12)',
@@ -659,7 +751,7 @@ const MenuLink = function MenuLink({
 const menuItemStyle: CSSProperties = {
   display: 'block',
   width: '100%',
-  textAlign: 'left',
+  textAlign: 'start',
   border: 'none',
   cursor: 'pointer',
   padding: '9px 10px',

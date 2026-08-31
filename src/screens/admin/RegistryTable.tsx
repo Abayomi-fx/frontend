@@ -114,7 +114,7 @@ export function RegistryTable({ rows, onSave }: RegistryTableProps) {
               sortLabel={t('sortBy', { col: t('colLastVerified') })}
               align="right"
             />
-            <th style={{ ...thBase, textAlign: 'right' }}>
+            <th style={{ ...thBase, textAlign: 'end' }}>
               <span className="hb-eyebrow">{t('colActions')}</span>
             </th>
           </tr>
@@ -252,7 +252,7 @@ function Row({
         <td style={{ ...tdStyle, ...numCell }}>{row.green}</td>
         <td style={{ ...tdStyle, ...numCell }}>{row.funded}</td>
         <td style={{ ...tdStyle, ...numCell, color: 'var(--ink-60)' }}>{row.lastVerified}</td>
-        <td style={{ ...tdStyle, textAlign: 'right' }}>
+        <td style={{ ...tdStyle, textAlign: 'end' }}>
           {!editing && (
             <Button size="sm" variant="ghost" onClick={open}>
               {updateLabel}
@@ -276,7 +276,7 @@ function Row({
               </span>
               <ScoreField label={creditFieldLabel} value={credit} onChange={setCredit} />
               <ScoreField label={greenFieldLabel} value={green} onChange={setGreen} />
-              <div style={{ display: 'flex', gap: 8, marginLeft: 'auto' }}>
+              <div style={{ display: 'flex', gap: 8, marginInlineStart: 'auto' }}>
                 <Button size="sm" variant="ghost" onClick={onCancel}>
                   {cancelLabel}
                 </Button>
@@ -346,7 +346,7 @@ const tdStyle: CSSProperties = {
 const numCell: CSSProperties = {
   fontFamily: 'var(--font-data)',
   fontFeatureSettings: '"tnum" 1',
-  textAlign: 'right',
+  textAlign: 'end',
   whiteSpace: 'nowrap',
 }
 

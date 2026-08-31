@@ -13,18 +13,24 @@ import {
 import { NextIntlClientProvider } from 'next-intl'
 import en from '../../messages/en.json'
 import fr from '../../messages/fr.json'
-import { type Locale } from './request'
+import ar from '../../messages/ar.json'
+import { type Locale, RTL_LOCALES } from './request'
 
 export type Messages = typeof en
 
-const CATALOGS: Record<Locale, Messages> = { en, fr }
+const CATALOGS: Record<Locale, Messages> = { en, fr, ar }
 
 interface LocaleSwitcherValue {
   locale: Locale
-  switchLocale: () => void
+  dir: 'ltr' | 'rtl'
+  switchLocale: (target: Locale) => void
 }
 
 const LocaleSwitcherContext = createContext<LocaleSwitcherValue | null>(null)
+
+function getDir(locale: Locale): 'ltr' | 'rtl' {
+  return RTL_LOCALES.has(locale) ? 'rtl' : 'ltr'
+}
 
 export function LocaleProvider({
   initialLocale,
@@ -40,19 +46,22 @@ export function LocaleProvider({
 
   useEffect(() => {
     document.documentElement.lang = locale
+    document.documentElement.dir = getDir(locale)
   }, [locale])
 
-  const switchLocale = useCallback(() => {
-    const next = locale === 'en' ? 'fr' : 'en'
-    document.cookie = `NEXT_LOCALE=${next};path=/;max-age=31536000;samesite=lax`
+  const switchLocale = useCallback((target: Locale) => {
+    document.cookie = `NEXT_LOCALE=${target};path=/;max-age=31536000;samesite=lax`
 
     startTransition(() => {
-      setLocale(next)
-      setMessages(CATALOGS[next])
+      setLocale(target)
+      setMessages(CATALOGS[target])
     })
-  }, [locale])
+  }, [])
 
-  const value = useMemo(() => ({ locale, switchLocale }), [locale, switchLocale])
+  const value = useMemo(
+    () => ({ locale, dir: getDir(locale), switchLocale }),
+    [locale, switchLocale],
+  )
 
   return (
     <LocaleSwitcherContext.Provider value={value}>

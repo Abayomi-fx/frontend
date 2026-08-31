@@ -84,8 +84,7 @@ export function SessionTimeoutModal({
       style={{
         position: 'fixed',
         top: 0,
-        left: 0,
-        right: 0,
+        insetInline: 0,
         bottom: 0,
         backgroundColor: 'rgba(11, 43, 35, 0.65)',
         backdropFilter: 'blur(6px)',
@@ -212,12 +211,7 @@ export function SessionTimeoutModal({
             flexDirection: 'row',
           }}
         >
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={onLogout}
-            style={{ flex: 1 }}
-          >
+          <Button variant="secondary" size="lg" onClick={onLogout} style={{ flex: 1 }}>
             {t('logoutCta')}
           </Button>
           <Button

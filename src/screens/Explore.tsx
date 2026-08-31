@@ -265,7 +265,7 @@ function ProjectCardSkeleton() {
         <div
           style={{
             position: 'absolute',
-            left: 12,
+            insetInlineStart: 12,
             bottom: 12,
             height: 26,
             width: 90,

@@ -96,7 +96,7 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
                      still reads in greyscale, under a colour-vision deficiency,
                      or with forced colours on. Solar therefore decorates the
                      value; it never carries it alone. */
-                  borderRight:
+                  borderInlineEnd:
                     fundedPct > 0 && fundedPct < 100 ? '2px solid var(--ink)' : undefined,
                   boxSizing: 'border-box',
                 }}

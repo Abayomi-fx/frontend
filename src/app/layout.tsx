@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { getLocale, getMessages } from 'next-intl/server'
 import { Providers } from './providers'
 import { LocaleProvider, type Messages } from '../i18n/LocaleProvider'
-import { type Locale } from '../i18n/request'
+import { type Locale, RTL_LOCALES } from '../i18n/request'
 import { TopBar } from '../shell/TopBar'
 import { Footer } from '../shell/Footer'
 import { THEME_SCRIPT } from '../theme/themeScript'
@@ -57,7 +57,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const messages = await getMessages()
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={RTL_LOCALES.has(locale as Locale) ? 'rtl' : 'ltr'}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

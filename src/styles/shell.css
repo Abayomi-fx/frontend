@@ -45,7 +45,7 @@
 .hb-topbar__nav {
   display: flex;
   gap: 4px;
-  margin-left: 8px;
+  margin-inline-start: 8px;
 }
 
 .hb-topbar__nav-link {
@@ -63,7 +63,7 @@
 }
 
 .hb-topbar__actions {
-  margin-left: auto;
+  margin-inline-start: auto;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -121,7 +121,8 @@
   border: 1px solid var(--ink-12);
   border-radius: var(--radius-pill);
   height: 40px;
-  padding: 0 6px 0 14px;
+  padding-block: 0;
+  padding-inline: 14px 6px;
   cursor: pointer;
 }
 .hb-wallet__addr {
@@ -138,7 +139,7 @@
 .hb-wallet__menu {
   position: absolute;
   top: 48px;
-  right: 0;
+  inset-inline-end: 0;
   min-width: 224px;
   background: var(--surface);
   border: 1px solid var(--ink-12);
@@ -172,7 +173,7 @@
 .hb-menu-item {
   display: block;
   width: 100%;
-  text-align: left;
+  text-align: start;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -192,7 +193,7 @@
 .hb-skip-link {
   position: absolute;
   top: -100%;
-  left: 8px;
+  inset-inline-start: 8px;
   z-index: 9999;
   padding: 8px 16px;
   background: var(--surface);
