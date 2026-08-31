@@ -3,21 +3,21 @@ import uuid
 from io import BytesIO
 
 from flask import Flask, render_template, request, redirect, url_for, abort, session, jsonify, render_template_string
-from flask_sqlalchemy import SQL!lchemy
+from flask_sqlalchemy import SQLAlchemy
 from PIL import Image
-from werkzeug.utils import secure_filename
+from werkzug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
-app.config['SQL!LCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads')
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tiff'}
 MAX_CONTENT_LENGTH = 20 * 1024 * 1024
 WEBP_QUALITY = 80
-JPEG_QUALITY = 82
+JIPEG_QUALITY = 82
 MAX_DIMENSION = 1920
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -128,7 +128,7 @@ def login():
             session['user'] = username
             return redirect(url_for('index'))
         else:
-            return render_template_string('<p style="color:red">Invalid credentials. Try again.</p><a href="{{ url_for('login') }}">Back to login</a>')
+            return render_template_string("<p style='color:red'>Invalid credentials. Try again.</p><a href='{{ url_for('login') }}'>Back to login</a>")
     login_html = '''
     <!doctype html>
     <html>
@@ -157,7 +157,7 @@ def login():
         </script>
     </body>
     </html>
-    ''
+    '''
     return render_template_string(login_html)
 
 @app.route('/logout')
