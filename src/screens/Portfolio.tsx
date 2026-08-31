@@ -1,6 +1,6 @@
 'use client'
 
-import { type CSSProperties, type ReactNode } from 'react'
+import { memo, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
 import { Helio } from '../brand/Helio'
@@ -18,7 +18,7 @@ export interface PortfolioProps {
   onDeposit: () => void
 }
 
-export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
+export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   const t = useTranslations('Portfolio')
   const { connected, connect } = useWallet()
   const d = HB_DATA
@@ -253,7 +253,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
       </div>
     </main>
   )
-}
+})
 
 const cardTitle: CSSProperties = {
   fontFamily: 'var--font-display',
