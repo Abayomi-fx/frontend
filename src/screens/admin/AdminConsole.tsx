@@ -60,16 +60,30 @@ export function AdminConsole() {
     })
   }
 
-  const setCreatorStatus = (address: string, status: Creator['status']) => {
-    setWhitelist((list) => list.map((c) => (c.address === address ? { ...c, status } : c)))
+  const setCreatorStatus = (address: string, status: Creator['status'], rejectionReason?: string) => {
+    setWhitelist((list) => 
+      list.map((c) => 
+        c.address === address 
+          ? { ...c, status, rejectionReason: status === 'rejected' ? rejectionReason : undefined } 
+          : c
+      )
+    )
     const c = whitelist.find((x) => x.address === address)
+    const toneMap = { approved: 'success' as const, rejected: 'ember' as const, pending: 'neutral' as const }
+    const titleMap = { 
+      approved: t('toastApprovedTitle'), 
+      rejected: t('toastRevokedTitle'),
+      pending: t('toastRevokedTitle')
+    }
+    const messageMap = {
+      approved: t('toastApprovedMsg', { name: c?.name ?? 'Creator' }),
+      rejected: t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
+      pending: t('toastRevokedMsg', { name: c?.name ?? 'Creator' })
+    }
     toast({
-      tone: status === 'approved' ? 'success' : 'neutral',
-      title: status === 'approved' ? t('toastApprovedTitle') : t('toastRevokedTitle'),
-      message:
-        status === 'approved'
-          ? t('toastApprovedMsg', { name: c?.name ?? 'Creator' })
-          : t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
+      tone: toneMap[status],
+      title: titleMap[status],
+      message: messageMap[status],
     })
   }
 
@@ -173,9 +187,36 @@ export function AdminConsole() {
                 </div>
               </div>
               <AddressChip value={c.address} label="creator address" />
-              <Badge tone={c.status === 'approved' ? 'growth' : 'neutral'}>
-                {c.status === 'approved' ? t('statusApproved') : t('statusPending')}
-              </Badge>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
+                <Badge 
+                  tone={
+                    c.status === 'approved' 
+                      ? 'growth' 
+                      : c.status === 'rejected' 
+                      ? 'ember' 
+                      : 'neutral'
+                  }
+                >
+                  {c.status === 'approved' 
+                    ? t('statusApproved') 
+                    : c.status === 'rejected'
+                    ? t('statusRejected')
+                    : t('statusPending')}
+                </Badge>
+                {c.status === 'rejected' && c.rejectionReason && (
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--type-caption)',
+                      color: 'var(--ember)',
+                      lineHeight: 1.4,
+                      maxWidth: 320,
+                    }}
+                  >
+                    <span style={{ fontWeight: 600 }}>{t('rejectionReason')}:</span> {c.rejectionReason}
+                  </div>
+                )}
+              </div>
               <div style={{ display: 'flex', gap: 8, marginLeft: 'auto' }}>
                 {c.status === 'approved' ? (
                   <Button
