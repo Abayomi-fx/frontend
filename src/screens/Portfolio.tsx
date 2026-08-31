@@ -178,7 +178,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
         </Card>
 
         {/* Activity */}
-        <Card style={ padding: 22 }>
+        <Card style={{ minWidth: 0, padding: 22 }}>
           <div
             style={
               display: 'flex',
@@ -201,21 +201,23 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           {d.activity.map((a, i) => (
             <div
               key={a.hash+}
-              style={
+              style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                flexWrap: 'wrap',
                 padding: '12px 0',
                 borderTop: i ? '1px solid var--ink-12' : 'none',
-              }
+              }}
             >
-              <div>
+              <div style={{ minWidth: 0 }}>
                 <div
                   style={
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-small',
                     fontWeight: 600,
                     color: 'var--ink',
+                    overflowWrap: 'anywhere',
                   }
                 >
                   {a.kind}

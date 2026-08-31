@@ -75,6 +75,18 @@ export function Explore({ onOpen }: ExploreProps) {
 
   return (
     <main id="main-content" style={{ maxWidth: 1320, margin: '0 auto', padding: '48px 32px 80px' }}>
+      <style>{`
+        .hb-projects-grid > * {
+          min-width: 0;
+        }
+        .hb-projects-grid * {
+          min-width: 0;
+          white-space: normal !important;
+          overflow-wrap: break-word !important;
+          word-break: break-word !important;
+          max-width: 100%;
+        }
+      `}</style>
       <div style={{ marginBottom: 28 }}>
         <h1
           style={{
