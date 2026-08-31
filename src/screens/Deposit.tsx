@@ -383,7 +383,7 @@ export function Deposit({ onDone }: DepositProps) {
               <Button
                 variant="primary"
                 size="lg"
-                style={{ flex: 1, background: 'var(--primary)' }}
+                style={{ flex: 1 }}
                 onClick={async () => {
                   changeStep('pending')
                   setTxError(null)
@@ -557,7 +557,7 @@ export function Deposit({ onDone }: DepositProps) {
               >
                 View investment
               </a>
-              <Button variant="primary" style={{ flex: 1, background: 'var(--primary)' }} onClick={handleDone}>
+              <Button variant="primary" style={{ flex: 1 }} onClick={handleDone}>
                 {t('goPortfolio')}
               </Button>
             </div>
