@@ -1,10 +1,10 @@
-import { useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { useState, type ButtonHTMAttributes, type ReactNode } from 'react'
 
 /**
  * Heliobond Tag — a selectable filter/category pill. Selected state uses a
  * solar-tint fill paired with an ink label (color never alone).
  */
-export interface TagProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TagProps extends ButtonHTMAttributes<HTMLButtonElement> {
   selected?: boolean
   children: ReactNode
 }
@@ -29,7 +29,7 @@ export function Tag({ selected = false, onClick, children, style, ...rest }: Tag
         fontFamily: 'var(--font-body)',
         fontWeight: 500,
         fontSize: 'var(--type-small)',
-        color: 'var(--ink)',
+        color: selected ? 'var(--ink-strong, #1a1a1a)' : 'var(--ink)',
         background: selected
           ? 'var(--solar-12)'
           : hover && interactive
