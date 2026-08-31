@@ -126,32 +126,35 @@ export interface ToastContextType {
 const ToastContext = createContext<ToastContextType | null>(null)
 
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [activeToast, setActiveToast] = useState<(ToastProps & { duration?: number }) | null>(null)
-
-  useEffect(() => {
-    if (!activeToast || activeToast.duration === 0) return
-    const ms = activeToast.duration ?? 5000
-    const timer = setTimeout(() => {
-      setActiveToast(null)
-    }, ms)
-    return () => clearTimeout(timer)
-  }, [activeToast])
+  const [activeToasts, setActiveToasts] = useState<(ToastProps & { id: string; duration?: number })[]>([])
 
   const showToast = useCallback(
     (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
-      setActiveToast(options)
+      const id = Math.random().toString(36).substring(2, 9)
+      setActiveToasts((prev) => [...prev, { ...options, id }])
+
+      const ms = options.duration ?? 5000
+      if (ms > 0) {
+        setTimeout(() => {
+          setActiveToasts((prev) => prev.filter((t) => t.id !== id))
+        }, ms)
+      }
     },
     [],
   )
 
-  const dismiss = useCallback(() => {
-    setActiveToast(null)
+  const dismiss = useCallback((id?: string) => {
+    if (id) {
+      setActiveToasts((prev) => prev.filter((t) => t.id !== id))
+    } else {
+      setActiveToasts([])
+    }
   }, [])
 
   return (
     <ToastContext.Provider value={{ toast: showToast, dismiss }}>
       {children}
-      {activeToast && (
+      {activeToasts.length > 0 && (
         <div
           role="status"
           aria-live="polite"
@@ -161,16 +164,23 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             right: 24,
             bottom: 24,
             zIndex: 9999,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 12,
+            alignItems: 'flex-end',
           }}
         >
-          <Toast
-            tone={activeToast.tone}
-            title={activeToast.title}
-            message={activeToast.message}
-            action={activeToast.action}
-            onDismiss={dismiss}
-            style={activeToast.style}
-          />
+          {activeToasts.map((activeToast) => (
+            <Toast
+              key={activeToast.id}
+              tone={activeToast.tone}
+              title={activeToast.title}
+              message={activeToast.message}
+              action={activeToast.action}
+              onDismiss={() => dismiss(activeToast.id)}
+              style={activeToast.style}
+            />
+          ))}
         </div>
       )}
     </ToastContext.Provider>
