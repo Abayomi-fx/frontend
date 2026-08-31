@@ -62,6 +62,9 @@
   --focus-offset: var(--ink);
 
   /* --- Shadows — ink-tinted, never gray-black ------------------------- */
+  /* --- Overlay & backdrop --------------------------------------------- */
+  --backdrop: rgba(11, 43, 35, 0.65); /* modal/dialog backdrop overlay */
+
   --shadow-sm: 0 1px 2px rgba(11, 43, 35, 0.06);
   --shadow-md: 0 8px 30px rgba(11, 43, 35, 0.1);
   --shadow-lg: 0 24px 60px rgba(11, 43, 35, 0.14);
@@ -91,6 +94,9 @@
   --solar-24: rgba(255, 180, 0, 0.26);
   --growth-12: rgba(93, 217, 154, 0.14);
   --ember-12: rgba(255, 155, 130, 0.14);
+
+  /* --- Overlay & backdrop --------------------------------------------- */
+  --backdrop: rgba(237, 242, 236, 0.65); /* modal/dialog backdrop overlay */
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.5);
