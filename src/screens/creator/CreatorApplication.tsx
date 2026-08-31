@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, Tag, Card, CheckBoldIcon, FormField, FormInput } from '@/components'
 import {
@@ -9,7 +9,6 @@ import {
   type ApplicationStage,
   type ProjectType,
 } from '@/data/creator'
-import { cardTitle, subtle } from '@/styles/shared'
 
 /**
  * CreatorApplication — the whitelist door for project creators. Plain criteria
@@ -32,7 +31,11 @@ export interface ApplicationFormValues {
   links: string
 }
 
-export function CreatorApplication({ stage = 'submitted', onSubmit, rejectionReason }: CreatorApplicationProps) {
+export function CreatorApplication({
+  stage = 'submitted',
+  onSubmit,
+  rejectionReason,
+}: CreatorApplicationProps) {
   const t = useTranslations('Creator')
   const [orgName, setOrgName] = useState('')
   const [projectType, setProjectType] = useState<ProjectType>(PROJECT_TYPES[0])
@@ -103,7 +106,10 @@ export function CreatorApplication({ stage = 'submitted', onSubmit, rejectionRea
 
         <Card>
           <h3 style={cardTitle}>{t('standTitle')}</h3>
-          <Stepper activeStage={activeStage} rejectionReason={activeStage === 'rejected' ? rejectionReason : undefined} />
+          <Stepper
+            activeStage={activeStage}
+            rejectionReason={activeStage === 'rejected' ? rejectionReason : undefined}
+          />
         </Card>
       </div>
 
@@ -194,7 +200,13 @@ export function CreatorApplication({ stage = 'submitted', onSubmit, rejectionRea
   )
 }
 
-function Stepper({ activeStage, rejectionReason }: { activeStage: ApplicationStage; rejectionReason?: string }) {
+function Stepper({
+  activeStage,
+  rejectionReason,
+}: {
+  activeStage: ApplicationStage
+  rejectionReason?: string
+}) {
   const t = useTranslations('Creator')
   const order: ApplicationStage[] = ['submitted', 'in_review', 'approved']
   const activeIndex = order.indexOf(activeStage === 'rejected' ? 'approved' : activeStage)
@@ -241,7 +253,7 @@ function Stepper({ activeStage, rejectionReason }: { activeStage: ApplicationSta
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0 }}>
                 <Dot done={done} isRejected={activeStage === 'rejected' && last} />
-                <div style={{ minWidth: 0, paddingRight: 8 }}>
+                <div style={{ minWidth: 0, paddingInlineEnd: 8 }}>
                   <div
                     style={{
                       fontFamily: 'var(--font-body)',
@@ -323,7 +335,7 @@ function Stepper({ activeStage, rejectionReason }: { activeStage: ApplicationSta
 function Dot({ done, isRejected }: { done: boolean; isRejected?: boolean }) {
   const bgColor = isRejected ? 'var(--ember)' : done ? 'var(--solar)' : 'transparent'
   const borderColor = isRejected ? 'var(--ember)' : done ? 'var(--solar)' : 'var(--ink-12)'
-  
+
   return (
     <span
       aria-hidden="true"
@@ -384,3 +396,17 @@ function Label({ htmlFor, children }: { htmlFor: string; children: ReactNode }) 
   )
 }
 
+const cardTitle: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 700,
+  fontSize: 'var(--type-h5)',
+  margin: '0 0 8px',
+  color: 'var(--ink)',
+  letterSpacing: '-0.01em',
+}
+const subtle: CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-small)',
+  lineHeight: 1.5,
+  color: 'var(--ink-60)',
+}

@@ -96,7 +96,7 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
                      still reads in greyscale, under a colour-vision deficiency,
                      or with forced colours on. Solar therefore decorates the
                      value; it never carries it alone. */
-                  borderRight:
+                  borderInlineEnd:
                     fundedPct > 0 && fundedPct < 100 ? '2px solid var(--ink)' : undefined,
                   boxSizing: 'border-box',
                 }}
@@ -124,11 +124,8 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
           </div>
         </Card>
 
-        <Card style={{ padding: 22, height: '100%', boxSizing: 'border-box' }}>
         <Card style={cardInner}>
-          <div
-            style={sectionHeaderTop}
-          >
+          <div style={sectionHeaderTop}>
             <h4 style={cardTitle}>{t('dashOracleScores')}</h4>
             <span
               style={{
@@ -218,11 +215,8 @@ export function CreatorDashboard({ data = CREATOR_DASHBOARD }: CreatorDashboardP
           </ul>
         </Card>
 
-        <Card style={{ padding: 22, height: '100%', boxSizing: 'border-box' }}>
         <Card style={cardInner}>
-          <div
-            style={sectionHeaderBottom}
-          >
+          <div style={sectionHeaderBottom}>
             <h4 style={cardTitle}>{t('dashUpdatesTitle')}</h4>
             <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--ink-40)' }}>
               {t('dashUpdatesLink')}
@@ -312,13 +306,6 @@ const cardTitle: CSSProperties = {
   color: 'var(--ink)',
   letterSpacing: '-0.01em',
 }
-const subtle: CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-small)',
-  lineHeight: 1.5,
-  color: 'var(--ink-60)',
-}
-
 const subtleBlock: CSSProperties = {
   fontFamily: 'var(--font-body)',
   fontSize: 'var(--type-small)',

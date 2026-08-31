@@ -22,16 +22,6 @@ export interface VaultStats {
   projectsFunded: number
 }
 
-/** A creator the ProjectRegistry may (or may not yet) accept new projects from. */
-export interface Creator {
-  name: string
-  /** Stellar G-address. */
-  address: string
-  status: 'approved' | 'pending'
-  /** Projects this creator has live in the registry. */
-  projects: number
-}
-
 /** Registry row = a Project plus the oracle's last-verified timestamp. */
 export interface RegistryEntry extends Project {
   /** Human-readable "last verified" stamp for the score pair. */
@@ -86,12 +76,12 @@ export const WHITELIST: Creator[] = [
   { name: 'Atlántico Marine Energy', address: 'GBVIG...tidal', projects: 1, status: 'approved' },
   { name: 'Andes Agrivoltaic Trust', address: 'GCATA...agriv', projects: 1, status: 'approved' },
   { name: 'Norrland Wind Collective', address: 'GDJAM...windc', projects: 1, status: 'pending' },
-  { 
-    name: 'Western Ghats Micro-Hydro', 
-    address: 'GKERA...hydro', 
-    projects: 0, 
+  {
+    name: 'Western Ghats Micro-Hydro',
+    address: 'GKERA...hydro',
+    projects: 0,
     status: 'rejected',
-    rejectionReason: 'Missing required permits and environmental impact assessment documentation.'
+    rejectionReason: 'Missing required permits and environmental impact assessment documentation.',
   },
 ]
 

@@ -127,7 +127,7 @@ export function ProjectBuilder() {
             <span
               style={{
                 position: 'absolute',
-                left: 14,
+                insetInlineStart: 14,
                 top: '50%',
                 transform: 'translateY(-50%)',
                 fontFamily: 'var(--font-data)',
@@ -147,7 +147,7 @@ export function ProjectBuilder() {
               aria-describedby={goalError ? goalErrorId : undefined}
               style={{
                 ...inputStyle,
-                paddingLeft: 28,
+                paddingInlineStart: 28,
                 fontFamily: 'var(--font-data)',
                 fontFeatureSettings: '"tnum" 1',
                 borderColor: goalError ? 'var(--ember)' : 'var(--ink-12)',

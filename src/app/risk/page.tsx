@@ -35,7 +35,7 @@ export default function RiskPage() {
           fontSize: 'var(--type-body)',
           lineHeight: 1.7,
           color: 'var(--ink-60)',
-          paddingLeft: 20,
+          paddingInlineStart: 20,
           margin: 0,
         }}
       >

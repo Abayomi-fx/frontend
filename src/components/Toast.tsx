@@ -162,7 +162,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           aria-atomic="true"
           style={{
             position: 'fixed',
-            right: 24,
+            insetInlineEnd: 24,
             bottom: 24,
             zIndex: 9999,
             display: 'flex',

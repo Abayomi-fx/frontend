@@ -60,25 +60,33 @@ export function AdminConsole() {
     })
   }
 
-  const setCreatorStatus = (address: string, status: Creator['status'], rejectionReason?: string) => {
-    setWhitelist((list) => 
-      list.map((c) => 
-        c.address === address 
-          ? { ...c, status, rejectionReason: status === 'rejected' ? rejectionReason : undefined } 
-          : c
-      )
+  const setCreatorStatus = (
+    address: string,
+    status: Creator['status'],
+    rejectionReason?: string,
+  ) => {
+    setWhitelist((list) =>
+      list.map((c) =>
+        c.address === address
+          ? { ...c, status, rejectionReason: status === 'rejected' ? rejectionReason : undefined }
+          : c,
+      ),
     )
     const c = whitelist.find((x) => x.address === address)
-    const toneMap = { approved: 'success' as const, rejected: 'ember' as const, pending: 'neutral' as const }
-    const titleMap = { 
-      approved: t('toastApprovedTitle'), 
+    const toneMap = {
+      approved: 'success' as const,
+      rejected: 'error' as const,
+      pending: 'neutral' as const,
+    }
+    const titleMap = {
+      approved: t('toastApprovedTitle'),
       rejected: t('toastRevokedTitle'),
-      pending: t('toastRevokedTitle')
+      pending: t('toastRevokedTitle'),
     }
     const messageMap = {
       approved: t('toastApprovedMsg', { name: c?.name ?? 'Creator' }),
       rejected: t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
-      pending: t('toastRevokedMsg', { name: c?.name ?? 'Creator' })
+      pending: t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
     }
     toast({
       tone: toneMap[status],
@@ -97,9 +105,7 @@ export function AdminConsole() {
           <div className="hb-eyebrow" style={{ marginBottom: 8 }}>
             {t('eyebrow')}
           </div>
-          <h1 style={pageTitle}>
-            {t('h1')}
-          </h1>
+          <h1 style={pageTitle}>{t('h1')}</h1>
           <p style={{ ...subtext, marginTop: 6 }}>{t('subtitle')}</p>
         </div>
         <Badge tone="testnet">{t('badgeInternal')}</Badge>
@@ -156,9 +162,7 @@ export function AdminConsole() {
               <div style={whitelistName}>
                 <div style={whitelistNameText}>{c.name}</div>
                 <div style={whitelistMeta}>
-                  <span style={whitelistData}>
-                    {c.projects}
-                  </span>{' '}
+                  <span style={whitelistData}>{c.projects}</span>{' '}
                   {t('liveProject', { count: c.projects })}
                 </div>
               </div>
@@ -205,9 +209,7 @@ function Section({
   return (
     <section style={{ ...sectionCard, marginBottom: 20 }}>
       <div style={{ marginBottom: 14 }}>
-        <h2 style={sectionTitle}>
-          {title}
-        </h2>
+        <h2 style={sectionTitle}>{title}</h2>
         <p style={{ ...subtext, marginTop: 4 }}>{caption}</p>
       </div>
       {children}
@@ -230,21 +232,15 @@ function StatCell({
     <div
       style={{
         ...statCell,
-        borderRight: last ? 'none' : '1px solid var(--ink-12)',
+        borderInlineEnd: last ? 'none' : '1px solid var(--ink-12)',
       }}
     >
       <div className="hb-eyebrow" style={statCellLabel}>
         {label}
       </div>
       <div style={statValueRow}>
-        <span style={statValue}>
-          {value}
-        </span>
-        {unit && (
-          <span style={statUnit}>
-            {unit}
-          </span>
-        )}
+        <span style={statValue}>{value}</span>
+        {unit && <span style={statUnit}>{unit}</span>}
       </div>
     </div>
   )
@@ -371,5 +367,5 @@ const whitelistData: CSSProperties = {
 const whitelistActions: CSSProperties = {
   display: 'flex',
   gap: 8,
-  marginLeft: 'auto',
+  marginInlineStart: 'auto',
 }

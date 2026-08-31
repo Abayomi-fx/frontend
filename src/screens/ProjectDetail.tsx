@@ -63,8 +63,8 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
           style={{
             position: 'absolute',
             top: 16,
-            left: 16,
-            right: 16,
+            insetInlineStart: 16,
+            insetInlineEnd: 16,
             display: 'flex',
             justifyContent: 'flex-start',
           }}
@@ -78,9 +78,9 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
         <h1
           style={{
             position: 'absolute',
-            left: 24,
+            insetInlineStart: 24,
             top: 64,
-            right: 24,
+            insetInlineEnd: 24,
             margin: 0,
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
@@ -98,7 +98,7 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
         <span
           style={{
             position: 'absolute',
-            left: 16,
+            insetInlineStart: 16,
             bottom: 16,
             display: 'inline-flex',
             alignItems: 'center',
@@ -256,7 +256,7 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
                   {event.date}
                 </div>
               </div>
-              <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+              <div style={{ textAlign: 'end', whiteSpace: 'nowrap' }}>
                 <div
                   style={{
                     fontFamily: 'var(--font-data)',

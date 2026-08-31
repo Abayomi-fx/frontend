@@ -1,10 +1,9 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components'
 import { type RegistryEntry } from '@/data/admin'
-import { tableStyle, thBase, tdStyle, numCell, typePill, inputStyle } from '@/screens/styles'
 import { clampScore, parseFundedNum } from './utils'
 
 /**
@@ -115,7 +114,7 @@ export function RegistryTable({ rows, onSave }: RegistryTableProps) {
               sortLabel={t('sortBy', { col: t('colLastVerified') })}
               align="right"
             />
-            <th style={{ ...thBase, textAlign: 'right' }}>
+            <th style={{ ...thBase, textAlign: 'end' }}>
               <span className="hb-eyebrow">{t('colActions')}</span>
             </th>
           </tr>
@@ -253,7 +252,7 @@ function Row({
         <td style={{ ...tdStyle, ...numCell }}>{row.green}</td>
         <td style={{ ...tdStyle, ...numCell }}>{row.funded}</td>
         <td style={{ ...tdStyle, ...numCell, color: 'var(--ink-60)' }}>{row.lastVerified}</td>
-        <td style={{ ...tdStyle, textAlign: 'right' }}>
+        <td style={{ ...tdStyle, textAlign: 'end' }}>
           {!editing && (
             <Button size="sm" variant="ghost" onClick={open}>
               {updateLabel}
@@ -277,7 +276,7 @@ function Row({
               </span>
               <ScoreField label={creditFieldLabel} value={credit} onChange={setCredit} />
               <ScoreField label={greenFieldLabel} value={green} onChange={setGreen} />
-              <div style={{ display: 'flex', gap: 8, marginLeft: 'auto' }}>
+              <div style={{ display: 'flex', gap: 8, marginInlineStart: 'auto' }}>
                 <Button size="sm" variant="ghost" onClick={onCancel}>
                   {cancelLabel}
                 </Button>
@@ -320,4 +319,62 @@ function ScoreField({
       />
     </label>
   )
+}
+
+const tableStyle: CSSProperties = {
+  width: '100%',
+  borderCollapse: 'collapse',
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-small)',
+}
+
+const thBase: CSSProperties = {
+  background: 'var(--ink-06)',
+  padding: '10px 14px',
+  position: 'sticky',
+  top: 0,
+  whiteSpace: 'nowrap',
+  zIndex: 1,
+}
+
+const tdStyle: CSSProperties = {
+  padding: '12px 14px',
+  verticalAlign: 'middle',
+  color: 'var(--ink)',
+}
+
+const numCell: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontFeatureSettings: '"tnum" 1',
+  textAlign: 'end',
+  whiteSpace: 'nowrap',
+}
+
+const typePill: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  height: 22,
+  padding: '0 9px',
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-eyebrow)',
+  fontWeight: 500,
+  color: 'var(--ink)',
+  background: 'var(--ink-06)',
+  border: '1px solid var(--ink-12)',
+  borderRadius: 'var(--radius-pill)',
+  whiteSpace: 'nowrap',
+}
+
+const inputStyle: CSSProperties = {
+  width: 72,
+  height: 36,
+  padding: '0 10px',
+  fontFamily: 'var(--font-data)',
+  fontSize: 'var(--type-small)',
+  fontFeatureSettings: '"tnum" 1',
+  color: 'var(--ink)',
+  background: 'var(--surface)',
+  border: '1px solid var(--ink-12)',
+  borderRadius: 'var(--radius-input)',
+  outline: 'none',
 }

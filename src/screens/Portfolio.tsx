@@ -81,8 +81,16 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
             delta={`+$612.18 (2.6%) ${t('sinceDeposit')} + $320 pending`}
             size="lg"
           />
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-caption)', color: 'var(--ink-60)', marginTop: 4 }}>
-            Includes $320 pending/escrow investments awaiting verification — total reflects settled + pending.
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-caption)',
+              color: 'var(--ink-60)',
+              marginTop: 4,
+            }}
+          >
+            Includes $320 pending/escrow investments awaiting verification — total reflects settled
+            + pending.
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -199,7 +207,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
                   {a.shares ? ` · ${a.shares}` : ''}
                 </div>
               </div>
-              <div style={{ textAlign: 'right' }}>
+              <div style={{ textAlign: 'end' }}>
                 <div
                   style={{
                     fontFamily: 'var(--font-body)',
