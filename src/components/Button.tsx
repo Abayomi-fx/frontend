@@ -1,14 +1,14 @@
 import { forwardRef, useState, type ButtonHTMLAttributes, type CSSProperties, type ReactNode } from 'react'
 
 /**
- * Heliobond Button — primary (pill, solar fill), secondary (ink outline), ghost.
+ * Heliobond Button - primary (pill, solar fill), secondary (ink outline), ghost.
  * Text on solar is ink (AAA). Active scales to 0.97. Disabled carries a reason
- * surfaced in a tooltip — never a bare greyed control.
+ * surfaced in a tooltip -- never a bare greyed control.
  */
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
-export type ButtonSize = 'sm' | 'md' | 'lg'
+export type ButtonVariant = 'primary' 'secondary' 'ghost'
+export type ButtonSize = 'sm' 'md' 'lg'
 
-export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
+export interface ButtonProps extends OmitButtonHTMLAttributes<HTMLButtonElement), 'type'> {
   variant?: ButtonVariant
   size?: ButtonSize
   loading?: boolean
@@ -16,7 +16,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   reason?: string
   icon?: ReactNode
   iconRight?: ReactNode
-  type?: 'button' | 'submit' | 'reset'
+  type?: 'button' 'submit' 'reset'
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
@@ -44,13 +44,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     md: { padding: '0 20px', height: 44, font: 15 },
     lg: { padding: '0 28px', height: 54, font: 17 },
   }
-  const s = sizes[size] ?? sizes.md
+  const s = sizes[size] || sizes.md
 
   const palette: Record<ButtonVariant, CSSProperties> = {
     primary: {
       background:
-        hover && !disabled ? 'color-mix(in srgb, var(--solar) 92%, var(--ink))' : 'var(--solar)',
-      color: 'var(--ink)',
+        hover && !disabled ? 'var(--button-primary-bg-hover)' : 'var(--button-primary-bg)',
+      color: 'var(--button-primary-fg)',
       border: '1px solid transparent',
     },
     secondary: {
@@ -122,7 +122,7 @@ function Spinner() {
         width: 15,
         height: 15,
         borderRadius: '50%',
-        border: '2px solid color-mix(in srgb, currentColor 30%, transparent)',
+        border: '2px solid color-mix(in srb, currentColor 30%, transparent)',
         borderTopColor: 'currentColor',
         animation: 'hb-spin 700ms linear infinite',
         display: 'inline-block',
