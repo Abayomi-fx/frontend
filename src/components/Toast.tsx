@@ -24,11 +24,12 @@ export interface ToastProps {
   message?: string
   action?: ReactNode
   onDismiss?: () => void
-  style?: CSSProperties
+  href?: string
   stackable?: boolean
+  style?: CSSProperties
 }
 
-export function Toast({ tone = 'neutral', title, message, action, onDismiss, style }: ToastProps) {
+export function Toast({ tone = 'neutral', title, message, action, onDismiss, href, style }: ToastProps) {
   const accents: Record<ToastTone, string> = {
     neutral: 'var(--ink)',
     success: 'var(--growth)',
@@ -37,23 +38,8 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, sty
   }
   const accent = accents[tone] || accents.neutral
 
-  return (
-    <div
-      role="status"
-      style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: 12,
-        width: 360,
-        maxWidth: '90vw',
-        padding: '14px 14px 14px 16px',
-        background: 'var(--surface)',
-        border: '1px solid var(--ink-12)',
-        borderRadius: 'var(--radius-card)',
-        boxShadow: 'var(--shadow-md)',
-        ...style,
-      }}
-    >
+  const inner = (
+    <>
       <span
         style={{
           width: 4,
@@ -92,6 +78,44 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, sty
         )}
         {action && <div style={{ marginTop: 10 }}>{action}</div>}
       </div>
+    </>
+  )
+
+  return (
+    <div
+      role="status"
+      style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 12,
+        width: 360,
+        maxWidth: '90vw',
+        padding: '14px 14px 14px 16px',
+        background: 'var(--surface)',
+        border: '1px solid var(--ink-12)',
+        borderRadius: 'var(--radius-card)',
+        boxShadow: 'var(--shadow-md)',
+        ...style,
+      }}
+    >
+      {href ? (
+        <a
+          href={href}
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 12,
+            flex: 1,
+            minWidth: 0,
+            textDecoration: 'none',
+            color: 'inherit',
+          }}
+        >
+          {inner}
+        </a>
+      ) : (
+        inner
+      )}
       {onDismiss && (
         <button
           type="button"
@@ -184,6 +208,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               title={activeToast.title}
               message={activeToast.message}
               action={activeToast.action}
+              href={activeToast.href}
               onDismiss={() => dismiss(activeToast.id)}
               style={activeToast.style}
             />

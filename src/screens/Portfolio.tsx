@@ -6,7 +6,6 @@ import { Button, StatBlock, LiquidityMeter, Card } from '../components'
 import { cardTitleLg as cardTitle } from '@/theme'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
-import { getPortfolioRisk } from '../lib/bondUtils'
 import { useWallet } from '../wallet/WalletProvider'
 
 /**
@@ -23,7 +22,6 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   const t = useTranslations('Portfolio')
   const { connected, connect } = useWallet()
   const d = HB_DATA
-  const risk = getPortfolioRisk(d.holdings)
 
   if (!connected) {
     return (
@@ -135,7 +133,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
       {/* Portfolio risk indicator from bond ratings mix */}
       <Card style={{ padding: 22, marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-          <StatBlock label="Portfolio risk" value={risk.level[0].toUpperCase() + risk.level.slice(1)} size="md" />
+          <StatBlock label="Portfolio risk" value={d.you.riskLevel[0].toUpperCase() + d.you.riskLevel.slice(1)} size="md" />
           <p
             style={{
               fontFamily: 'var--font-body',
@@ -145,7 +143,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
               margin: 0,
             }}
           >
-            Score: {risk.score}/100 based on bond ratings mix.
+            Score: {d.you.riskScore}/100 based on bond ratings mix.
           </p>
         </div>
       </Card>
@@ -164,7 +162,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
             }}
           >
             {t.rich('impactBody', {
-              b: (c: ReactNode) => <b style={ color: 'var--ink' }>{c}</b>,
+              b: (c: ReactNode) => <b style={{ color: 'var(--ink)' }}>{c}</b>,
               count: d.you.backed,
             })}
           </p>
@@ -175,75 +173,75 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
         </Card>
 
         {/* Activity */}
-        <Card style={ padding: 22 }>
+        <Card style={{ padding: 22 }}>
           <div
-            style={
+            style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBottom: 8,
-            }
+            }}
           >
             <h3 style={cardTitle}>{t('activityTitle')}</h3>
             <span
-              style={
+              style={{
                 fontFamily: 'var--font-body',
                 fontSize: 'var--type-caption',
                 color: 'var--ink-40',
-              }
+              }}
             >
               {t('activityNote')}
             </span>
           </div>
           {d.activity.map((a, i) => (
             <div
-              key={a.hash+}
-              style={
+              key={a.hash}
+              style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '12px 0',
                 borderTop: i ? '1px solid var--ink-12' : 'none',
-              }
+              }}
             >
               <div>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-small',
                     fontWeight: 600,
                     color: 'var--ink',
-                  }
+                  }}
                 >
                   {a.kind}
                 </div>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-caption',
                     color: 'var--ink-60',
-                  }
+                  }}
                 >
                   {a.amount}
-                  {a.shares ? `£· ${a.shares} : ''}
+                  {a.shares ? ` · ${a.shares}` : ''}
                 </div>
               </div>
-              <div style={ textAlign: 'end' }>
+              <div style={{ textAlign: 'end' }}>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-caption',
                     color: 'var--ink-60',
-                  }
+                  }}
                 >
                   {a.when}
                 </div>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-data',
                     fontSize: 'var--type-eyebrow',
                     color: 'var--ink-40',
-                  }
+                  }}
                 >
                   {a.hash} ↑
                 </div>
@@ -256,10 +254,3 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   )
 }
 
-const cardTitle: CSSProperties = {
-  fontFamily: 'var--font-display',
-  fontWeight: 700,
-  fontSize: 'var--type-body-lg',
-  margin: '0 0 10px',
-  color: 'var--ink',
-}

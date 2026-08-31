@@ -279,7 +279,14 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
                     marginTop: 2,
                   }}
                 >
-                  {event.hash} ↗
+                  <a
+                    href={`https://etherscan.io/tx/${event.hash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {event.hash} ↗
+                  </a>
                 </div>
               </div>
             </div>
@@ -339,7 +346,12 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
 
       {/* Primary CTA — honest pooled framing */}
       <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <Button variant="primary" size="lg" onClick={onInvest} style={{ width: '100%' }}>
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={onInvest}
+          style={{ width: '100%' }}
+        >
           {t('investCta')}
         </Button>
         <p

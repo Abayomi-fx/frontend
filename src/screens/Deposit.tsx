@@ -45,7 +45,7 @@ export function Deposit({ onDone }: DepositProps) {
   } = useVault()
   const [step, setStep] = useState<DepositStep>('amount')
   const [amount, setAmount] = useState('100')
-  const [txHash, setTxHash] = useState<string | null>(null)
+  const [investmentId, setInvestmentId] = useState<string | null>(null)
   const [txError, setTxError] = useState<string | null>(null)
   const priceFetchedAt = fetchedAt ?? new Date()
   const [now, setNow] = useState(() => Date.now())
@@ -91,7 +91,6 @@ export function Deposit({ onDone }: DepositProps) {
 
   const handleDone = () => {
     setAmount('')
-    setTxHash(null)
     setTxError(null)
     changeStep('amount')
     onDone()
@@ -184,22 +183,36 @@ export function Deposit({ onDone }: DepositProps) {
                       USDC worth {formatDecimal(n / price, 4)} HBS (real-time)
                     </span>
                     {n >= 1 && (
-                      <span
+                      <div
                         style={{
-                          display: 'block',
-                          marginTop: 4,
-                          fontSize: 'var(--type-caption)',
-                          color: 'var(--ink-60)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 6,
+                          marginTop: 8,
+                          paddingTop: 8,
+                          borderTop: '1px solid var(--ink-12)',
                         }}
                       >
-                        {t('projection', {
-                          amount: formatDecimal(
-                            roundToCents(projectedReturn(n, HB_DATA.pool.projectedRate)),
-                            2,
-                          ),
-                          rate: HB_DATA.pool.projectedRate,
-                        })}
-                      </span>
+                        <span style={{ fontSize: 'var(--type-eyebrow)', color: 'var(--ink-40)' }}>
+                          Projected returns:
+                        </span>
+                        {[1, 5, 10].map((years) => (
+                          <span
+                            key={years}
+                            style={{
+                              fontSize: 'var(--type-caption)',
+                              color: 'var(--ink-60)',
+                            }}
+                          >
+                            {years === 1 ? '1 year:' : `${years} years:`} ≈ $
+                            {formatDecimal(
+                              roundToCents(projectedReturn(n, HB_DATA.pool.projectedRate, years)),
+                              2,
+                            )}{' '}
+                            @ {HB_DATA.pool.projectedRate}% annual
+                          </span>
+                        ))}
+                      </div>
                     )}
                   </span>
                 )
@@ -381,14 +394,15 @@ export function Deposit({ onDone }: DepositProps) {
                   try {
                     const hash = await submitDeposit(n, address ?? '', sign, controller.signal)
                     if (mountedRef.current) {
+                      setInvestmentId(hash)
                       // Confirmed success — safe to clear the pending guard.
                       clearPending()
-                      setTxHash(hash)
                       changeStep('success')
                       toast({
                         tone: 'success',
                         title: 'Deposit confirmed',
                         message: `Successfully invested ${n} USDC in the pool.`,
+                        href: `/investments/${hash}`,
                       })
                     }
                   } catch (e) {
@@ -517,9 +531,7 @@ export function Deposit({ onDone }: DepositProps) {
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
               <a
-                href={txHash ? `https://stellar.expert/explorer/testnet/tx/${txHash}` : undefined}
-                target="_blank"
-                rel="noreferrer"
+                href={investmentId ? `/investments/${investmentId}` : undefined}
                 style={{
                   flex: 1,
                   display: 'inline-flex',
@@ -537,7 +549,7 @@ export function Deposit({ onDone }: DepositProps) {
                   cursor: 'pointer',
                 }}
               >
-                {t('viewExpert')}
+                View investment
               </a>
               <Button variant="primary" style={{ flex: 1 }} onClick={handleDone}>
                 {t('goPortfolio')}
