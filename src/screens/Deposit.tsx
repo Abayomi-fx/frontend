@@ -184,22 +184,36 @@ export function Deposit({ onDone }: DepositProps) {
                       USDC worth {formatDecimal(n / price, 4)} HBS (real-time)
                     </span>
                     {n >= 1 && (
-                      <span
+                      <div
                         style={{
-                          display: 'block',
-                          marginTop: 4,
-                          fontSize: 'var(--type-caption)',
-                          color: 'var(--ink-60)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 6,
+                          marginTop: 8,
+                          paddingTop: 8,
+                          borderTop: '1px solid var(--ink-12)',
                         }}
                       >
-                        {t('projection', {
-                          amount: formatDecimal(
-                            roundToCents(projectedReturn(n, HB_DATA.pool.projectedRate)),
-                            2,
-                          ),
-                          rate: HB_DATA.pool.projectedRate,
-                        })}
-                      </span>
+                        <span style={{ fontSize: 'var(--type-eyebrow)', color: 'var(--ink-40)' }}>
+                          Projected returns:
+                        </span>
+                        {[1, 5, 10].map((years) => (
+                          <span
+                            key={years}
+                            style={{
+                              fontSize: 'var(--type-caption)',
+                              color: 'var(--ink-60)',
+                            }}
+                          >
+                            {years === 1 ? '1 year:' : `${years} years:`} ≈ $
+                            {formatDecimal(
+                              roundToCents(projectedReturn(n, HB_DATA.pool.projectedRate, years)),
+                              2,
+                            )}{' '}
+                            @ {HB_DATA.pool.projectedRate}% annual
+                          </span>
+                        ))}
+                      </div>
                     )}
                   </span>
                 )
