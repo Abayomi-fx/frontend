@@ -1,4 +1,3 @@
-
 "use client"
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
@@ -50,31 +49,28 @@ function OfflineBanner() {
 
   useEffect(() => {
     let active = true
-    let timeoutId: ReturnType<typeof setTimeout> | null = null
+    let currentController: AbortController | null = null
 
     const checkStellar = async () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
+      // Abort any in-flight request to prevent stale responses/hangs.
+      if (currentController) {
+        currentController.abort()
       }
       const controller = new AbortController()
-      timeoutId = setTimeout(() => controller.abort(), 5000)
+      currentController = controller
+      const timeoutId = setTimeout(() => controller.abort(), 3000)
 
       try {
         const horizonUrl =
           process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://horizon.stellar.org'
-        const response = await fetch(`${horizonUrl}/`, { signal: controller.signal })
-        if (timeoutId) {
-          clearTimeout(timeoutId)
-          timeoutId = null
-        }
+        const response = await fetch(`horizonUrl/`, { signal: controller.signal })
         if (!response.ok) throw new Error('Stellar node unreachable')
-        if (active) setStellarReachable(true)
+        if (active && currentController === controller) setStellarReachable(true)
       } catch {
-        if (timeoutId) {
-          clearTimeout(timeoutId)
-          timeoutId = null
-        }
-        if (active) setStellarReachable(false)
+        if (active && currentController === controller) setStellarReachable(false)
+      } finally {
+        clearTimeout(timeoutId)
+        if (currentController === controller) currentController = null
       }
     }
 
@@ -94,7 +90,8 @@ function OfflineBanner() {
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
       clearInterval(interval)
-      if (timeoutId) clearTimeout(timeoutId)
+      // Abort any outstanding request on unmount.
+      currentController?.abort()
     }
   }, [])
 
