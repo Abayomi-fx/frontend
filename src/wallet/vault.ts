@@ -72,15 +72,43 @@ const HORIZON_URL =
 
 /** Max time to wait for a Stellar RPC/Horizon response before treating it as offline. */
 const RPC_TIMEOUT_MS = 5000
+let cachedSharePrice = SHARE_PRICE
+let cachedTotalAssets: number | null = null
+let offline = false
+const offlineListeners = new Set<(offline: boolean) => void>()
+
+function setOffline(nextOffline: boolean) {
+  if (offline === nextOffline) return
+  offline = nextOffline
+  offlineListeners.forEach((listener) => listener(nextOffline))
+}
+
+/** Returns true when the last Stellar network call timed out. */
+export function isOffline(): boolean {
+  return offline
+}
+
+/** Subscribe to offline status changes. Returns an unsubscribe function. */
+export function onOfflineChange(listener: (offline: boolean) => void): () => void {
+  offlineListeners.add(listener)
+  return () => {
+    offlineListeners.delete(listener)
+  }
+}
 
 /** Reject if a Stellar network call takes longer than RPC_TIMEOUT_MS. */
 async function withTimeout<T>(promise: Promise<T>, message: string): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined
   try {
     const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(() => reject(new Error(message)), RPC_TIMEOUT_MS)
+      timer = setTimeout(() => {
+        setOffline(true)
+        reject(new Error(message))
+      }, RPC_TIMEOUT_MS)
     })
-    return await Promise.race([promise, timeout])
+    const result = await Promise.race([promise, timeout])
+    setOffline(false)
+    return result
   } finally {
     if (timer !== undefined) clearTimeout(timer)
   }
@@ -120,8 +148,14 @@ async function sorobanSimulate(sourceAddress: string, method: string, args: unkn
 export async function fetchSharePrice(sourceAddress: string): Promise<number> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
   const { scValToNative } = await import('@stellar/stellar-sdk')
-  const retval = await sorobanSimulate(sourceAddress, 'share_price')
-  return Number(scValToNative(retval))
+  try {
+    const retval = await sorobanSimulate(sourceAddress, 'share_price')
+    cachedSharePrice = Number(scValToNative(retval))
+    return cachedSharePrice
+  } catch {
+    setOffline(true)
+    return cachedSharePrice
+  }
 }
 
 /**
@@ -131,8 +165,14 @@ export async function fetchSharePrice(sourceAddress: string): Promise<number> {
 export async function fetchTotalAssets(sourceAddress: string): Promise<number> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
   const { scValToNative } = await import('@stellar/stellar-sdk')
-  const retval = await sorobanSimulate(sourceAddress, 'total_assets')
-  return Number(scValToNative(retval))
+  try {
+    const retval = await sorobanSimulate(sourceAddress, 'total_assets')
+    cachedTotalAssets = Number(scValToNative(retval))
+    return cachedTotalAssets
+  } catch {
+    setOffline(true)
+    return cachedTotalAssets ?? 0
+  }
 }
 
 // ---------------------------------------------------------------------------
