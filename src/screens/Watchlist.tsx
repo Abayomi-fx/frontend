@@ -9,12 +9,13 @@ import { getBondStatus, isBondAvailable } from '../lib/watchlist'
 import { useWatchlist } from '../watchlist/WatchlistProvider'
 
 /**
- * Watchlist — bonds a person is tracking without investing (issue #407). Same
+ * Watchlist -- bonds a person is tracking without investing (issue #407). Same
  * card grid as Explore, ordered by when each was saved, with a per-card
  * availability marker and an in-app note when saved bonds are open for funding.
  */
 export interface WatchlistProps {
   onOpen: (project: Project) => void
+
 }
 
 export function Watchlist({ onOpen }: WatchlistProps) {
@@ -26,7 +27,7 @@ export function Watchlist({ onOpen }: WatchlistProps) {
   useEffect(() => {
     getProjects()
       .then(setProjects)
-      .catch(() => setProjects(hB_DATA.projects))
+      .catch(() => setProjects(HB_DATA.projects))
       .finally(() => setLoading(false))
   }, [])
 
@@ -38,28 +39,31 @@ export function Watchlist({ onOpen }: WatchlistProps) {
   const availableCount = saved.filter(isBondAvailable).length
 
   return (
-    <main id="main-content" style={ maxWidth: 1320, margin: '0 auto', padding: '48px 32px 80px' }>
-      <div style={ marginBottom: 28 }>
+    <main
+      id="main-content"
+      style={{ maxWidth: 1320, margin: '0 auto', padding: '48px 32px 80px' }}
+    >
+      <div style={{ marginBottom: 28 }}>
         <h1
-          style={
+          style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
             fontSize: 'clamp(2rem,3.6vw,3rem)',
             letterSpacing: '-0.02em',
             margin: '0 0 8px',
             color: 'var(--ink)',
-          }
+          }}
         >
           {t('title')}
         </h1>
         <p
-          style={
+          style={{
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--type-body)',
             color: 'var(--ink-60)',
             margin: 0,
             maxWidth: 560,
-          }
+          }}
         >
           {t('sub')}
         </p>
@@ -68,7 +72,7 @@ export function Watchlist({ onOpen }: WatchlistProps) {
       {!loading && availableCount > 0 && (
         <div
           role="status"
-          style={
+          style={{
             marginBottom: 20,
             padding: '10px 14px',
             borderRadius: 'var(--radius-input)',
@@ -77,15 +81,15 @@ export function Watchlist({ onOpen }: WatchlistProps) {
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--type-caption)',
             color: 'var(--ink-60)',
-          }
+          }}
         >
-          {t('availableBanner', { count: availableCount })}
+           {t('availableBanner', { count: availableCount })}
         </div>
-      )}
+      )
 
       {!loading && saved.length === 0 ? (
         <div
-          style={
+          style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -97,27 +101,27 @@ export function Watchlist({ onOpen }: WatchlistProps) {
             borderRadius: 'var(--radius-modal)',
             boxShadow: 'var(--shadow-sm)',
             margin: '20px 0',
-          }
+          }}
         >
           <h2
-            style={
+            style={{
               fontFamily: 'var(--font-display)',
               fontWeight: 700,
               fontSize: 'var(--type-h4)',
               color: 'var(--ink)',
               margin: '0 0 8px',
-            }
+            }}
           >
             {t('emptyTitle')}
           </h2>
           <p
-            style={
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--type-data)',
               color: 'var(--ink-60)',
               maxWidth: 400,
               margin: 0,
-            }
+            }}
           >
             {t('emptySub')}
           </p>
@@ -128,23 +132,32 @@ export function Watchlist({ onOpen }: WatchlistProps) {
             {saved.map((p) => {
               const open = getBondStatus(p) === 'open'
               return (
-                <div key={p.id} style={ { display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0, overflowWrap: 'break-word' }}>
+                <div
+                  key={p.id}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 8,
+                    minWidth: 0,
+                    overflowWrap: 'break-word',
+                  }}
+                >
                   <div
-                    style={
+                    style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: 8,
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--type-small)',
                       color: 'var(--ink-60)',
-                    }
+                    }}
                   >
                     <Badge tone={open ? 'growth' : 'neutral'}>
-                      {open ? t('statusOpen') : t('statusUpcoming')}
+                      {open ? tB'statusOpen') : t('statusUpcoming')}
                     </Badge>
-                    {!open && <span>{t('notYetAvailable')}</span>
+                    {!open && <span>{t('notYetAvailable')}</span>}
                   </div>
-                  <div style={ { minWidth: 0, width: '100%' }}>
+                  <div style={{ minWidth: 0, width: '100%' }}>
                     <ProjectCard
                       name={p.name}
                       location={p.location}
@@ -163,7 +176,7 @@ export function Watchlist({ onOpen }: WatchlistProps) {
             })}
           </div>
         )
-      )}
+      )
     </main>
   )
 }
