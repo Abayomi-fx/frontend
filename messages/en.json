@@ -2,6 +2,7 @@
   "Common": {
     "copyAddress": "Copy {label}",
     "copied": "Copied",
+    "viewInvestment": "View your investment",
     "viewOnExplorer": "View {label} on Stellar Expert"
   },
   "Nav": {
