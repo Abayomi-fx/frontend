@@ -42,9 +42,13 @@ export function TopBar() {
     let currentController: AbortController | undefined
 
     const check = async () => {
+      if (!navigator.onLine) {
+        if (!cancelled) setNetworkOnline(false)
+        return
+      }
       const controller = new AbortController()
       currentController = controller
-      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      const timeoutId = setTimeout(() => controller.abort(), 3000)
       try {
         const res = await fetch('https://horizon-testnet.stellar.org', {
           signal: controller.signal,
@@ -58,11 +62,21 @@ export function TopBar() {
       }
     }
 
+    const handleOnline = () => { void check() }
+    const handleOffline = () => {
+      currentController?.abort()
+      if (!cancelled) setNetworkOnline(false)
+    }
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
     void check()
     const interval = setInterval(() => { void check() }, 15000)
     return () => {
       cancelled = true
       clearInterval(interval)
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
       currentController?.abort()
     }
   }, [])
