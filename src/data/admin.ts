@@ -22,16 +22,6 @@ export interface VaultStats {
   projectsFunded: number
 }
 
-/** A creator the ProjectRegistry may (or may not yet) accept new projects from. */
-export interface Creator {
-  name: string
-  /** Stellar G-address. */
-  address: string
-  status: 'approved' | 'pending'
-  /** Projects this creator has live in the registry. */
-  projects: number
-}
-
 /** Registry row = a Project plus the oracle's last-verified timestamp. */
 export interface RegistryEntry extends Project {
   /** Human-readable "last verified" stamp for the score pair. */
@@ -52,23 +42,7 @@ export const VAULT_STATS: VaultStats = {
   projectsFunded: HB_DATA.pool.projectsFunded,
 }
 
-/** Vault accounting, ERC-4626-style. `totalAssets = liquid + deployed`. */
-export interface VaultStats {
-  /** USDC value of all assets the vault controls. */
-  totalAssets: number
-  /** total assets ÷ HBS supply. */
-  sharePrice: number
-  /** HBS shares outstanding. */
-  hbsSupply: number
-  /** USDC sitting idle in the vault, available to deploy or honour withdrawals. */
-  liquid: number
-  /** USDC currently working in funded projects. */
-  deployed: number
-  /** count of projects with capital deployed. */
-  projectsFunded: number
-}
-
-export type WhitelistStatus = 'approved' | 'pending'
+export type WhitelistStatus = 'approved' | 'pending' | 'rejected'
 
 /** A creator the ProjectRegistry may (or may not yet) accept new projects from. */
 export interface Creator {
@@ -78,6 +52,8 @@ export interface Creator {
   status: WhitelistStatus
   /** Projects this creator has live in the registry. */
   projects: number
+  /** Reason for rejection, only present when status is 'rejected'. */
+  rejectionReason?: string
 }
 
 // Last-verified stamps, paired to the registry projects in order. Fixed strings.
@@ -100,7 +76,13 @@ export const WHITELIST: Creator[] = [
   { name: 'Atlántico Marine Energy', address: 'GBVIG...tidal', projects: 1, status: 'approved' },
   { name: 'Andes Agrivoltaic Trust', address: 'GCATA...agriv', projects: 1, status: 'approved' },
   { name: 'Norrland Wind Collective', address: 'GDJAM...windc', projects: 1, status: 'pending' },
-  { name: 'Western Ghats Micro-Hydro', address: 'GKERA...hydro', projects: 0, status: 'pending' },
+  {
+    name: 'Western Ghats Micro-Hydro',
+    address: 'GKERA...hydro',
+    projects: 0,
+    status: 'rejected',
+    rejectionReason: 'Missing required permits and environmental impact assessment documentation.',
+  },
 ]
 
 // Re-export the Project type so admin screens can import it from one place.

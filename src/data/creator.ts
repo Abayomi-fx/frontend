@@ -3,7 +3,7 @@
 // no live calls: stable, typed fixtures so the creator screens render the same
 // every time.
 
-export type ApplicationStage = 'submitted' | 'in_review' | 'approved'
+export type ApplicationStage = 'submitted' | 'in_review' | 'approved' | 'rejected'
 
 export interface DraftProject {
   name: string
@@ -44,6 +44,8 @@ export interface CreatorApplication {
   submittedOn: string
   /** Stated, honest review window shown to the applicant. */
   reviewWindow: string
+  /** Reason for rejection, only present when stage is 'rejected'. */
+  rejectionReason?: string
 }
 
 /** Ordered stepper model: Submitted → In review → Decision. */
@@ -51,6 +53,7 @@ export const APPLICATION_STEPS: readonly ApplicationStep[] = [
   { id: 'submitted', label: 'Submitted', hint: 'We have your application.' },
   { id: 'in_review', label: 'In review', hint: 'A reviewer is verifying your org and project.' },
   { id: 'approved', label: 'Decision', hint: 'You hear back, approved or with next steps.' },
+  { id: 'rejected', label: 'Decision', hint: 'You hear back, approved or with next steps.' },
 ] as const
 
 /** The plain criteria a creator must meet — shown as an ink checklist. */

@@ -60,49 +60,52 @@ export function AdminConsole() {
     })
   }
 
-  const setCreatorStatus = (address: string, status: Creator['status']) => {
-    setWhitelist((list) => list.map((c) => (c.address === address ? { ...c, status } : c)))
+  const setCreatorStatus = (
+    address: string,
+    status: Creator['status'],
+    rejectionReason?: string,
+  ) => {
+    setWhitelist((list) =>
+      list.map((c) =>
+        c.address === address
+          ? { ...c, status, rejectionReason: status === 'rejected' ? rejectionReason : undefined }
+          : c,
+      ),
+    )
     const c = whitelist.find((x) => x.address === address)
+    const toneMap = {
+      approved: 'success' as const,
+      rejected: 'error' as const,
+      pending: 'neutral' as const,
+    }
+    const titleMap = {
+      approved: t('toastApprovedTitle'),
+      rejected: t('toastRevokedTitle'),
+      pending: t('toastRevokedTitle'),
+    }
+    const messageMap = {
+      approved: t('toastApprovedMsg', { name: c?.name ?? 'Creator' }),
+      rejected: t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
+      pending: t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
+    }
     toast({
-      tone: status === 'approved' ? 'success' : 'neutral',
-      title: status === 'approved' ? t('toastApprovedTitle') : t('toastRevokedTitle'),
-      message:
-        status === 'approved'
-          ? t('toastApprovedMsg', { name: c?.name ?? 'Creator' })
-          : t('toastRevokedMsg', { name: c?.name ?? 'Creator' }),
+      tone: toneMap[status],
+      title: titleMap[status],
+      message: messageMap[status],
     })
   }
 
   const totalAssets = liquid + deployed
 
   return (
-    <div style={{ fontFamily: 'var(--font-body)', color: 'var(--ink)' }}>
+    <div style={consolePage}>
       {/* Header */}
-      <header
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          gap: 16,
-          flexWrap: 'wrap',
-          marginBottom: 20,
-        }}
-      >
+      <header style={header}>
         <div>
           <div className="hb-eyebrow" style={{ marginBottom: 8 }}>
             {t('eyebrow')}
           </div>
-          <h1
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 700,
-              fontSize: 'var(--type-h2)',
-              margin: 0,
-              color: 'var(--ink)',
-            }}
-          >
-            {t('h1')}
-          </h1>
+          <h1 style={pageTitle}>{t('h1')}</h1>
           <p style={{ ...subtext, marginTop: 6 }}>{t('subtitle')}</p>
         </div>
         <Badge tone="testnet">{t('badgeInternal')}</Badge>
@@ -154,21 +157,12 @@ export function AdminConsole() {
           {whitelist.map((c, i) => (
             <div
               key={c.address}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 14,
-                flexWrap: 'wrap',
-                padding: '12px 0',
-                borderTop: i ? '1px solid var(--ink-12)' : 'none',
-              }}
+              style={{ ...whitelistRow, borderTop: i ? '1px solid var(--ink-12)' : 'none' }}
             >
-              <div style={{ minWidth: 180, flex: '1 1 200px' }}>
-                <div style={{ fontWeight: 600, fontSize: 'var(--type-small)' }}>{c.name}</div>
-                <div style={{ ...subtext, fontSize: 'var(--type-eyebrow)' }}>
-                  <span style={{ fontFamily: 'var(--font-data)', fontFeatureSettings: '"tnum" 1' }}>
-                    {c.projects}
-                  </span>{' '}
+              <div style={whitelistName}>
+                <div style={whitelistNameText}>{c.name}</div>
+                <div style={whitelistMeta}>
+                  <span style={whitelistData}>{c.projects}</span>{' '}
                   {t('liveProject', { count: c.projects })}
                 </div>
               </div>
@@ -176,7 +170,7 @@ export function AdminConsole() {
               <Badge tone={c.status === 'approved' ? 'growth' : 'neutral'}>
                 {c.status === 'approved' ? t('statusApproved') : t('statusPending')}
               </Badge>
-              <div style={{ display: 'flex', gap: 8, marginInlineStart: 'auto' }}>
+              <div style={whitelistActions}>
                 {c.status === 'approved' ? (
                   <Button
                     size="sm"
@@ -215,17 +209,7 @@ function Section({
   return (
     <section style={{ ...sectionCard, marginBottom: 20 }}>
       <div style={{ marginBottom: 14 }}>
-        <h2
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: 700,
-            fontSize: 'var(--type-h5)',
-            margin: 0,
-            color: 'var(--ink)',
-          }}
-        >
-          {title}
-        </h2>
+        <h2 style={sectionTitle}>{title}</h2>
         <p style={{ ...subtext, marginTop: 4 }}>{caption}</p>
       </div>
       {children}
@@ -247,39 +231,16 @@ function StatCell({
   return (
     <div
       style={{
-        flex: '1 1 0',
-        minWidth: 140,
-        padding: '14px 16px',
+        ...statCell,
         borderInlineEnd: last ? 'none' : '1px solid var(--ink-12)',
       }}
     >
-      <div className="hb-eyebrow" style={{ marginBottom: 6 }}>
+      <div className="hb-eyebrow" style={statCellLabel}>
         {label}
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, flexWrap: 'wrap' }}>
-        <span
-          style={{
-            fontFamily: 'var(--font-data)',
-            fontWeight: 600,
-            fontSize: 'var(--type-h4)',
-            color: 'var(--ink)',
-            fontFeatureSettings: '"tnum" 1',
-            lineHeight: 1.1,
-          }}
-        >
-          {value}
-        </span>
-        {unit && (
-          <span
-            style={{
-              fontFamily: 'var(--font-data)',
-              fontSize: 'var(--type-fine)',
-              color: 'var(--ink-60)',
-            }}
-          >
-            {unit}
-          </span>
-        )}
+      <div style={statValueRow}>
+        <span style={statValue}>{value}</span>
+        {unit && <span style={statUnit}>{unit}</span>}
       </div>
     </div>
   )
@@ -311,4 +272,100 @@ const subtext: CSSProperties = {
   fontSize: 'var(--type-caption)',
   lineHeight: 1.5,
   color: 'var(--ink-60)',
+}
+
+const consolePage: CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  color: 'var(--ink)',
+}
+
+const header: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  gap: 16,
+  flexWrap: 'wrap',
+  marginBottom: 20,
+}
+
+const pageTitle: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 700,
+  fontSize: 'var(--type-h2)',
+  margin: 0,
+  color: 'var(--ink)',
+}
+
+const sectionTitle: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 700,
+  fontSize: 'var(--type-h5)',
+  margin: 0,
+  color: 'var(--ink)',
+}
+
+const statCell: CSSProperties = {
+  flex: '1 1 0',
+  minWidth: 140,
+  padding: '14px 16px',
+}
+
+const statCellLabel: CSSProperties = {
+  marginBottom: 6,
+}
+
+const statValueRow: CSSProperties = {
+  display: 'flex',
+  alignItems: 'baseline',
+  gap: 5,
+  flexWrap: 'wrap',
+}
+
+const statValue: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontWeight: 600,
+  fontSize: 'var(--type-h4)',
+  color: 'var(--ink)',
+  fontFeatureSettings: '"tnum" 1',
+  lineHeight: 1.1,
+}
+
+const statUnit: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontSize: 'var(--type-fine)',
+  color: 'var(--ink-60)',
+}
+
+const whitelistRow: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 14,
+  flexWrap: 'wrap',
+  padding: '12px 0',
+}
+
+const whitelistName: CSSProperties = {
+  minWidth: 180,
+  flex: '1 1 200px',
+}
+
+const whitelistNameText: CSSProperties = {
+  fontWeight: 600,
+  fontSize: 'var(--type-small)',
+}
+
+const whitelistMeta: CSSProperties = {
+  ...subtext,
+  fontSize: 'var(--type-eyebrow)',
+}
+
+const whitelistData: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontFeatureSettings: '"tnum" 1',
+}
+
+const whitelistActions: CSSProperties = {
+  display: 'flex',
+  gap: 8,
+  marginInlineStart: 'auto',
 }

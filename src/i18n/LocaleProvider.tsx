@@ -13,12 +13,13 @@ import {
 import { NextIntlClientProvider } from 'next-intl'
 import en from '../../messages/en.json'
 import fr from '../../messages/fr.json'
+import es from '../../messages/es.json'
 import ar from '../../messages/ar.json'
 import { type Locale, RTL_LOCALES } from './request'
 
 export type Messages = typeof en
 
-const CATALOGS: Record<Locale, Messages> = { en, fr, ar }
+const CATALOGS: Record<Locale, Messages> = { en, fr, es, ar }
 
 interface LocaleSwitcherValue {
   locale: Locale
