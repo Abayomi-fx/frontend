@@ -70,6 +70,56 @@ const HORIZON_URL =
   process.env.NEXT_PUBLIC_HORIZON_URL ??
   (STELLAR_NETWORK === 'public' ? 'https://horizon.stellar.org' : 'https://horizon-testnet.stellar.org')
 
+/** Max time to wait for a Stellar RPC/Horizon response before treating it as offline. */
+const RPC_TIMEOUT_MS = 5000
+let cachedSharePrice = SHARE_PRICE
+let cachedTotalAssets: number | null = null
+let offline = false
+const offlineListeners = new Set<(offline: boolean) => void>()
+
+function setOffline(nextOffline: boolean) {
+  if (offline === nextOffline) return
+  offline = nextOffline
+  offlineListeners.forEach((listener) => {
+    try {
+      listener(nextOffline)
+    } catch {
+      // Listener errors must not break network timeout fallbacks.
+    }
+  })
+}
+
+/** Returns true when the last Stellar network call timed out. */
+export function isOffline(): boolean {
+  return offline
+}
+
+/** Subscribe to offline status changes. Returns an unsubscribe function. */
+export function onOfflineChange(listener: (offline: boolean) => void): () => void {
+  offlineListeners.add(listener)
+  return () => {
+    offlineListeners.delete(listener)
+  }
+}
+
+/** Reject if a Stellar network call takes longer than RPC_TIMEOUT_MS. */
+async function withTimeout<T>(promise: Promise<T>, message: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  try {
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        setOffline(true)
+        reject(new Error(message))
+      }, RPC_TIMEOUT_MS)
+    })
+    const result = await Promise.race([promise, timeout])
+    setOffline(false)
+    return result
+  } finally {
+    if (timer !== undefined) clearTimeout(timer)
+  }
+}
+
 /** Call a Soroban view function (no state mutation) and return the raw ScVal. */
 async function sorobanSimulate(sourceAddress: string, method: string, args: unknown[] = []) {
   const { rpc, Contract, TransactionBuilder, Networks, Account, nativeToScVal } =
@@ -87,7 +137,10 @@ async function sorobanSimulate(sourceAddress: string, method: string, args: unkn
     .setTimeout(0)
     .build()
 
-  const result = await server.simulateTransaction(tx)
+  const result = await withTimeout(
+    server.simulateTransaction(tx),
+    'Stellar RPC timed out during simulation',
+  )
   if ('error' in result) throw new Error(`Soroban simulate error: ${result.error}`)
   if (!result.result) throw new Error('Soroban simulate returned no result')
   return result.result.retval
@@ -100,9 +153,16 @@ async function sorobanSimulate(sourceAddress: string, method: string, args: unkn
  */
 export async function fetchSharePrice(sourceAddress: string): Promise<number> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
+  if (offline) return cachedSharePrice
   const { scValToNative } = await import('@stellar/stellar-sdk')
-  const retval = await sorobanSimulate(sourceAddress, 'share_price')
-  return Number(scValToNative(retval))
+  try {
+    const retval = await sorobanSimulate(sourceAddress, 'share_price')
+    cachedSharePrice = Number(scValToNative(retval))
+    return cachedSharePrice
+  } catch {
+    setOffline(true)
+    return cachedSharePrice
+  }
 }
 
 /**
@@ -111,9 +171,16 @@ export async function fetchSharePrice(sourceAddress: string): Promise<number> {
  */
 export async function fetchTotalAssets(sourceAddress: string): Promise<number> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
+  if (offline) return cachedTotalAssets ?? 0
   const { scValToNative } = await import('@stellar/stellar-sdk')
-  const retval = await sorobanSimulate(sourceAddress, 'total_assets')
-  return Number(scValToNative(retval))
+  try {
+    const retval = await sorobanSimulate(sourceAddress, 'total_assets')
+    cachedTotalAssets = Number(scValToNative(retval))
+    return cachedTotalAssets
+  } catch {
+    setOffline(true)
+    return cachedTotalAssets ?? 0
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -131,7 +198,10 @@ async function waitForTransaction(hash: string): Promise<void> {
 
   while (Date.now() < deadline) {
     await new Promise((r) => setTimeout(r, 2000))
-    const result = await server.getTransaction(hash)
+    const result = await withTimeout(
+      server.getTransaction(hash),
+      'Stellar RPC timed out while polling transaction status',
+    )
     if (result.status === rpc.Api.GetTransactionStatus.SUCCESS) return
     if (result.status === rpc.Api.GetTransactionStatus.FAILED) {
       throw new Error('Transaction failed on-chain')
@@ -176,6 +246,8 @@ export async function submitDeposit(
     })
   }
 
+  if (offline) throw new Error('Stellar node is offline')
+
   const { rpc, Contract, TransactionBuilder, Networks, Horizon, nativeToScVal, Transaction } =
     await import('@stellar/stellar-sdk')
 
@@ -183,7 +255,10 @@ export async function submitDeposit(
   const horizon = new Horizon.Server(HORIZON_URL)
   const contract = new Contract(CONTRACT_ID)
 
-  const account = await horizon.loadAccount(address)
+  const account = await withTimeout(
+    horizon.loadAccount(address),
+    'Stellar Horizon timed out loading account',
+  )
   // USDC uses 7 decimal places on Stellar (stroops-equivalent for SAC tokens).
   // The contract expects the raw integer amount scaled by 10^7.
   const amountScVal = nativeToScVal(BigInt(Math.round(amount * 1e7)), { type: 'i128' })
@@ -195,14 +270,20 @@ export async function submitDeposit(
     .setTimeout(180)
     .build()
 
-  const simResult = await server.simulateTransaction(tx)
+  const simResult = await withTimeout(
+    server.simulateTransaction(tx),
+    'Stellar RPC timed out during simulation',
+  )
   if ('error' in simResult) throw new Error(`Simulation failed: ${simResult.error}`)
 
   const assembled = rpc.assembleTransaction(tx, simResult).build()
   const signedXdr = await sign(assembled.toXDR())
   const signedTx = new Transaction(signedXdr, networkPassphrase)
 
-  const sendResult = await server.sendTransaction(signedTx)
+  const sendResult = await withTimeout(
+    server.sendTransaction(signedTx),
+    'Stellar RPC timed out submitting transaction',
+  )
   if (sendResult.status === 'ERROR')
     throw new Error(`Send failed: ${JSON.stringify(sendResult.errorResult)}`)
 
@@ -245,6 +326,8 @@ export async function submitWithdraw(
     })
   }
 
+  if (offline) throw new Error('Stellar node is offline')
+
   const { rpc, Contract, TransactionBuilder, Networks, Horizon, nativeToScVal, Transaction } =
     await import('@stellar/stellar-sdk')
 
@@ -252,7 +335,10 @@ export async function submitWithdraw(
   const horizon = new Horizon.Server(HORIZON_URL)
   const contract = new Contract(CONTRACT_ID)
 
-  const account = await horizon.loadAccount(address)
+  const account = await withTimeout(
+    horizon.loadAccount(address),
+    'Stellar Horizon timed out loading account',
+  )
   const sharesScVal = nativeToScVal(BigInt(Math.round(amount * 1e7)), { type: 'i128' })
   const minAssetsScVal = nativeToScVal(BigInt(0), { type: 'i128' })
   const networkPassphrase = STELLAR_NETWORK === 'public' ? Networks.PUBLIC : Networks.TESTNET
@@ -262,14 +348,20 @@ export async function submitWithdraw(
     .setTimeout(180)
     .build()
 
-  const simResult = await server.simulateTransaction(tx)
+  const simResult = await withTimeout(
+    server.simulateTransaction(tx),
+    'Stellar RPC timed out during simulation',
+  )
   if ('error' in simResult) throw new Error(`Simulation failed: ${simResult.error}`)
 
   const assembled = rpc.assembleTransaction(tx, simResult).build()
   const signedXdr = await sign(assembled.toXDR())
   const signedTx = new Transaction(signedXdr, networkPassphrase)
 
-  const sendResult = await server.sendTransaction(signedTx)
+  const sendResult = await withTimeout(
+    server.sendTransaction(signedTx),
+    'Stellar RPC timed out submitting transaction',
+  )
   if (sendResult.status === 'ERROR')
     throw new Error(`Send failed: ${JSON.stringify(sendResult.errorResult)}`)
 

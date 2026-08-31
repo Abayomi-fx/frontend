@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { Helio } from '../brand/Helio'
 
 /**
- * App-level error boundary — runtime errors in any route segment bubble here
+ * App-level error boundary -- runtime errors in any route segment bubble here
  * instead of the framework default crash screen.
  *
  * Must be a Client Component (Next.js requirement for error.tsx).
@@ -18,6 +18,11 @@ export default function GlobalError({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const isOffline = useMemo(
+    () => /stellar|offline|network|connection|sync/i.test(error.message ?? ''),
+    [error.message]
+  )
+
   useEffect(() => {
     // In production wire this to your error-reporting service (e.g. Sentry).
     console.error('[Heliobond] unhandled error:', error)
@@ -50,7 +55,7 @@ export default function GlobalError({
           textTransform: 'uppercase',
         }}
       >
-        Something went wrong
+        {isOffline ? "You're offline" : "Something went wrong"}
       </p>
 
       <h1
@@ -64,7 +69,7 @@ export default function GlobalError({
           margin: '0 0 14px',
         }}
       >
-        An unexpected error occurred
+        {isOffline ? 'Lost connection to Stellar' : 'An unexpected error occurred'}
       </h1>
 
       <p
@@ -77,8 +82,9 @@ export default function GlobalError({
           margin: '0 0 8px',
         }}
       >
-        The application hit an unexpected problem. You can try recovering, or go back to the home
-        page.
+        {isOffline
+          ? "The app couldn't reach the Stellar node. Check your connection or try again. You can still access cached views."
+          : "The application hit an unexpected problem. You can try recovering, or go back to the home page."}
       </p>
 
       {error.digest && (
@@ -140,7 +146,7 @@ export default function GlobalError({
             transition: 'background var(--dur-press) var(--ease-out)',
           }}
         >
-          Go home
+          {isOffline ? 'View cached views' : 'Go home'}
         </Link>
       </div>
     </main>
