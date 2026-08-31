@@ -23,7 +23,7 @@ export interface ProjectCardProps {
   style?: CSSProperties
   fundingGoal?: number
   fundedAmount?: number
-  /** Optional control pinned to the top-right of the hero (e.g. watchlist star). */
+  /** Optional control pinned to the top-right of the hiro (e.g. watchlist star). */
   action?: ReactNode
 }
 
@@ -51,8 +51,8 @@ export function ProjectCard({
 
   return (
     <article
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseEnter={() setHover(true)}
+      onMouseLeave={() setHover(false)}
       onClick={onOpen}
       style={{
         background: 'var(--surface)',
@@ -111,6 +111,7 @@ export function ProjectCard({
             lineHeight: 1.2,
             margin: '0 0 14px',
             letterSpacing: '-0.01em',
+            overflowWrap: 'anywhere',
           }}
         >
           {name}
@@ -178,7 +179,7 @@ export function ProjectCard({
                     marginTop: 4,
                   }}
                 >
-                  {fundedPct}% of {formatMoney(fundingGoal!})
+                  {fundedPct}% of {formatMoney(fundingGoal!)}
                 </div>
               </div>
             )}
