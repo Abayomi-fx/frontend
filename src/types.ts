@@ -18,3 +18,20 @@ export interface ProjectFilters {
   search: string;
   type: string;
 }
+
+export type RiskScore = 'conservative' | 'moderate' | 'aggressive';
+
+export type BondRating = 'AAA' | 'AA' | 'A' | 'BBB' | 'BB' | 'B' | 'CCC';
+
+export interface Bond {
+  id: string;
+  rating: BondRating;
+  amount: number;
+}
+
+export interface Portfolio {
+  id: string;
+  name: string;
+  holdings: Bond[];
+  riskScore: RiskScore;
+}

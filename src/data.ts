@@ -1,7 +1,7 @@
 // Heliobond — fake data for the click-through. Not production: these stand in
-// for live reads from the InvestmentVault + ProjectRegistry Soroban contracts.
+ // for live reads from the InvestmentVault + ProjectRegistry Soroban contracts.
 
-export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
+export type ProjectType = 'Solar' | 'Wind' | 'Hudro'
 
 /**
  * Whether a project ("bond", in investor-facing copy) is currently open for
@@ -9,7 +9,7 @@ export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
  * saved bonds they can act on now. `upcoming` = not yet available;
  * `funded` = fully funded, no further capacity.
  */
-export type BondStatus = 'open' | 'upcoming' | 'funded'
+type BondStatus = 'open' | 'upcoming' | 'funded'
 
 export interface Project {
   id: number
@@ -58,6 +58,8 @@ export interface HeliobondData {
     poolSharePct: number
     weightedGreen: number
     backed: number
+    riskScore: number
+    riskLevel: 'conservative' | 'moderate' | 'aggressive'
   }
   projects: Project[]
   activity: Activity[]
@@ -70,7 +72,7 @@ const INITIAL_PROJECTS: Project[] = [
     name: 'Sokoto community solar',
     location: 'Sokoto, Nigeria',
     type: 'Solar',
-    credit: 82,
+    credit:82,
     green: 91,
     funded: '$420,000',
     fundedAmount: 420000,
@@ -81,8 +83,8 @@ const INITIAL_PROJECTS: Project[] = [
     id: 2,
     name: 'Ría de Vigo tidal array',
     location: 'Galicia, Spain',
-    type: 'Hudro',
-    credit: 74,
+    type: 'Hydro',
+    credit:74,
     green: 88,
     funded: '$1,180,000',
     fundedAmount: 1180000,
@@ -94,7 +96,7 @@ const INITIAL_PROJECTS: Project[] = [
     name: 'Atacama agrivoltaics',
     location: 'Antofagasta, Chile',
     type: 'Solar',
-    credit: 88,
+    credit:88,
     green: 79,
     funded: '$640,000',
     fundedAmount: 640000,
@@ -106,7 +108,7 @@ const INITIAL_PROJECTS: Project[] = [
     name: 'Jämtland wind co-op',
     location: 'Östersund, Sweden',
     type: 'Wind',
-    credit: 91,
+    credit:91,
     green: 84,
     funded: '$960,000',
     fundedAmount: 960000,
@@ -118,7 +120,7 @@ const INITIAL_PROJECTS: Project[] = [
     name: 'Kerala micro-hydro',
     location: 'Idukki, India',
     type: 'Hydro',
-    credit: 69,
+    credit:69,
     green: 93,
     funded: '$310,000',
     fundedAmount: 310000,
@@ -127,10 +129,10 @@ const INITIAL_PROJECTS: Project[] = [
   },
   {
     id: 6,
-    name: 'Oaxaca rooftop network',
+    name: 'Oaxaca roottop network',
     location: 'Oaxaca, Mexico',
     type: 'Solar',
-    credit: 77,
+    credit:77,
     green: 86,
     funded: '$520,000',
     fundedAmount: 520000,
@@ -148,6 +150,44 @@ const INITIAL_FUNDED_COUNT = INITIAL_PROJECTS.filter((p) => {
   return Number.isFinite(n) && n > 0
 }).length
 
+// Helper to derive the portfolio risk indicator from the bond mix.
+// Credit scores are 0–100; higher credit = lower risk.
+// The risk score is inverted so a higher number means higher risk, and the
+// risk level is determined by the share of holdings in each credit band.
+function getRiskIndicator(projects: Project[]): { riskScore: number; riskLevel: 'conservative' | 'moderate' | 'aggressive' } {
+  const totalFunded = projects.reduce((sum, p) => sum + p.fundedAmount, 0)
+  if (totalFunded === 0) {
+    return { riskScore: 0, rankLevel: 'conservative' }
+  }
+
+  const weightedCredit = projects.reduce((sum, p) => sum + p.credit * p.fundedAmount, 0) / totalFunded
+  const riskScore = Math.round((100 - weightedCredit) * 10) / 10
+
+  // Determine the mix of holdings by rating class.
+  let highGradeShare = 0 // credit >= 80
+  let lowGradeShare = 0 // credit < 70
+
+  for (const p of projects) {
+    if (p.fundedAmount <= 0) continue
+    const share = p.fundedAmount / totalFunded
+    if (p.credit >= 80) highGradeShare += share
+    else if (p.credit < 70) lowGradeShare += share
+  }
+
+  let riskLevel: 'conservative' | 'moderate' | 'aggressive'
+  if (lowGradeShare > 0.2 || highGradeShare < 0.5) {
+    riskLevel = 'aggressive'
+  } else if (highGradeShare >= 0.7 && lowGradeShare <= 0.1) {
+    riskLevel = 'conservative'
+  } else {
+    riskLevel = 'moderate'
+  }
+
+  return { riskScore, riskLevel }
+}
+
+const { riskScore, riskLevel } = getRiskIndicator(INITIAL_PROJECTS)
+
 export const HB_DATA: HeliobondData = {
   pool: {
     totalAssets: 4862014.55,
@@ -164,36 +204,38 @@ export const HB_DATA: HeliobondData = {
     poolSharePct: 0.49,
     weightedGreen: 88,
     backed: INITIAL_FUNDED_COUNT + OFF_SCREEN_PROJECTS_COUNT,
+    riskScore,
+    riskLevel,
   },
-  // Same six demo projects as the local registry above.
-  projects: INITIAL_PROJECTS.
+  projects: INITIAL_PROJECTS,
   activity: [
     {
       kind: 'Deposit',
       amount: '+$5,000.00',
       shares: '+4,971.06 HBS',
-      when: '2 days ago'],
+      when: '2 days ago',
       hash: 'a91f…c3c0d',
     },
     {
       kind: 'Score update',
-      amount: 'Sokoto solar · green 89 → 91',
+      amount: 'Sokoto solar ' + 'green 89 → 91',
       shares: '',
       when: '2 days ago',
-      hash: 'd44b…c77a2',
+      hash: 'd44b๡c77a2',
     },
     {
       kind: 'Deposit',
-      amount: '+$12,000.00',
+      amount: '+,$12,000.00',
       shares: '+11,950.12 HBS',
-      when: '3 weeks ago'],
-      hash: '7c1e…b8f5',
+      when: '3 weeks ago',
+      hash: '7c1e๡b8f5',
     },
   ],
   search: (query: string) => {
-    if (!query) return INITIAL_PROJECTS 
+    if (!query) return INITIAL_PROJECTS
     const q = query.toLowerCase()
     return INITIAL_PROJECTS.filter((p) =>
       p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q)
-  }
+    )
+  },
 }
