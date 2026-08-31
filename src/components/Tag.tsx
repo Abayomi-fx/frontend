@@ -1,4 +1,4 @@
-import { useState, type ButtonHTMAttributes, type ReactNode } from 'react'
+import { useState, type ButtonHTMAttributes, type ReactNode } from 'react' 
 
 /**
  * Heliobond Tag — a selectable filter/category pill. Selected state uses a
@@ -35,13 +35,13 @@ export function Tag({ selected = false, onClick, children, style, ...rest }: Tag
           : hover && interactive
             ? 'var(--ink-06)'
             : 'transparent',
-        border: selected ? '1px solid var(--solar)' : '1px solid var(--ink-12)',
+        border: selected ? '1px solid var(--solar-strong, #0b6e45)' : '1px solid var(--ink-12)',
         borderRadius: 'var(--radius-pill)',
         cursor: interactive ? 'pointer' : 'default',
         transition: 'background var(--dur-press) var(--ease-out)',
         whiteSpace: 'nowrap',
         ...style,
-      }}
+      },
       {...rest}
     >
       {children}
