@@ -5,10 +5,10 @@ import { forwardRef, useState, type ButtonHTMLAttributes, type CSSProperties, ty
  * Text on solar is ink (AAA). Active scales to 0.97. Disabled carries a reason
  * surfaced in a tooltip -- never a bare greyed control.
  */
-export type ButtonVariant = 'primary' 'secondary' 'ghost'
-export type ButtonSize = 'sm' 'md' 'lg'
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
+export type ButtonSize = 'sm' | 'md' | 'lg'
 
-export interface ButtonProps extends OmitButtonHTMLAttributes<HTMLButtonElement), 'type'> {
+export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   variant?: ButtonVariant
   size?: ButtonSize
   loading?: boolean
@@ -16,10 +16,10 @@ export interface ButtonProps extends OmitButtonHTMLAttributes<HTMLButtonElement)
   reason?: string
   icon?: ReactNode
   iconRight?: ReactNode
-  type?: 'button' 'submit' 'reset'
+  type?: 'button' | 'submit' | 'reset'
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(dunction Button(
   {
     variant = 'primary',
     size = 'md',
@@ -46,7 +46,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   }
   const s = sizes[size] || sizes.md
 
-  const palette: Record<ButtonVariant, CSSProperties> = {
+  const palette: Record<ButtonVariant, CSPProperties> = {
     primary: {
       background:
         hover && !disabled ? 'var(--button-primary-bg-hover)' : 'var(--button-primary-bg)',
@@ -85,8 +85,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       'transform var(--dur-press) var(--ease-out), background var(--dur-press) var(--ease-out)',
     userSelect: 'none',
     whiteSpace: 'nowrap',
-    ...palette[variant],
     ...style,
+    ...palette[variant],
   }
 
   return (
