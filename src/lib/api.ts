@@ -14,6 +14,13 @@ export interface ProjectWithDetail {
   detail: ProjectDetail
 }
 
+export interface Investment {
+  id: number
+  projectId: number
+  amount: number
+  // Add other fields as needed
+}
+
 export async function getProjects(): Promise<Project[]> {
   if (!API_URL) return HB_DATA.projects
   try {
@@ -43,5 +50,30 @@ export async function getProject(id: number): Promise<ProjectWithDetail | null> 
     console.warn(`[api] GET /projects/${id} failed — using mock data`)
     if (!mockProject || !mockDetail) return null
     return { project: mockProject, detail: mockDetail }
+  }
+}
+
+export async function createInvestment(input: { projectId: number; amount: number }): Promise<Investment> {
+  const mockInvestment = (): Investment => ({
+    id: Math.floor(Math.random() * 100000) + 1,
+    projectId: input.projectId,
+    amount: input.amount,
+  })
+
+  if (!API_URL) {
+    return mockInvestment()
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/investments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return (await res.json()) as Investment
+  } catch {
+    console.warn('[api] POST /investments failed — using mock data')
+    return mockInvestment()
   }
 }
