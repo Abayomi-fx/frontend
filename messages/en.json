@@ -157,6 +157,7 @@
     "pendingTx": "tx a91f…3c0d · view on Stellar Expert ↗",
     "successH1": "Welcome to the pool",
     "successBody": "You received <num>{shares} HBS</num> and now back <b>{count} verified projects</b>.",
+    "viewInvestment": "View your investment",
     "viewExpert": "View on Stellar Expert",
     "goPortfolio": "Go to portfolio"
   },
