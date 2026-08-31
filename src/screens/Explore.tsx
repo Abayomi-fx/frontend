@@ -79,8 +79,7 @@ export function Explore({ onOpen }: ExploreProps) {
         .hb-projects-grid > * {
           min-width: 0;
         }
-        .hb-projects-grid h3,
-        .hb-projects-grid h3 * {
+        .hb-projects-grid * {
           min-width: 0;
           white-space: normal !important;
           overflow-wrap: break-word !important;
