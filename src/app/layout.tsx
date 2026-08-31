@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from 'next'
 import { getLocale, getMessages } from 'next-intl/server'
+import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
 import { Providers } from './providers'
 import { LocaleProvider, type Messages } from '../i18n/LocaleProvider'
 import { type Locale, RTL_LOCALES } from '../i18n/request'
-import { TopBar } from '../shell/TopBar'
-import { Footer } from '../shell/Footer'
 import { THEME_SCRIPT } from '../theme/themeScript'
 import '../styles/index.css'
+
+const TopBar = dynamic(() => import('../shell/TopBar'))
+const Footer = dynamic(() => import('../shell/Footer'))
 
 export const metadata: Metadata = {
   title: 'Heliobond — sunlight made financial',
@@ -63,7 +66,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHtml={{ __html: THEME_SCRIPT }} />
       </head>
       <body>
         <LocaleProvider initialLocale={locale as Locale} initialMessages={messages as Messages}>
@@ -71,9 +74,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <a href="#main-content" className="hb-skip-link">
               Skip to content
             </a>
-            <TopBar />
+            <Suspense fallback={null}>
+              <TopBar />
+            </Suspense>
             {children}
-            <Footer />
+            <Suspense fallback={null}>
+              <Footer />
+            </Suspense>
           </Providers>
         </LocaleProvider>
       </body>
