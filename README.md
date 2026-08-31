@@ -29,6 +29,17 @@ accent, Cabinet Grotesk / Hanken Grotesk / Spline Sans Mono type.
 - Design tokens are plain CSS custom properties (verbatim from the handoff);
   components reference them via `var(--token)`, so light/dark is a pure token swap. See the [Design Tokens & Brand Guide](src/styles/tokens/README.md) for details.
 
+## Design Tokens Quick Reference
+
+The app’s source of truth is the CSS token layer in `src/styles/tokens/`:
+
+- Colors: `--ink`, `--canvas`, `--surface`, `--solar`, `--growth`, `--ember`, plus the semantic text / border aliases.
+- Typography: `--font-display`, `--font-body`, `--font-data`, and the type ladder (`--type-display-xl`, `--type-h3`, `--type-body`, `--type-small`, etc.).
+- Spacing and radii: `--space-1` through `--space-32`, plus `--radius-input`, `--radius-card`, `--radius-modal`, and `--radius-pill`.
+- Breakpoints: the shared layout uses `680px` and `960px` responsive cuts, with a max content width of `90rem`.
+
+For the full token table and rules, see [src/styles/tokens/README.md](src/styles/tokens/README.md).
+
 ## Run
 
 ```bash
