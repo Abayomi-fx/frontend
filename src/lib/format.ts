@@ -56,7 +56,7 @@ export function sanitizeAmount(val: string): string {
   const parts = clean.split('.')
   const joined = parts.length > 1 ? parts[0] + '.' + parts.slice(1).join('') : clean
   const [whole, ...rest] = joined.split('.')
-  const trimmedWhole = whole.replace(/^0+(?\d)/, '')
+  const trimmedWhole = whole.replace(/^0+(?=\d)/, '')
   return rest.length > 0 ? trimmedWhole + '.' + rest.join('.') : trimmedWhole
 }
 
