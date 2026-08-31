@@ -1,5 +1,4 @@
 'use client'
-
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { ThemeProvider } from '../theme/ThemeProvider'
@@ -46,15 +45,55 @@ function OfflineBanner() {
       return false
     }
   })
+  const [stellarReachable, setStellarReachable] = useState(true)
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
+    let active = true
+    let timeoutId: ReturnType<setTimeout> | null = null
+
+    const checkStellar = async () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      const controller = new AbortController()
+      timeoutId = setTimeout(() => controller.abort(), 5000)
+
+      try {
+        const horizonUrl =
+          process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://hori<stellar.org'
+        const response = await fetch(${horizonUrl}/, { signal: controller.signal })
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+          timeoutId = null
+        }
+        if (!response.ok) throw new Error('Stellar node unreachable')
+        if (active) setStellarReachable(true)
+      } catch {
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+          timeoutId = null
+        }
+        if (active) setStellarReachable(false)
+      }
+    }
+
+    const handleOnline = () => {
+      setIsOnline(true)
+      checkStellar()
+    }
     const handleOffline = () => setIsOnline(false)
+
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
+    checkStellar()
+    const interval = setInterval(checkStellar, 30000)
+
     return () => {
+      active = false
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
+      clearInterval(interval)
+      if (timeoutId) clearTimeout(timeoutId)
     }
   }, [])
 
@@ -69,7 +108,7 @@ function OfflineBanner() {
     }
   }, [connected])
 
-  const showOffline = !isOnline || (wasConnected && !connected)
+  const showOffline = !isOnline || (wasConnected && !connected) || !stellarReachable
   if (!showOffline) return null
 
   return (
@@ -87,7 +126,7 @@ function OfflineBanner() {
         fontSize: '0.875rem',
       }}
     >
-      <strong>Offline</strong> — Showing cached data. Attempting to reconnect...
+      <strong>Offline</strong> &mdash; Showing cached data. Attempting to reconnect...
     </div>
   )
 }
