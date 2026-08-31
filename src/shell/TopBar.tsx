@@ -37,6 +37,11 @@ export function TopBar() {
   const { theme, toggle } = useTheme()
 
   const [networkOnline, setNetworkOnline] = useState(true)
+
+  useEffect(() => {
+    router.prefetch('/connect')
+  }, [router])
+
   useEffect(() => {
     let cancelled = false
     let currentController: AbortController | undefined
@@ -441,6 +446,12 @@ function WalletMenu({ address, isDemo }: { address: string; isDemo: boolean }) {
   const { toast } = useToast()
   const router = useRouter()
   const { disconnect } = useWallet()
+
+  useEffect(() => {
+    router.prefetch('/watchlist')
+    router.prefetch('/portfolio')
+  }, [router])
+
   const [open, setOpen] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [copied, setCopied] = useState(false)
