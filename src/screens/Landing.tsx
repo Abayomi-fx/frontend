@@ -3,8 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock } from '../components'
-import { HB_DATA } from '../data'
-import { formatCurrency, formatNumber } from '../lib/format'
+import { HB_DATA, formatCurrency, formatNumber } from '../data'
 
 const LiveHelio = dynamic(() => import('../brand/LiveHelio').then((m) => m.LiveHelio), {
   ssr: false,
@@ -24,10 +23,7 @@ export function Landing({ onConnect, onExplore }: LandingProps) {
   const d = HB_DATA
   const steps = [1, 2, 3, 4] as const
   const intensity = Math.min(1, d.pool.totalAssets / 6_000_000)
-  const [poolUnits, poolFraction = ''] = d.pool.totalAssets.toFixed(2).split('.')
-  const [poolValue] = formatCurrency(Number(poolUnits)).split('.')
-  const poolDecimals = poolFraction && poolFraction !== '00' ? `.${poolFraction}` : undefined
-  const returnRate = formatNumber(d.pool.returnRate)
+  const [poolValue, poolDecimals = ''] = formatCurrency(d.pool.totalAssets).split('.')
 
   return (
     <main id="main-content">
@@ -93,7 +89,12 @@ export function Landing({ onConnect, onExplore }: LandingProps) {
           }}
         >
           <div style={counterCell}>
-            <StatBlock label={t('poolValue')} value={poolValue} decimals={poolDecimals} size="lg" />
+            <StatBlock
+              label={t('poolValue')}
+              value={poolValue}
+              decimals={poolDecimals ? `.${poolDecimals}` : undefined}
+              size="lg"
+            />
           </div>
           <div style={counterCell}>
             <StatBlock
@@ -103,7 +104,7 @@ export function Landing({ onConnect, onExplore }: LandingProps) {
             />
           </div>
           <div style={counterCell}>
-            <StatBlock label={t('returnRate')} value={returnRate} unit="%" size="lg" />
+            <StatBlock label={t('returnRate')} value={formatNumber(d.pool.returnRate)} unit="%" size="lg" />
           </div>
         </div>
         <p
