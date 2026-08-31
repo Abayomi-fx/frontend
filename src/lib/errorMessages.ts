@@ -1,6 +1,6 @@
 /**
  * Maps technical error codes and enum values to user-friendly messages.
- * Never surface raw codes like 'insufficient_balance' to users.
+* Never surface raw codes like 'insufficient_balance' to users.
  */
 
 const ERROR_CODE_MAP: Record<string, string> = {
@@ -12,6 +12,7 @@ const ERROR_CODE_MAP: Record<string, string> = {
   wallet_not_connected: 'Please connect your wallet first.',
   timeout: 'Connection timed out — please try again.',
   network_error: 'Network issue — please check your connection and try again.',
+  stellar_unreachable: 'Cannot reach Stellar network — showing cached data.',
   simulation_failed: 'Could not estimate the transaction — please try again.',
   tx_failed: 'Transaction did not go through — please try again.',
 }
@@ -26,7 +27,7 @@ export function getFriendlyErrorMessage(codeOrMessage: string): string {
   if (!codeOrMessage) return FALLBACK_MESSAGE
   const normalized = normalizeCode(codeOrMessage)
   if (ERROR_CODE_MAP[normalized]) return ERROR_CODE_MAP[normalized]
-  // If message already looks friendly (contains spaces and no underscores), return as-is
+  // If message already looks friendly contains spaces and no underscores), return as-is
   if (!codeOrMessage.includes('_') && codeOrMessage.length > 10) return codeOrMessage
   // Try to humanize snake_case codes
   if (codeOrMessage.includes('_')) {
