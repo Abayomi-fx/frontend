@@ -102,6 +102,8 @@
   "Explore": {
     "title": "Là où le pool agit",
     "sub": "Chaque projet financé par le pool, avec des scores vérifiés par l'oracle. Explorez librement — la connexion du portefeuille vient plus tard.",
+    "searchLabel": "Rechercher",
+    "searchPlaceholder": "Rechercher par nom ou localisation",
     "filterAll": "Tous",
     "countSorted": "{count} projets",
     "cardFundedFromPool": "Financé par le pool",
@@ -192,6 +194,7 @@
     "pendingSub": "Environ 5 secondes sur Stellar. tx 4d2c…9af1 ↗",
     "successH1": "Retrait réglé",
     "successBody": "<num>${amount} USDC</num> sont en route vers votre portefeuille. Merci de faire partie du pool.",
+    "transactionHashLabel": "le hash de transaction",
     "backToPortfolio": "Retour au portefeuille"
   },
   "Admin": {

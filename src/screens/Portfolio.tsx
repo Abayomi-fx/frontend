@@ -6,6 +6,7 @@ import { Button, StatBlock, LiquidityMeter, Card } from '../components'
 import { cardTitleLg as cardTitle } from '@/theme'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
+import { getPortfolioRisk } from '../lib/bondUtils'
 import { useWallet } from '../wallet/WalletProvider'
 
 /**
@@ -22,6 +23,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   const t = useTranslations('Portfolio')
   const { connected, connect } = useWallet()
   const d = HB_DATA
+  const risk = getPortfolioRisk(d.holdings)
 
   if (!connected) {
     return (
@@ -39,13 +41,13 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
           }}
         >
           <div className="hb-eyebrow">{t('eyebrow')}</div>
-          <h2 style={{ ...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
+          <h2 style={ {...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
           <p
             style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-small)',
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-small',
               lineHeight: 1.5,
-              color: 'var(--ink-60)',
+              color: 'var--ink-60',
               margin: 0,
             }}
           >
@@ -79,14 +81,14 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
             label={t('currentValue')}
             value="$24,180"
             decimals=".45"
-            delta={`+$612.18 (2.6%) ${t('sinceDeposit')} + $320 pending`}
+            delta={`++$612.18 (2.6%) ${t('sinceDeposit')} + $320 pending`}
             size="lg"
           />
           <p
             style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-caption)',
-              color: 'var(--ink-60)',
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-caption',
+              color: 'var--ink-60',
               marginTop: 4,
             }}
           >
@@ -119,9 +121,9 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
           <LiquidityMeter liquid={236} total={482} currency="$" showExplanation={false} />
           <p
             style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-eyebrow)',
-              color: 'var(--ink-60)',
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-eyebrow',
+              color: 'var--ink-60',
               margin: '8px 0 0',
             }}
           >
@@ -130,21 +132,39 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
         </Card>
       </div>
 
+      {/* Portfolio risk indicator from bond ratings mix */}
+      <Card style={{ padding: 22, marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+          <StatBlock label="Portfolio risk" value={risk.level[0].toUpperCase() + risk.level.slice(1)} size="md" />
+          <p
+            style={{
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-small',
+              lineHeight: 1.55,
+              color: 'var--ink-60',
+              margin: 0,
+            }}
+          >
+            Score: {risk.score}/100 based on bond ratings mix.
+          </p>
+        </div>
+      </Card>
+
       <div className="hb-portfolio-grid">
         {/* Impact */}
         <Card style={{ padding: 22 }}>
           <h3 style={cardTitle}>{t('impactTitle')}</h3>
           <p
             style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-small)',
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-small',
               lineHeight: 1.55,
-              color: 'var(--ink-60)',
+              color: 'var--ink-60',
               margin: '0 0 16px',
             }}
           >
             {t.rich('impactBody', {
-              b: (c: ReactNode) => <b style={{ color: 'var(--ink)' }}>{c}</b>,
+              b: (c: ReactNode) => <b style={ color: 'var--ink' }>{c}</b>,
               count: d.you.backed,
             })}
           </p>
@@ -155,77 +175,77 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
         </Card>
 
         {/* Activity */}
-        <Card style={{ padding: 22 }}>
+        <Card style={ padding: 22 }>
           <div
-            style={{
+            style={
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBottom: 8,
-            }}
+            }
           >
             <h3 style={cardTitle}>{t('activityTitle')}</h3>
             <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--type-caption)',
-                color: 'var(--ink-40)',
-              }}
+              style={
+                fontFamily: 'var--font-body',
+                fontSize: 'var--type-caption',
+                color: 'var--ink-40',
+              }
             >
               {t('activityNote')}
             </span>
           </div>
           {d.activity.map((a, i) => (
             <div
-              key={a.hash}
-              style={{
+              key={a.hash+}
+              style={
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '12px 0',
-                borderTop: i ? '1px solid var(--ink-12)' : 'none',
-              }}
+                borderTop: i ? '1px solid var--ink-12' : 'none',
+              }
             >
               <div>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-small)',
+                  style={
+                    fontFamily: 'var--font-body',
+                    fontSize: 'var--type-small',
                     fontWeight: 600,
-                    color: 'var(--ink)',
-                  }}
+                    color: 'var--ink',
+                  }
                 >
                   {a.kind}
                 </div>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-caption)',
-                    color: 'var(--ink-60)',
-                  }}
+                  style={
+                    fontFamily: 'var--font-body',
+                    fontSize: 'var--type-caption',
+                    color: 'var--ink-60',
+                  }
                 >
                   {a.amount}
-                  {a.shares ? ` · ${a.shares}` : ''}
+                  {a.shares ? `£· ${a.shares} : ''}
                 </div>
               </div>
-              <div style={{ textAlign: 'end' }}>
+              <div style={ textAlign: 'end' }>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-caption)',
-                    color: 'var(--ink-60)',
-                  }}
+                  style={
+                    fontFamily: 'var--font-body',
+                    fontSize: 'var--type-caption',
+                    color: 'var--ink-60',
+                  }
                 >
                   {a.when}
                 </div>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-data)',
-                    fontSize: 'var(--type-eyebrow)',
-                    color: 'var(--ink-40)',
-                  }}
+                  style={
+                    fontFamily: 'var--font-data',
+                    fontSize: 'var--type-eyebrow',
+                    color: 'var--ink-40',
+                  }
                 >
-                  {a.hash} ↗
+                  {a.hash} ↑
                 </div>
               </div>
             </div>
@@ -234,4 +254,12 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
       </div>
     </main>
   )
+}
+
+const cardTitle: CSSProperties = {
+  fontFamily: 'var--font-display',
+  fontWeight: 700,
+  fontSize: 'var--type-body-lg',
+  margin: '0 0 10px',
+  color: 'var--ink',
 }

@@ -21,9 +21,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ComponentRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { MeshDistortMaterial } from '@react-three/drei'
-import * as THREE from 'three'
+import dynamic from 'next/dynamic'
+import type * as Three from 'three'
 /* --- Brand palette (shared with the static Helio and the CSS tokens) ------ */
 import { SOLAR, SOLAR_CORE as CORE, SOLAR_HALO as HALO, INK, SOLAR_HIGHLIGHT } from './palette'
 
@@ -50,12 +49,30 @@ export interface HelioWebGLProps {
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n)
 
 /* ------------------------------------------------------------------------- *
+ * WebGL canvas — loaded through next/dynamic so three and R3F are split into
+ * their own on-demand chunk and never enter the shared shell.
+ * ------------------------------------------------------------------------- */
+interface HelioCanvasProps {
+  size: number
+  motes: number
+  intensity: number
+  animate: boolean
+  onReady?: () => void
+}
+
+const HelioCanvas = dynamic(
+  async () => {
+    const { Canvas, useFrame } = await import('@react-three/fiber')
+    const { MeshDistortMaterial } = await import('@react-three/drei')
+    const THREE = await import('three')
+
+/* ------------------------------------------------------------------------- *
  * Deterministic corona layout — mirrors the static Helio's mote scatter so
  * the live and fallback orbs read as the same object. No Math.random.
  * ------------------------------------------------------------------------- */
 interface MoteSpec {
   /* unit position on the orbit ring (z gives gentle depth) */
-  base: THREE.Vector3
+  base: Three.Vector3
   /* per-mote orbit radius + revolve speed + size */
   radius: number
   speed: number
@@ -92,7 +109,7 @@ function buildMotes(count: number): MoteSpec[] {
  * The sun — soft-body distorted sphere with a warm emissive core.
  * ------------------------------------------------------------------------- */
 function Sun({ animate, intensity }: { animate: boolean; intensity: number }) {
-  const group = useRef<THREE.Group>(null)
+  const group = useRef<Three.Group>(null)
   // The distort material is a MeshPhysicalMaterial subclass; ComponentRef gives
   // us the exact impl type (with emissiveIntensity from the standard-material chain).
   const mat = useRef<ComponentRef<typeof MeshDistortMaterial>>(null)
@@ -164,7 +181,7 @@ function Sun({ animate, intensity }: { animate: boolean; intensity: number }) {
  * cheap, and far steadier than postprocessing bloom.
  * ------------------------------------------------------------------------- */
 function Halo({ animate, intensity }: { animate: boolean; intensity: number }) {
-  const mat = useRef<THREE.MeshBasicMaterial>(null)
+  const mat = useRef<Three.MeshBasicMaterial>(null)
   const baseOpacity = 0.18 + 0.16 * intensity
 
   useEffect(() => {
@@ -213,7 +230,7 @@ function Halo({ animate, intensity }: { animate: boolean; intensity: number }) {
  * Corona — dark ink motes (one per funded project) revolving slowly.
  * ------------------------------------------------------------------------- */
 function Corona({ specs, animate }: { specs: MoteSpec[]; animate: boolean }) {
-  const group = useRef<THREE.Group>(null)
+  const group = useRef<Three.Group>(null)
 
   useFrame((state, delta) => {
     if (!animate || !group.current) return
@@ -232,7 +249,7 @@ function Corona({ specs, animate }: { specs: MoteSpec[]; animate: boolean }) {
 }
 
 function Mote({ spec, animate }: { spec: MoteSpec; animate: boolean }) {
-  const ref = useRef<THREE.Mesh>(null)
+  const ref = useRef<Three.Mesh>(null)
 
   // Resting position (also the static-mode position).
   useEffect(() => {
@@ -286,6 +303,37 @@ function Scene({
     </>
   )
 }
+    function HelioCanvasLoaded({
+      size,
+      motes,
+      intensity,
+      animate,
+      onReady,
+    }: HelioCanvasProps) {
+      const specs = useMemo(() => buildMotes(motes), [motes])
+      return (
+        <Canvas
+          dpr={[1, 2]}
+          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+          style={{ width: size, height: size, background: 'transparent' }}
+          // Frame loop pauses entirely in reduced-motion (single render).
+          frameloop={animate ? 'always' : 'demand'}
+          camera={{ position: [0, 0, 5.4], fov: 40, near: 0.1, far: 100 }}
+          onCreated={() => {
+            // Signal the parent once the first frame has actually painted, so the
+            // static fallback can cross-fade out with no blank gap.
+            if (onReady) requestAnimationFrame(() => onReady())
+          }}
+        >
+          <Scene specs={specs} animate={animate} intensity={intensity} />
+        </Canvas>
+      )
+    }
+
+    return { default: HelioCanvasLoaded }
+  },
+  { ssr: false, loading: () => null }
+)
 
 /* ------------------------------------------------------------------------- *
  * Lightweight, dependency-free WebGL capability probe.
@@ -309,7 +357,6 @@ function detectWebGL(): boolean {
  * ------------------------------------------------------------------------- */
 export function HelioWebGL({ size = 360, motes = 14, intensity = 1, onReady }: HelioWebGLProps) {
   const clampedIntensity = clamp01(intensity)
-  const specs = useMemo(() => buildMotes(motes), [motes])
 
   // Browser-only capability + motion preference reads (import-safe).
   const [ready, setReady] = useState(false)
@@ -338,21 +385,13 @@ export function HelioWebGL({ size = 360, motes = 14, intensity = 1, onReady }: H
 
   return (
     <div aria-hidden="true" style={{ width: size, height: size, position: 'relative' }}>
-      <Canvas
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-        style={{ width: size, height: size, background: 'transparent' }}
-        // Frame loop pauses entirely in reduced-motion (single render).
-        frameloop={animate ? 'always' : 'demand'}
-        camera={{ position: [0, 0, 5.4], fov: 40, near: 0.1, far: 100 }}
-        onCreated={() => {
-          // Signal the parent once the first frame has actually painted, so the
-          // static fallback can cross-fade out with no blank gap.
-          if (onReady) requestAnimationFrame(() => onReady())
-        }}
-      >
-        <Scene specs={specs} animate={animate} intensity={clampedIntensity} />
-      </Canvas>
+      <HelioCanvas
+        size={size}
+        motes={motes}
+        intensity={clampedIntensity}
+        animate={animate}
+        onReady={onReady}
+      />
     </div>
   )
 }

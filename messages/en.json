@@ -102,6 +102,8 @@
   "Explore": {
     "title": "Where the pool works",
     "sub": "Every project the pool funds, with oracle-verified scores. Explore freely — connecting a wallet comes later.",
+    "searchLabel": "Search projects",
+    "searchPlaceholder": "Search by name or location",
     "filterAll": "All",
     "countSorted": "{count} projects",
     "cardFundedFromPool": "Funded from the pool",
@@ -173,6 +175,11 @@
     "impactBody": "Your stake helps fund <b>{count} verified projects</b> across 6 countries.",
     "projectsBacked": "Projects backed",
     "weightedGreen": "Weighted green score",
+    "riskScore": "Portfolio risk score",
+    "riskTierConservative": "Conservative",
+    "riskTierModerate": "Moderate",
+    "riskTierAggressive": "Aggressive",
+    "riskCaption": "Based on the mix of bond ratings in your holdings.",
     "activityTitle": "Activity",
     "activityNote": "every entry → Stellar Expert"
   },
@@ -192,6 +199,7 @@
     "pendingSub": "Usually ~5 seconds on Stellar. tx 4d2c…9af1 ↗",
     "successH1": "Withdrawal settled",
     "successBody": "<num>${amount} USDC</num> is on its way to your wallet. Thanks for being part of the pool.",
+    "transactionHashLabel": "transaction hash",
     "backToPortfolio": "Back to portfolio"
   },
   "Admin": {

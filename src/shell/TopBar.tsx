@@ -1,15 +1,19 @@
 'use client'
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Button, useToast } from '../components'
-import { Mark } from '../brand/Mark'
 import { useLocaleSwitcher } from '../i18n/LocaleProvider'
 import { LOCALE_LABELS, type Locale } from '../i18n/request'
 import { useWallet, shortAddress } from '../wallet/WalletProvider'
 import { useTheme } from '../theme/ThemeProvider'
+
+const Mark = dynamic(() => import('../brand/Mark').then((m) => m.Mark), {
+  ssr: false,
+})
 
 /**
  * TopBar — persistent nav rendered by the root layout. Analemma mark + Explore /
@@ -90,7 +94,7 @@ export function TopBar() {
         aria-label="Heliobond — home"
         style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}
       >
-        <Mark />
+        {mounted && pathname === '/' ? <Mark /> : null}
         <span
           style={{
             fontFamily: 'var(--font-display)',

@@ -243,3 +243,94 @@ function NumberInput({
     />
   )
 }
+
+const panelStyle: CSSProperties = {
+  background: 'var(--surface)',
+  border: '1px solid var(--ink-12)',
+  borderRadius: 'var(--radius-card)',
+  padding: 16,
+  boxShadow: 'var(--shadow-sm)',
+}
+
+const textInput: CSSProperties = {
+  minHeight: 40,
+  padding: '0 12px',
+  fontFamily: 'var(--font-data)',
+  fontSize: 'var(--type-small)',
+  fontFeatureSettings: '"tnum" 1',
+}
+
+const helpText: CSSProperties = {
+  margin: 0,
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-caption)',
+  lineHeight: 1.5,
+  color: 'var(--ink-60)',
+}
+
+const gridStyle: CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+  gap: 16,
+}
+
+const formRowStyle: CSSProperties = {
+  display: 'flex',
+  gap: 12,
+}
+
+const fieldGrowStyle: CSSProperties = {
+  flex: 1,
+}
+
+const inputGroupStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+}
+
+const dataCaptionStyle: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontSize: 'var(--type-caption)',
+  color: 'var(--ink-60)',
+}
+
+const warningBoxStyle: CSSProperties = {
+  marginTop: 10,
+  padding: '10px 14px',
+  background: 'var(--solar-12)',
+  border: '1px solid var(--solar-24)',
+  borderRadius: 'var(--radius-input)',
+}
+
+const warningTextStyle: CSSProperties = {
+  margin: 0,
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-small)',
+  color: 'var(--ink)',
+  fontWeight: 600,
+}
+
+const moneyStyle: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontFeatureSettings: '"tnum" 1',
+  color: 'var(--ink)',
+}
+
+const panelTitleStyle: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 700,
+  fontSize: 'var(--type-body)',
+  margin: 0,
+  color: 'var(--ink)',
+}
+
+const panelHeaderStyle: CSSProperties = {
+  marginBottom: 12,
+}
+
+const panelBodyStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--form-gap)',
+}

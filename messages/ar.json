@@ -103,6 +103,8 @@
     "title": "أين يعمل المجمع",
     "sub": "كل مشروع يموله المجمع، مع درجات مؤكدة من Oracle. استكشف بحرية — توصيل المحفظة يأتي لاحقاً.",
     "filterAll": "الكل",
+    "searchPlaceholder": "ابحث بالاسم أو الموقع",
+    "searchAriaLabel": "ابحث في المشاريع بالاسم أو الموقع",
     "countSorted": "{count} مشاريع",
     "cardFundedFromPool": "ممول من المجمع",
     "cardVerifiedAgo": "تم التحقق قبل {ago}",
@@ -192,6 +194,7 @@
     "pendingSub": "عادةً حوالي 5 ثوانٍ على Stellar. tx 4d2c…9af1 ↗",
     "successH1": "تم السحب",
     "successBody": "<num>${amount} USDC</num> في طريقها إلى محفظتك. شكراً لكونك جزءاً من المجمع.",
+    "transactionHashLabel": "هاش المعاملة",
     "backToPortfolio": "رجوع إلى المحفظة"
   },
   "Admin": {

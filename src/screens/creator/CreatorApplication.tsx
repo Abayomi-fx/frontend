@@ -128,7 +128,7 @@ export function CreatorApplication({
           />
         </FormField>
 
-        <div style={{ marginBottom: 18 }}>
+        <div style={{ marginBottom: 'var(--form-gap)' }}>
           <Label htmlFor="">Project type</Label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {PROJECT_TYPES.map((t) => (

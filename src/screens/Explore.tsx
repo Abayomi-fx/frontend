@@ -35,6 +35,7 @@ export function Explore({ onOpen }: ExploreProps) {
   const [filter, setFilter] = useState<ProjectType | 'All'>(
     urlType && ['Solar', 'Wind', 'Hydro'].includes(urlType) ? urlType : 'All',
   )
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     getProjects()
@@ -58,7 +59,11 @@ export function Explore({ onOpen }: ExploreProps) {
     }
   }
 
-  const shown = filter === 'All' ? projects : projects.filter((p) => p.type === filter)
+  const query = searchTerm.trim().toLowerCase()
+  const filteredByType = filter === 'All' ? projects : projects.filter((p) => p.type === filter)
+  const shown = filteredByType.filter((p) =>
+    p.name.toLowerCase().includes(query) || p.location.toLowerCase().includes(query),
+  )
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const paged = shown.slice(0, visibleCount)
   const remaining = shown.length - visibleCount
@@ -66,7 +71,7 @@ export function Explore({ onOpen }: ExploreProps) {
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE)
-  }, [filter, projects.length])
+  }, [filter, projects.length, searchTerm])
 
   return (
     <main id="main-content" style={{ maxWidth: 1320, margin: '0 auto', padding: '48px 32px 80px' }}>
@@ -124,7 +129,24 @@ export function Explore({ onOpen }: ExploreProps) {
           gap: 12,
         }}
       >
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <input
+            type="search"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder="Search by name or location"
+            aria-label="Search by name or location"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
+              color: 'var(--ink)',
+              background: 'var(--surface)',
+              border: '1px solid var(--ink-12)',
+              borderRadius: 'var(--radius-input)',
+              padding: '8px 12px',
+              minWidth: 200,
+            }}
+          />
           {TYPES.map((ty) => (
             <Tag key={ty} selected={filter === ty} onClick={() => setFilterAndUrl(ty)}>
               {ty === 'All' ? t('filterAll') : ty}

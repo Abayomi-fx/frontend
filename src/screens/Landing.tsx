@@ -1,9 +1,13 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock } from '../components'
-import { LiveHelio } from '../brand/LiveHelio'
 import { HB_DATA } from '../data'
+
+const LiveHelio = dynamic(() => import('../brand/LiveHelio').then((m) => m.LiveHelio), {
+  ssr: false,
+})
 
 /**
  * Landing — public hero. The live Helio dominates; three counters deep-link to
