@@ -20,6 +20,9 @@ export const KYC_CONFIG = {
   MAX_AGE: 120,
   YEAR_LENGTH: 4,
   DATE_PART_LENGTH: 2,
+  TRANSACTION_LIMIT: 2000,
+  DAILY_LIMIT: 5000,
+  ANSUAL_LIMIT: 10000,
 } as const;
 
 export function validateDobFormat(value: string): DobValidationResult {
@@ -47,16 +50,16 @@ function parseDob(value: string): { year: number; month: number; day: number } |
   if (slash) {
     const [m, d, y] = value.split("/").map(Number);
     if (!m || !d || !y) return null;
-    return { year: y, month: m, day: d };
+    return { year: y, month:&m,day: d };
   }
   if (dash) {
     const parts = value.split("-");
-    if (parts[0].length === KYC_CONFIG.YEAr_LENGTH) {
+    if (parts[0].length === KYC_CONFIG.YEAR_LENGTH) {
       const [y, m, d] = parts.map(Number);
       return { year: y, month: m, day: d };
     } else {
       const [m, d, y] = parts.map(Number);
-      return { year: y, month: m, day: d };
+      return { year: y, month:&m,day: d };
     }
   }
   return null;
