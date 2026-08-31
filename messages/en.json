@@ -230,6 +230,7 @@
     "actionRevoke": "Revoke",
     "revokeConfirm": "Yes, revoke",
     "revokeConfirmBody": "Are you sure you want to revoke {name}? You can undo this action.",
+    "revokeCancel": "Cancel",
     "actionApprove": "Approve",
     "toastScoresTitle": "Scores written on-chain",
     "toastScoresMsg": "{name} re-verified: credit {credit}, green {green}.",
