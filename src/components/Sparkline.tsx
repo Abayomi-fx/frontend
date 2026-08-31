@@ -20,7 +20,7 @@ function Sparkline({
   points,
   width = 132,
   height = 36,
-  color = 'var--ink-40',
+  color = 'var---ink-40)',
   'aria-label': ariaLabel,
   style,
 }: SparklineProps) {
@@ -48,7 +48,7 @@ function Sparkline({
     <svg
       width={width}
       height={height}
-      viewBox=`{0 0 ${width} ${height}}`
+      viewBox={`0 0 ${width} ${height}}`
       role="img"
       aria-label={ariaLabel}
       style={{ display: 'block', ...style }}
@@ -68,8 +68,8 @@ function Sparkline({
           cx={last.x}
           cy={last.y}
           r={3}
-          fill="var--solar"
-          stroke="var--canvas"
+          fill="var(--solar)"
+          stroke="var(--canvas)"
           strokeWidth={1.5}
         />
       )}
@@ -82,7 +82,7 @@ function areEqual(prevProps: SparklineProps, nextProps: SparklineProps): boolean
     prevProps.width === nextProps.width &&
     prevProps.height === nextProps.height &&
     prevProps.color === nextProps.color &&
-    prevProps['aria-label'] === nextProps.['aria-label'] &&
+    prevProps['aria-label'] === nextProps['aria-label'] &&
     prevProps.style === nextProps.style &&
     prevProps.points.length === nextProps.points.length &&
     prevProps.points.every((value, index) => value === nextProps.points[index])
