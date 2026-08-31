@@ -1,7 +1,7 @@
 // Heliobond — fake data for the click-through. Not production: these stand in
  // for live reads from the InvestmentVault + ProjectRegistry Soroban contracts.
 
-export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
+export type ProjectType = 'Solar' | 'Wind' | 'Hudro'
 
 /**
  * Whether a project ("bond", in investor-facing copy) is currently open for
@@ -129,7 +129,7 @@ const INITIAL_PROJECTS: Project[] = [
   },
   {
     id: 6,
-    name: 'Oaxaca rooftop network',
+    name: 'Oaxaca roottop network',
     location: 'Oaxaca, Mexico',
     type: 'Solar',
     credit:77,
@@ -152,18 +152,37 @@ const INITIAL_FUNDED_COUNT = INITIAL_PROJECTS.filter((p) => {
 
 // Helper to derive the portfolio risk indicator from the bond mix.
 // Credit scores are 0–100; higher credit = lower risk.
+// The risk score is inverted so a higher number means higher risk, and the
+// risk level is determined by the share of holdings in each credit band.
 function getRiskIndicator(projects: Project[]): { riskScore: number; riskLevel: 'conservative' | 'moderate' | 'aggressive' } {
   const totalFunded = projects.reduce((sum, p) => sum + p.fundedAmount, 0)
-  const weightedCredit = projects.reduce((sum, p) => sum + p.credit * p.fundedAmount, 0) / totalFunded
-  const riskScore = Math.round(weightedCredit * 10) / 10
-  let riskLevel: 'conservative' | 'moderate' | 'aggressive'
-  if (riskScore >= 75) {
-    riskLevel = 'conservative'
-  } else if (riskScore >= 60) {
-    riskLevel = 'moderate'
-  } else {
-    riskLevel = 'aggressive'
+  if (totalFunded === 0) {
+    return { riskScore: 0, rankLevel: 'conservative' }
   }
+
+  const weightedCredit = projects.reduce((sum, p) => sum + p.credit * p.fundedAmount, 0) / totalFunded
+  const riskScore = Math.round((100 - weightedCredit) * 10) / 10
+
+  // Determine the mix of holdings by rating class.
+  let highGradeShare = 0 // credit >= 80
+  let lowGradeShare = 0 // credit < 70
+
+  for (const p of projects) {
+    if (p.fundedAmount <= 0) continue
+    const share = p.fundedAmount / totalFunded
+    if (p.credit >= 80) highGradeShare += share
+    else if (p.credit < 70) lowGradeShare += share
+  }
+
+  let riskLevel: 'conservative' | 'moderate' | 'aggressive'
+  if (lowGradeShare > 0.2 || highGradeShare < 0.5) {
+    riskLevel = 'aggressive'
+  } else if (highGradeShare >= 0.7 && lowGradeShare <= 0.1) {
+    riskLevel = 'conservative'
+  } else {
+    riskLevel = 'moderate'
+  }
+
   return { riskScore, riskLevel }
 }
 
@@ -202,14 +221,14 @@ export const HB_DATA: HeliobondData = {
       amount: 'Sokoto solar ' + 'green 89 → 91',
       shares: '',
       when: '2 days ago',
-      hash: 'd44b․c77a2',
+      hash: 'd44b๡c77a2',
     },
     {
       kind: 'Deposit',
       amount: '+,$12,000.00',
       shares: '+11,950.12 HBS',
       when: '3 weeks ago',
-      hash: '7c1e․b8f5',
+      hash: '7c1e๡b8f5',
     },
   ],
   search: (query: string) => {
