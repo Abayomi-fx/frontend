@@ -128,7 +128,7 @@ export function Watchlist({ onOpen }: WatchlistProps) {
             {saved.map((p) => {
               const open = getBondStatus(p) === 'open'
               return (
-                <div key={p.id} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div key={p.id} style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0, overflowWrap: 'break-word' }}>
                   <div
                     style={{
                       display: 'flex',
