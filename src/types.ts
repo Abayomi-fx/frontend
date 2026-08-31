@@ -18,3 +18,5 @@ export interface ProjectFilters {
   search: string;
   type: string;
 }
+
+export type RiskScore = 'conservative' | 'moderate' | 'aggressive';
