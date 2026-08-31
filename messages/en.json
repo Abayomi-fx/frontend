@@ -189,6 +189,7 @@
   "Referral": {
     "title": "Referral program",
     "shareLink": "Share your referral link",
+    "yourReferralLink": "Your referral link",
     "copyLink": "Copy referral link",
     "copied": "Copied"
   },
