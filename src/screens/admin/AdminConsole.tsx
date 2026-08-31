@@ -69,7 +69,8 @@ export function AdminConsole() {
     status: Creator['status'],
     rejectionReason?: string,
   ) => {
-    if (status !== 'approved') {
+    // Revoking a creator is consequential: confirm first, then offer undo.
+    if (status === 'pending' || status === 'rejected') {
       const c = whitelist.find((x) => x.address === address)
       if (!window.confirm(`${t('actionRevoke')} ${c?.name ?? 'Creator'}?`)) return
     }
