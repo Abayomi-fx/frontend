@@ -2,7 +2,8 @@
   "Common": {
     "copyAddress": "Copy {label}",
     "copied": "Copied",
-    "viewOnExplorer": "View {label} on Stellar Expert"
+    "viewOnExplorer": "View {label} on Stellar Expert",
+    "referralProgramShareLink": "Enlace para compartir el programa de referidos"
   },
   "Nav": {
     "explore": "Explore",
