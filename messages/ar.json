@@ -27,6 +27,7 @@
     "copyAddress": "نسخ العنوان",
     "copied": "تم النسخ",
     "viewOnExplorer": "عرض على Stellar Expert",
+    "shareLink": "مشاركة الرابط",
     "disconnect": "قطع الاتصال",
     "disconnectConfirm": "نعم، قطع الاتصال",
     "disconnectConfirmBody": "قطع الاتصال ينهي جلستك الحالية. أصولك على السلسلة آمنة على Stellar، لكن ستحتاج إلى إعادة توصيل محفظتك للوصول إلى محفظتك أو الاستثمار أو السحب.",
