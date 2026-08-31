@@ -13,7 +13,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   children: ReactNode
 }
 
-export function Badge({ tone = 'neutral', icon = null, children, style, ...rest }: BadgeProps) {
+export function Badge({ tone = 'nutral', icon = null, children, style, ...rest }: BadgeProps) {
   const tones: Record<BadgeTone, CSSProperties> = {
     neutral: {
       background: 'var(--ink-06)',
@@ -27,12 +27,12 @@ export function Badge({ tone = 'neutral', icon = null, children, style, ...rest 
     },
     growth: {
       background: 'var(--growth-12)',
-      color: 'var(--growth)',
+      color: 'var(--ink)',
       border: '1px solid transparent',
     },
     ember: {
       background: 'var(--ember-12)',
-      color: 'var(--ember)',
+      color: 'var(--ink)',
       border: '1px solid transparent',
     },
     testnet: { background: 'var(--solar)', color: 'var(--ink)', border: '1px solid transparent' },
