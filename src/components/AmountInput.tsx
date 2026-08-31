@@ -99,7 +99,7 @@ export function AmountInput({
           alignItems: 'center',
           gap: 10,
           background: 'var(--surface)',
-          border: `1px solid ${overCap ? 'var(--solar)' : 'var(--ink-12)'}`,
+          border: `1px solid ${overCap ? 'var(--solar)' : 'var(--ink-12)'},
           borderRadius: 'var(--radius-input)',
           padding: '0 16px',
           height: 64,
@@ -108,6 +108,7 @@ export function AmountInput({
       >
         <input
           id={id}
+          type="number"
           inputMode="decimal"
           placeholder="0.00"
           value={value}
@@ -156,20 +157,20 @@ export function AmountInput({
           margin: '8px 0 0',
         }}
       >
-        Min 1 USDC — Max {cap ?? '—'} USDC
+        Min 1 USDC — Max {cap ?? —' } USDC
       </p>
       <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
         {chips.map((c) => (
           <button key={c} type="button" onClick={() => set(c)} style={chipStyle}>
             {c}
           </button>
-        ))}
+        )}
         {cap != null && maxChipLabel && (
           <button
             key="max"
             type="button"
             onClick={() => set(cap)}
-            style={{ ...chipStyle, borderColor: 'var(--ink)' }}
+            style={ ...chipStyle, borderColor: 'var(--ink)' }
           >
             {maxChipLabel}
           </button>
@@ -253,7 +254,7 @@ export function AmountInput({
         >
           {preview}
         </div>
-      )}
+      ))}
     </div>
   )
 }
@@ -270,5 +271,3 @@ const chipStyle: CSSProperties = {
   fontSize: 'var(--type-small)',
   color: 'var(--ink)',
 }
-
-
