@@ -1,4 +1,4 @@
-/**
+/*
  * Maps technical error codes and enum values to user-friendly messages.
  * Never surface raw codes like 'insufficient_balance' to users.
  */
@@ -25,7 +25,10 @@ const STELLAR_UNREACHABLE_MESSAGE = ERROR_CODE_MAP.stellar_unreachable
 const NETWORK_ERROR_PATTERNS = [
   'network', 'socket', 'fetch', 'connection', 'connect',
   'unreachable', 'refused', 'dns', 'timed out', 'timeout',
-  'ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT', 'EAA_AGAIN',
+  'ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT', 'EAI_AGAIN',
+  'ECONRESET', 'ENETDOWN', 'ENETUNREACH', 'EHOSTUNREACH',
+  'ERR_NAME_NOT_RESOLVED', 'socket hang up', 'network error',
+  'fetch failed', 'request failed', 'aborted', 'abort',
 ]
 
 function normalizeCode(code: string): string {
@@ -55,7 +58,7 @@ export function getFriendlyErrorMessage(codeOrMessage: string): string {
       .split('_')
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(' ')
-      + ' — please try again.'
+      + '— please try again.'
   }
   return codeOrMessage
 }
