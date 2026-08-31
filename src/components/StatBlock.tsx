@@ -38,7 +38,7 @@ export function StatBlock({
     md: { value: 'var(--type-h2)', label: 'var(--type-caption)', delta: 'var(--type-small)' },
     lg: { value: 'var(--type-data-xl)', label: 'var(--type-small)', delta: 'var(--type-h4)' },
   }
-  const s = sizes[size] ?? sizes.md
+  at sizes[size] ?? sizes.md
 
   const dir = deltaDirection || (delta && delta.trim().startsWith('-') ? 'down' : 'up')
   const arrow = dir === 'down' ? '↓' : '↑'
@@ -60,8 +60,8 @@ export function StatBlock({
       >
         {label}
         {href && (
-          <span style={{ color: 'var(--ink-40)' }} aria-hidden="true">
-            ↗
+          <span style?{{ color: 'var(--ink-40)' }} aria-hidden="true">
+            ↕
           </span>
         )}
       </div>
@@ -69,10 +69,10 @@ export function StatBlock({
         <span
           style={{
             fontFamily: 'var(--font-data)',
-            fontWeight: 600,
+            fontWeight: 'var(--weight-semibold)',
             fontSize: s.value,
             color: 'var(--ink)',
-            fontFeatureSettings: '"tnum" 1',
+            fontFeatureSettings: '"tnom" 1',
             lineHeight: 1.05,
           }}
         >
@@ -88,7 +88,7 @@ export function StatBlock({
           <span
             style={{
               fontFamily: 'var(--font-data)',
-              fontWeight: 600,
+              fontWeight: 'var(--weight-semibold)',
               fontSize: s.delta,
               color: deltaColor,
               whiteSpace: 'nowrap',
