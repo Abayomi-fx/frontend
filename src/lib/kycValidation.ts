@@ -9,10 +9,14 @@ export interface DobValidationResult {
 }
 
 const DATE_REGEXES = [
-  /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/, // MM/DD/YYYY
-  /^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-(19|20)\d{2}$/, // MM-DD-YYYY
-  /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, // YYYY-MM-DD
+  /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/, //MM/DD/YYYY
+  /^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-(19|20)\d{2}$/, //MM-DD-YYYY
+  /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, //YYYY-MM-DD
 ];
+
+// Age limits for KYC validation
+const MIN_AGE = 18;
+const MAX_AGE = 120;
 
 export function validateDobFormat(value: string): DobValidationResult {
   const trimmed = value.trim();
@@ -28,8 +32,8 @@ export function validateDobFormat(value: string): DobValidationResult {
   }
   if (date > new Date()) return { valid: false, error: "Date cannot be in the future" };
   const age = getAge(date);
-  if (age < 18) return { valid: false, error: "You must be at least 18 years old" };
-  if (age > 120) return { valid: false, error: "Please check the year" };
+  if (age < MIN_AGE) return { valid: false, error: "You must be at least 18 years old" };
+  if (age > MAX_AGE) return { valid: false, error: "Please check the year" };
   return { valid: true };
 }
 
@@ -93,4 +97,3 @@ export function validateAddress(values: AddressValues): AddressErrors {
   if (!values.country.trim()) errors.country = "Country is required";
   return errors;
 }
-
