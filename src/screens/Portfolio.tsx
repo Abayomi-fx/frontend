@@ -205,7 +205,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
                 borderTop: i ? '1px solid var--ink-12' : 'none',
               }
             >
-              <div>
+              <div style={{ minWidth: 0 }}>
                 <div
                   style={
                     fontFamily: 'var--font-body',
