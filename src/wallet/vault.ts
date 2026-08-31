@@ -15,11 +15,19 @@ import { HB_DATA } from '../data'
 
 export interface WithdrawPreview {
   assets: number
-  sharePrice: number
+  sharePrice: string
   networkFee: number
 }
 /** total_assets / total_supply. Constant in the mock; a live read on-chain. */
 export const SHARE_PRICE = HB_DATA.pool.sharePrice
+
+/** Number of decimal places used when formatting share prices. */
+export const SHARE_PRICE_DECIMALS = 7
+
+/** Formats a share price with consistent precision across all screens. */
+export function formatSharePrice(sharePrice: number): string {
+  return sharePrice.toFixed(SHARE_PRICE_DECIMALS)
+}
 
 /** Simulated pending delay for deposit transactions in demo mode. */
 export const SIMULATED_DEPOSIT_DELAY_MS = 2000
@@ -29,13 +37,13 @@ export const SIMULATED_WITHDRAW_DELAY_MS = 2000
 
 export interface DepositPreview {
   shares: number
-  sharePrice: number
+  sharePrice: string
   /** USDC; sub-cent on Stellar. */
   networkFee: number
 }
 
 export const vault = {
-  sharePrice: () => SHARE_PRICE,
+  sharePrice: () => formatSharePrice(SHARE_PRICE),
 
   /** convert_to_shares(usdc) — what you receive for a deposit. */
   convertToShares: (usdc: number): number => usdc / SHARE_PRICE,
@@ -45,13 +53,13 @@ export const vault = {
 
   previewDeposit: (usdc: number): DepositPreview => ({
     shares: usdc / SHARE_PRICE,
-    sharePrice: SHARE_PRICE,
+    sharePrice: formatSharePrice(SHARE_PRICE),
     networkFee: 0.00001,
   }),
 
   previewWithdraw: (usdc: number): WithdrawPreview => ({
     assets: usdc,
-    sharePrice: SHARE_PRICE,
+    sharePrice: formatSharePrice(SHARE_PRICE),
     networkFee: 0.00001,
   }),
 }
@@ -98,11 +106,11 @@ async function sorobanSimulate(sourceAddress: string, method: string, args: unkn
  * Throws when NEXT_PUBLIC_VAULT_CONTRACT_ID is not set — callers should catch
  * and fall back to the mock value.
  */
-export async function fetchSharePrice(sourceAddress: string): Promise<number> {
+export async function fetchSharePrice(sourceAddress: string): Promise<string> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
   const { scValToNative } = await import('@stellar/stellar-sdk')
   const retval = await sorobanSimulate(sourceAddress, 'share_price')
-  return Number(scValToNative(retval))
+  return formatSharePrice(Number(scValToNative(retval)) / 10 ** SHARE_PRICE_DECIMALS)
 }
 
 /**
