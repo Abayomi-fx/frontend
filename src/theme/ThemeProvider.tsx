@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode from 'react'
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 
 export type Theme = 'light' | 'dark'
 
@@ -111,8 +111,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    >
-      <style>{`::root { --primary-button-color: #007FFF; } [data-theme='dark'] { --primary-button-color: #0066DD; }`}</style>
+    <>
+      <style>{`:root { --primary-button-color: #007FFF; } [data-theme='dark'] { --primary-button-color: #0066DD; }`}</style>
       <ThemeContext.Provider value={{ theme, toggle, setTheme }}>{children}</ThemeContext.Provider>
     </>
   )
