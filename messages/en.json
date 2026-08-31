@@ -186,6 +186,12 @@
     "activityTitle": "Activity",
     "activityNote": "every entry → Stellar Expert"
   },
+  "Referral": {
+    "title": "Referral program",
+    "shareLink": "Share your referral link",
+    "copyLink": "Copy referral link",
+    "copied": "Copied"
+  },
   "Withdraw": {
     "h1": "Withdraw from the pool",
     "amountLabel": "Amount",
