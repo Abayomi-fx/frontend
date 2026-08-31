@@ -1,6 +1,6 @@
-import { type CSSProperties } from 'react'
+import { memo, type CSSProperties } from 'react'
 
-/**
+ /**
  * Heliobond Sparkline — a tiny presentational trend line. The path is drawn in
  * ink (it reads as the data, not decoration); only the last point gets a solar
  * dot, marking "now" — so the accent is a single highlight, never the line
@@ -16,7 +16,7 @@ export interface SparklineProps {
   style?: CSSProperties
 }
 
-export function Sparkline({
+function Sparkline({
   points,
   width = 132,
   height = 36,
@@ -77,4 +77,7 @@ export function Sparkline({
   )
 }
 
-export default Sparkline
+const MemoizedSparkline = memo(Sparkline)
+
+export { MemoizedSparkline as Sparkline }
+export default MemoizedSparkline
