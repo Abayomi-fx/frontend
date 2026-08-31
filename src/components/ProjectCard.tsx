@@ -94,7 +94,7 @@ export function ProjectCard({
             border: '1px solid var(--ink-12)',
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--type-caption)',
-            fontWeight: 600,
+            fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--ink)',
           }}
         >
@@ -106,7 +106,7 @@ export function ProjectCard({
         <h3
           style={{
             fontFamily: 'var(--font-display)',
-            fontWeight: 700,
+            fontWeight: 'var(--font-weight-semibold)',
             fontSize: 'var(--type-h4)',
             lineHeight: 1.2,
             margin: '0 0 14px',
@@ -144,7 +144,7 @@ export function ProjectCard({
             <div
               style={{
                 fontFamily: 'var(--font-data)',
-                fontWeight: 600,
+                fontWeight: 'var(--font-weight-semibold)',
                 fontSize: 'var(--type-body-lg)',
                 color: 'var(--ink)',
               }}
@@ -178,7 +178,7 @@ export function ProjectCard({
                     marginTop: 4,
                   }}
                 >
-                  {fundedPct}% of {formatMoney(fundingGoal!)}
+                  {fundedPct}% of {formatMoney(fundingGoal!})
                 </div>
               </div>
             )}
@@ -192,7 +192,7 @@ export function ProjectCard({
                 whiteSpace: 'nowrap',
               }}
             >
-              {resolvedVerifiedLabel} ↗
+              {resolvedVerifiedLabel} ↑
             </span>
           )}
         </div>
