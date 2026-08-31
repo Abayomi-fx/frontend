@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode from 'react'
 
 export type Theme = 'light' | 'dark'
 
@@ -93,7 +93,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next)
     } catch {
-      /* private mode / storage disabled — theme just won't persist */
+      /* private mode / storage disabled -- theme just won't persist */
     }
   }, [])
 
@@ -111,6 +111,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>{children}</ThemeContext.Provider>
+    >
+      <style>{`::root { --primary-button-color: #007FFF; } [data-theme='dark'] { --primary-button-color: #0066DD; }`}</style>
+      <ThemeContext.Provider value={{ theme, toggle, setTheme }}>{children}</ThemeContext.Provider>
+    </>
   )
 }
