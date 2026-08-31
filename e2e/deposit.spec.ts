@@ -42,10 +42,12 @@ test.describe('Deposit flow — demo mode smoke test', () => {
     await expect(page.getByText('50.00 USDC')).toBeVisible()
 
     // Confirm the deposit.
-    await page.getByRole('button', { name: /confirm in wallet/i }).click()
-
-    // ── Step 3: Pending ───────────────────────────────────────────────────
-    await expect(page.getByRole('heading', { name: 'Confirming your deposit' })).toBeVisible()
+    // Use Promise.all to avoid a race condition where the 2s demo delay
+    // resolves before Playwright can assert the pending step.
+    await Promise.all([
+      expect(page.getByRole('heading', { name: 'Confirming your deposit' })).toBeVisible(),
+      page.getByRole('button', { name: /confirm in wallet/i }).click(),
+    ])
 
     // ── Step 4: Success ───────────────────────────────────────────────────
     // Demo mode resolves in ~2 s.
