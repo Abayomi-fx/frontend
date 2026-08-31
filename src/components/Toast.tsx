@@ -7,15 +7,9 @@ import {
   useCallback,
   type CSSProperties,
   type ReactNode,
-} from 'react'
+ } from 'react'
 import { CloseIcon } from './icons'
 
-/**
- * Heliobond Toast — enters and exits from the same edge, swipe-to-dismiss in
- * spirit. Tones use an ink/semantic label + icon, never color alone. State
- * changes that matter (preview, balance) belong in aria-live regions elsewhere;
- * this is for transient confirmations.
- */
 export type ToastTone = 'neutral' | 'success' | 'error' | 'solar'
 
 export interface ToastProps {
@@ -62,7 +56,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
           >
             {title}
           </div>
-        )}
+        }
         {message && (
           <div
             style={{
@@ -74,7 +68,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
           >
             {message}
           </div>
-        )}
+        }
         {action && <div style={{ marginTop: 10 }}>{action}</div>}
       </div>
     </>
@@ -114,7 +108,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
         </a>
       ) : (
         inner
-      )}
+      )
       {onDismiss && (
         <button
           type="button"
@@ -136,7 +130,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, hre
         >
           <CloseIcon />
         </button>
-      )}
+      )
     </div>
   )
 }
@@ -149,11 +143,11 @@ export interface ToastContextType {
 const ToastContext = createContext<ToastContextType | null>(null)
 
 const MAX_ACTIVE_TOASTS = 3
+const DEFAULT_TOAST_DURATION = 5000
+const MIN_SUCCESS_TOAST_DURATION = 7000
 
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [activeToasts, setActiveToasts] = useState<
-    (ToastProps & { id: string; duration?: number })[]
-  >([])
+  const [activeToasts, setActiveToasts] = useState<(ToastProps & { id: string; duration?: number })[]>([])
 
   const showToast = useCallback(
     (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
@@ -163,7 +157,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         return next.length > MAX_ACTIVE_TOASTS ? next.slice(next.length - MAX_ACTIVE_TOASTS) : next
       })
 
-      const ms = options.duration ?? 5000
+      const ms = Math.max(
+        options.duration ?? DEFAULT_TOAST_DURATION,
+        options.tone === 'success' ? MIN_SUCCESS_TOAST_DURATION : 0,
+      )
       if (ms > 0) {
         setTimeout(() => {
           setActiveToasts((prev) => prev.filter((t) => t.id !== id))
@@ -213,7 +210,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             />
           ))}
         </div>
-      )}
+      )
     </ToastContext.Provider>
   )
 }
