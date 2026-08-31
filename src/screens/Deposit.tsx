@@ -449,9 +449,7 @@ export function Deposit({ onDone }: DepositProps) {
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
               <a
-                href={txHash ? `https://stellar.expert/explorer/testnet/tx/${txHash}` : undefined}
-                target="_blank"
-                rel="noreferrer"
+                href={txHash ? `/investments/${txHash}` : undefined}
                 style={{
                   flex: 1,
                   display: 'inline-flex',
@@ -469,7 +467,7 @@ export function Deposit({ onDone }: DepositProps) {
                   cursor: 'pointer',
                 }}
               >
-                {t('viewExpert')}
+                View investment
               </a>
               <Button variant="primary" style={{ flex: 1 }} onClick={onDone}>
                 {t('goPortfolio')}
