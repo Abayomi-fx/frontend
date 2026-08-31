@@ -61,8 +61,13 @@ export const vault = {
 // ---------------------------------------------------------------------------
 
 const CONTRACT_ID = process.env.NEXT_PUBLIC_VAULT_CONTRACT_ID
-const RPC_URL = process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ?? 'https://soroban-testnet.stellar.org'
-const HORIZON_URL = 'https://horizon-testnet.stellar.org'
+const STELLAR_NETWORK = process.env.NEXT_PUBLIC_STELLAR_NETWORK ?? 'testnet'
+const RPC_URL =
+  process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ??
+  (STELLAR_NETWORK === 'public' ? 'https://soroban.stellar.org' : 'https://soroban-testnet.stellar.org')
+const HORIZON_URL =
+  process.env.NEXT_PUBLIC_HORIZON_URL ??
+  (STELLAR_NETWORK === 'public' ? 'https://horizon.stellar.org' : 'https://horizon-testnet.stellar.org')
 
 /** Call a Soroban view function (no state mutation) and return the raw ScVal. */
 async function sorobanSimulate(sourceAddress: string, method: string, args: unknown[] = []) {
@@ -74,8 +79,9 @@ async function sorobanSimulate(sourceAddress: string, method: string, args: unkn
   // Sequence '0' is fine for simulation — only the address format matters.
   const source = new Account(sourceAddress, '0')
   const scArgs = args.map((a) => nativeToScVal(a))
+  const networkPassphrase = STELLAR_NETWORK === 'public' ? Networks.PUBLIC : Networks.TESTNET
 
-  const tx = new TransactionBuilder(source, { fee: '100', networkPassphrase: Networks.TESTNET })
+  const tx = new TransactionBuilder(source, { fee: '100', networkPassphrase })
     .addOperation(contract.call(method, ...scArgs))
     .setTimeout(0)
     .build()
@@ -181,8 +187,9 @@ export async function submitDeposit(
   // The contract expects the raw integer amount scaled by 10^7.
   const amountScVal = nativeToScVal(BigInt(Math.round(amount * 1e7)), { type: 'i128' })
   const minSharesScVal = nativeToScVal(BigInt(0), { type: 'i128' })
+  const networkPassphrase = STELLAR_NETWORK === 'public' ? Networks.PUBLIC : Networks.TESTNET
 
-  const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase: Networks.TESTNET })
+  const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase })
     .addOperation(contract.call('deposit', amountScVal, minSharesScVal))
     .setTimeout(180)
     .build()
@@ -192,7 +199,7 @@ export async function submitDeposit(
 
   const assembled = rpc.assembleTransaction(tx, simResult).build()
   const signedXdr = await sign(assembled.toXDR())
-  const signedTx = new Transaction(signedXdr, Networks.TESTNET)
+  const signedTx = new Transaction(signedXdr, networkPassphrase)
 
   const sendResult = await server.sendTransaction(signedTx)
   if (sendResult.status === 'ERROR')
@@ -247,8 +254,9 @@ export async function submitWithdraw(
   const account = await horizon.loadAccount(address)
   const sharesScVal = nativeToScVal(BigInt(Math.round(amount * 1e7)), { type: 'i128' })
   const minAssetsScVal = nativeToScVal(BigInt(0), { type: 'i128' })
+  const networkPassphrase = STELLAR_NETWORK === 'public' ? Networks.PUBLIC : Networks.TESTNET
 
-  const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase: Networks.TESTNET })
+  const tx = new TransactionBuilder(account, { fee: '100', networkPassphrase })
     .addOperation(contract.call('withdraw', sharesScVal, minAssetsScVal))
     .setTimeout(180)
     .build()
@@ -258,7 +266,7 @@ export async function submitWithdraw(
 
   const assembled = rpc.assembleTransaction(tx, simResult).build()
   const signedXdr = await sign(assembled.toXDR())
-  const signedTx = new Transaction(signedXdr, Networks.TESTNET)
+  const signedTx = new Transaction(signedXdr, networkPassphrase)
 
   const sendResult = await server.sendTransaction(signedTx)
   if (sendResult.status === 'ERROR')
