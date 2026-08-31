@@ -11,7 +11,7 @@ import {
 import { CloseIcon } from './icons'
 
 /**
- * Heliobond Toast — enters and exits from the same edge, swipe-to-dismiss in
+ * Heliobond Toast -- enters and exits from the same edge, swipe-to-dismiss in
  * spirit. Tones use an ink/semantic label + icon, never color alone. State
  * changes that matter (preview, balance) belong in aria-live regions elsewhere;
  * this is for transient confirmations.
@@ -24,10 +24,11 @@ export interface ToastProps {
   message?: string
   action?: ReactNode
   onDismiss?: () => void
+  href?: string
   style?: CSSProperties
 }
 
-export function Toast({ tone = 'neutral', title, message, action, onDismiss, style }: ToastProps) {
+export function Toast({ tone = 'neutral', title, message, action, onDismiss, href, style }: ToastProps) {
   const accents: Record<ToastTone, string> = {
     neutral: 'var(--ink)',
     success: 'var(--growth)',
@@ -35,6 +36,49 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, sty
     solar: 'var(--solar)',
   }
   const accent = accents[tone] || accents.neutral
+
+  const inner = (
+    >
+      <span
+        style={{
+          width: 4,
+          alignSelf: 'stretch',
+          borderRadius: 'var(--radius-pill)',
+          background: accent,
+          flex: '0 0 auto',
+        }}
+        aria-hidden="true"
+      />
+      <div style={ flex: 1, minWidth: 0 }>
+        {title && (
+          <div
+            style={
+              fontFamily: 'var(--font-body)',
+              fontWeight: 600,
+              fontSize: 'var(--type-data)',
+              color: 'var(--ink)',
+              marginBottom: message ? 2 : 0,
+            }
+          >
+            {title}
+          </div>
+        )}
+        {message && (
+          <div
+            style={
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
+              lineHeight: 1.45,
+              color: 'var(--ink-60)',
+            }
+          >
+            {message}
+          </div>
+        )}
+        {action && <div style={{ marginTop: 10 }}>{action}</div>}
+      </div>
+    </>
+  )
 
   return (
     <div
@@ -53,50 +97,30 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, sty
         ...style,
       }}
     >
-      <span
-        style={{
-          width: 4,
-          alignSelf: 'stretch',
-          borderRadius: 'var(--radius-pill)',
-          background: accent,
-          flex: '0 0 auto',
-        }}
-        aria-hidden="true"
-      />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        {title && (
-          <div
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 600,
-              fontSize: 'var(--type-data)',
-              color: 'var(--ink)',
-              marginBottom: message ? 2 : 0,
-            }}
-          >
-            {title}
-          </div>
-        )}
-        {message && (
-          <div
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-small)',
-              lineHeight: 1.45,
-              color: 'var(--ink-60)',
-            }}
-          >
-            {message}
-          </div>
-        )}
-        {action && <div style={{ marginTop: 10 }}>{action}</div>}
-      </div>
+      {href ? (
+        <a
+          href={href}
+          style={
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 12,
+            flex: 1,
+            minWidth: 0,
+            textDecoration: 'none',
+            color: 'inherit',
+          }
+        >
+          {inner}
+        </a>
+      ) : (
+        inner
+      )}
       {onDismiss && (
         <button
           type="button"
           aria-label="Dismiss"
           onClick={onDismiss}
-          style={{
+          style={
             flex: '0 0 auto',
             width: 28,
             height: 28,
@@ -108,7 +132,7 @@ export function Toast({ tone = 'neutral', title, message, action, onDismiss, sty
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-          }}
+          }
         >
           <CloseIcon />
         </button>
@@ -137,7 +161,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       const ms = options.duration ?? 5000
       if (ms > 0) {
         setTimeout(() => {
-          setActiveToasts((prev) => prev.filter((t) => t.id !== id))
+          setActiveToasts(prev => prev.filter((t) => t.id !== id))
         }, ms)
       }
     },
@@ -160,7 +184,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           role="status"
           aria-live="polite"
           aria-atomic="true"
-          style={{
+          style={
             position: 'fixed',
             insetInlineEnd: 24,
             bottom: 24,
@@ -169,7 +193,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             flexDirection: 'column',
             gap: 12,
             alignItems: 'flex-end',
-          }}
+          }
         >
           {activeToasts.map((activeToast) => (
             <Toast
@@ -178,6 +202,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               title={activeToast.title}
               message={activeToast.message}
               action={activeToast.action}
+              href={activeToast.href}
               onDismiss={() => dismiss(activeToast.id)}
               style={activeToast.style}
             />
