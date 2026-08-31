@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from 'react'
+import {useState, type CSSProperties, type ReactNode } from 'react'
 import { ScoreGauge } from './ScoreGauge'
 import { PinIcon } from './icons'
 import { formatMoney } from '../lib/format'
@@ -51,8 +51,8 @@ export function ProjectCard({
 
   return (
     <article
-      onMouseEnter={() setHover(true)}
-      onMouseLeave={() setHover(false)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       onClick={onOpen}
       style={{
         background: 'var(--surface)',
@@ -64,6 +64,7 @@ export function ProjectCard({
         transform: hover && onOpen ? 'translateY(-2px)' : 'none',
         transition:
           'box-shadow var(--dur-modal) var(--ease-out), transform var(--dur-modal) var(--ease-out)',
+        minWidth: 0,
         ...style,
       }}
     >
@@ -94,7 +95,7 @@ export function ProjectCard({
             border: '1px solid var(--ink-12)',
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--type-caption)',
-            fontWeight: 'var(--font-weight-semibold)',
+            fontWeight: 'var(--font-weight-semibold',
             color: 'var(--ink)',
           }}
         >
