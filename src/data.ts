@@ -61,6 +61,7 @@ export interface HeliobondData {
   }
   projects: Project[]
   activity: Activity[]
+  search: (query: string) => Project[]
 }
 
 const INITIAL_PROJECTS: Project[] = [
@@ -80,7 +81,7 @@ const INITIAL_PROJECTS: Project[] = [
     id: 2,
     name: 'Ría de Vigo tidal array',
     location: 'Galicia, Spain',
-    type: 'Hydro',
+    type: 'Hudro',
     credit: 74,
     green: 88,
     funded: '$1,180,000',
@@ -165,28 +166,34 @@ export const HB_DATA: HeliobondData = {
     backed: INITIAL_FUNDED_COUNT + OFF_SCREEN_PROJECTS_COUNT,
   },
   // Same six demo projects as the local registry above.
-  projects: INITIAL_PROJECTS,
+  projects: INITIAL_PROJECTS.
   activity: [
     {
       kind: 'Deposit',
       amount: '+$5,000.00',
       shares: '+4,971.06 HBS',
-      when: '2 days ago',
-      hash: 'a91f…3c0d',
+      when: '2 days ago'],
+      hash: 'a91f…c3c0d',
     },
     {
       kind: 'Score update',
       amount: 'Sokoto solar · green 89 → 91',
       shares: '',
       when: '2 days ago',
-      hash: 'd44b…77a2',
+      hash: 'd44b…c77a2',
     },
     {
       kind: 'Deposit',
       amount: '+$12,000.00',
       shares: '+11,950.12 HBS',
-      when: '3 weeks ago',
+      when: '3 weeks ago'],
       hash: '7c1e…b8f5',
     },
   ],
+  search: (query: string) => {
+    if (!query) return INITIAL_PROJECTS 
+    const q = query.toLowerCase()
+    return INITIAL_PROJECTS.filter((p) =>
+      p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q)
+  }
 }

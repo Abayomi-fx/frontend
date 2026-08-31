@@ -102,6 +102,8 @@
     "title": "أين يعمل المجمع",
     "sub": "كل مشروع يموله المجمع، مع درجات مؤكدة من Oracle. استكشف بحرية — توصيل المحفظة يأتي لاحقاً.",
     "filterAll": "الكل",
+    "searchPlaceholder": "ابحث بالاسم أو الموقع",
+    "searchAriaLabel": "ابحث في المشاريع بالاسم أو الموقع",
     "countSorted": "{count} مشاريع",
     "cardFundedFromPool": "ممول من المجمع",
     "cardVerifiedAgo": "تم التحقق قبل {ago}",
