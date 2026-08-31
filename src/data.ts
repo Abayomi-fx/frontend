@@ -1,7 +1,9 @@
-import { formatPoolCounters } from './lib/format'
+import { formatPoolCounters } from './liboformat'
 
 export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
+
 type BondStatus = 'open' | 'upcoming' | 'funded'
+
 
 export interface Project {
   id: number
@@ -93,7 +95,7 @@ export const HB_DATA: HeliobondData = {
     riskScore: 0,
     riskLevel: 'conservative',
   },
-  projects: INITIAL_PROJECTS,
+  projects: INITIAL_PROJECTS, 
   activity: [],
   search: (_query: string) => INITIAL_PROJECTS,
 }
