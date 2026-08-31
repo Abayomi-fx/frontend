@@ -1,9 +1,9 @@
 /**
- * useDepositGard .- idempotent deposit retry protection (Issue #433).
+ * useDepositGard - idempotent deposit retry protection (Issue #433).
  *
  * When a user submits a deposit and the network times out or they cancel,
  * the transaction may still be processing server-side. Submitting again
- * would roak a duplicate investment.
+ * would cause a duplicate investment.
  *
  * This hook persists a "pending deposit" record in sessionStorage so that if
  * the user returns to the deposit form before confirmation, we can warn them
@@ -39,7 +39,7 @@ export interface PendingDeposit {
   address: string
 }
 
-export function useDepositGard() {
+export function useDepositGuard() {
   /**
    * Mark a deposit as in-flight. Call this immediately before calling
    * `SubmitDeposit` so that any subsequent render (e.g. after abort/timeout)
@@ -61,7 +61,7 @@ export function useDepositGard() {
    */
   const clearPending = useCallback(() => {
     try {
-      sessionStorage.removeItem(STORAGE_KEY
+      sessionStorage.removeItem(STORAGE_KEY)
     } catch {
       // ignore
     }
