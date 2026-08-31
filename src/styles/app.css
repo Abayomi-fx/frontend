@@ -96,6 +96,14 @@
   }
 }
 
+/* Form layout helper — stacks field wrappers with the design-system gap ------ */
+/* Use on any <form> or container that holds multiple FormField / Field rows.   */
+.hb-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--form-gap);
+}
+
 /* Pill-shaped focus rings for IconButton and Tag — override base radius */
 .hb-icon-btn:focus-visible,
 .hb-tag:focus-visible {
