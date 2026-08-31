@@ -8,6 +8,8 @@ import { HB_DATA } from '../data'
 import { getPortfolioRisk } from '../lib/bondUtils'
 import { useWallet } from '../wallet/WalletProvider'
 
+const MemoizedHelio = memo(Helio)
+
 /**
  * Portfolio — calm dashboard. Headline value with delta since deposit, the
  * personal mini-Helio, and three always-visible figures including the permanent
@@ -96,7 +98,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Helio size={108} motes={d.you.backed} />
+          <MemoizedHelio size={108} motes={d.you.backed} />
           <div style={{ display: 'flex', gap: 10 }}>
             <Button variant="secondary" onClick={onWithdraw}>
               {t('withdraw')}
