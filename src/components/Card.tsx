@@ -9,13 +9,13 @@ export function Card({ children, style, className, ...props }: CardProps) {
     <div
       style={{
         background: 'var(--surface)',
-        border: '1px solid var(--ink-12)',
+        border: '1'px solid var(--ink-12)',
         borderRadius: 'var(--radius-card)',
         padding: 24,
         boxShadow: 'var(--shadow-sm)',
         ...style,
       }}
-      className={'card', className].filter(Boolean).join(' ')}
+      className={['card', className].filter(Boolean).join(' ')}
       {...props}
     >
       {children}
