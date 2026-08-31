@@ -16,6 +16,7 @@ export interface VaultState {
 
 export function useVault(): VaultState {
   const { address, isDemo } = useWallet()
+  const network = process.env.NEXT_PUBLIC_STELLAR_NETWORK || 'public'
   const [sharePrice, setSharePrice] = useState(HB_DATA.pool.sharePrice)
   const [totalAssets, setTotalAssets] = useState(HB_DATA.pool.totalAssets)
   const [loading, setLoading] = useState(!!process.env.NEXT_PUBLIC_VAULT_CONTRACT_ID && !isDemo)
@@ -36,7 +37,7 @@ export function useVault(): VaultState {
     setLoading(true)
     setError(null)
 
-    Promise.all([fetchSharePrice(address), fetchTotalAssets(address)])
+    Promise.all([fetchSharePrice(address, network), fetchTotalAssets(address, network)])
       .then(([price, assets]) => {
         setSharePrice(price)
         setTotalAssets(assets)
@@ -47,7 +48,7 @@ export function useVault(): VaultState {
         setFetchedAt(new Date())
       })
       .finally(() => setLoading(false))
-  }, [address, isDemo, tick])
+  }, [address, isDemo, tick, network])
 
   useEffect(() => {
     if (!process.env.NEXT_PUBLIC_VAULT_CONTRACT_ID || isDemo) return
