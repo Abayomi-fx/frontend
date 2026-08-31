@@ -35,3 +35,6 @@ export interface Portfolio {
   holdings: Bond[];
   riskScore: RiskScore;
 }
+
+export const KYC_ALLOWED_DOCUMENT_TYPES = ['image/jpeg', 'image/png', 'application/pdf'] as const;
+export type KycAllowedDocumentType = typeof KYC_ALLOWED_DOCUMENT_TYPES[number];
