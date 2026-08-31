@@ -12,6 +12,7 @@ import { useWallet } from '../wallet/WalletProvider'
 import { HB_DATA } from '../data'
 import { roundToCents, formatDecimal, parseAmount } from '../lib/format'
 import { projectedReturn } from '../lib/bondUtils'
+import { useDepositGuard } from '../hooks/useDepositGuard'
 
 /**
  * Deposit — the flow that must be perfect. One column, one decision per step:
@@ -59,6 +60,10 @@ export function Deposit({ onDone }: DepositProps) {
 
   const mountedRef = useRef(true)
   const abortControllerRef = useRef<AbortController | null>(null)
+
+  // Idempotency guard: detect if a prior deposit is still in-flight (#433).
+  const { markPending, clearPending, getPending } = useDepositGuard()
+  const pendingDeposit = getPending()
 
   useEffect(() => {
     mountedRef.current = true
@@ -224,6 +229,52 @@ export function Deposit({ onDone }: DepositProps) {
         return (
           <Panel>
             <h1 style={h1Style}>{t('reviewH1', { amount: n })}</h1>
+            {/* Warn if a prior deposit submission may still be processing (#433) */}
+            {pendingDeposit && (
+              <div
+                role="alert"
+                style={{
+                  marginBottom: 16,
+                  padding: '12px 14px',
+                  borderRadius: 'var(--radius-input)',
+                  background: 'rgba(255, 176, 0, 0.08)',
+                  border: '1px solid rgba(255, 176, 0, 0.30)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--type-small)',
+                  color: 'var(--ink)',
+                  lineHeight: 1.5,
+                }}
+              >
+                <strong style={{ display: 'block', marginBottom: 4 }}>
+                  ⚠ Previous deposit may still be processing
+                </strong>
+                Your last deposit of{' '}
+                <span style={{ fontFamily: 'var(--font-data)', fontWeight: 600 }}>
+                  {formatDecimal(pendingDeposit.amount, 2)} USDC
+                </span>{' '}
+                (started{' '}
+                {Math.floor((Date.now() - pendingDeposit.startedAt) / 1000)}s ago) has not yet
+                confirmed. Submitting again before it settles may result in a duplicate investment.
+                Check your portfolio before proceeding.{' '}
+                <button
+                  type="button"
+                  onClick={clearPending}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--type-small)',
+                    color: 'var(--ink)',
+                    fontWeight: 600,
+                    textDecoration: 'underline',
+                  }}
+                >
+                  Dismiss warning
+                </button>
+              </div>
+            )}
             <div
               style={{
                 display: 'flex',
@@ -322,11 +373,16 @@ export function Deposit({ onDone }: DepositProps) {
                 onClick={async () => {
                   changeStep('pending')
                   setTxError(null)
+                  // Mark this submission as in-flight so a retry after
+                  // timeout/abort shows a "still processing" warning (#433).
+                  markPending(n, address ?? '')
                   const controller = new AbortController()
                   abortControllerRef.current = controller
                   try {
                     const hash = await submitDeposit(n, address ?? '', sign, controller.signal)
                     if (mountedRef.current) {
+                      // Confirmed success — safe to clear the pending guard.
+                      clearPending()
                       setTxHash(hash)
                       changeStep('success')
                       toast({
@@ -338,8 +394,13 @@ export function Deposit({ onDone }: DepositProps) {
                   } catch (e) {
                     if (mountedRef.current) {
                       if (e instanceof Error && e.message === 'Aborted') {
+                        // User cancelled or tab navigated away — the tx may
+                        // still be processing on-chain. Do NOT clear the guard
+                        // so the warning appears if they try again.
                         return
                       }
+                      // A confirmed on-chain failure — safe to clear.
+                      clearPending()
                       setTxError(
                         e instanceof Error
                           ? getFriendlyErrorMessage(e.message)
