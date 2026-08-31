@@ -94,7 +94,7 @@ export function ProjectCard({
             border: '1px solid var(--ink-12)',
             fontFamily: 'var(--font-body)',
             fontSize: 'var(--type-caption)',
-            fontWeight: 'var(--weight-semibold)',
+            fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--ink)',
           }}
         >
@@ -106,7 +106,7 @@ export function ProjectCard({
         <h3
           style={{
             fontFamily: 'var(--font-display)',
-            fontWeight: 'var(--weight-bold)',
+            fontWeight: 'var(--font-weight-semibold)',
             fontSize: 'var(--type-h4)',
             lineHeight: 1.2,
             margin: '0 0 14px',
@@ -118,7 +118,7 @@ export function ProjectCard({
 
         <div style={{ display: 'flex', gap: 18, marginBottom: 16 }}>
           <ScoreGauge value={credit} label="Credit" size={84} stroke={7} />
-          <ScoreGAuge value={green} label="Green" size={84} stroke={7} />
+          <ScoreGauge value={green} label="Green" size={84} stroke={7} />
         </div>
 
         <div
@@ -144,7 +144,7 @@ export function ProjectCard({
             <div
               style={{
                 fontFamily: 'var(--font-data)',
-                fontWeight: 'var(--weight-semibold)',
+                fontWeight: 'var(--font-weight-semibold)',
                 fontSize: 'var(--type-body-lg)',
                 color: 'var(--ink)',
               }}
@@ -165,7 +165,7 @@ export function ProjectCard({
                   <div
                     style={{
                       width: `${fundedPct}%`,
-                      height: 100%,
+                      height: '100%',
                       background: 'var(--solar)',
                     }}
                   />
@@ -178,7 +178,7 @@ export function ProjectCard({
                     marginTop: 4,
                   }}
                 >
-                  {fundedPct}% of {formatMoney(fundingGoal!)}
+                  {fundedPct}% of {formatMoney(fundingGoal!})
                 </div>
               </div>
             )}
