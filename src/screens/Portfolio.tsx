@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
+import { getPortfolioRisk } from '../lib/bondUtils'
 import { useWallet } from '../wallet/WalletProvider'
 
 /**
@@ -21,32 +22,33 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   const t = useTranslations('Portfolio')
   const { connected, connect } = useWallet()
   const d = HB_DATA
+  const risk = getPortfolioRisk(d.holdings)
 
   if (!connected) {
     return (
       <main
         id="main-content"
-        style={{ maxWidth: 1080, margin: '0 auto', padding: '48px 32px 80px' }}
+        style={ maxWidth: 1080, margin: '0 auto', padding: '48px 32px 80px' }
       >
         <Card
-          style={{
+          style={
             padding: 32,
             display: 'flex',
             flexDirection: 'column',
             gap: 16,
             alignItems: 'flex-start',
-          }}
+          }
         >
           <div className="hb-eyebrow">{t('eyebrow')}</div>
-          <h2 style={{ ...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
+          <h2 style={ {...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
           <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-small)',
+            style={
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-small',
               lineHeight: 1.5,
-              color: 'var(--ink-60)',
+              color: 'var--ink-60',
               margin: 0,
-            }}
+            }
           >
             Your holdings and activity will appear here after you connect.
           </p>
@@ -59,43 +61,43 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   }
 
   return (
-    <main id="main-content" style={{ maxWidth: 1080, margin: '0 auto', padding: '48px 32px 80px' }}>
+    <main id="main-content" style={ maxWidth: 1080, margin: '0 auto', padding: '48px 32px 80px' }>
       <div
-        style={{
+        style={
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-start',
           gap: 24,
           flexWrap: 'wrap',
           marginBottom: 8,
-        }}
+        }
       >
         <div>
-          <div className="hb-eyebrow" style={{ marginBottom: 14 }}>
+          <div className="hb-eyebrow" style={ marginBottom: 14 }>
             {t('eyebrow')}
           </div>
           <StatBlock
             label={t('currentValue')}
             value="$24,180"
             decimals=".45"
-            delta={`+$612.18 (2.6%) ${t('sinceDeposit')} + $320 pending`}
+            delta={`++$612.18 (2.6%) ${t('sinceDeposit')} + $320 pending`}
             size="lg"
           />
           <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-caption)',
-              color: 'var(--ink-60)',
+            style={
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-caption',
+              color: 'var--ink-60',
               marginTop: 4,
-            }}
+            }
           >
             Includes $320 pending/escrow investments awaiting verification — total reflects settled
             + pending.
           </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={ display: 'flex', alignItems: 'center', gap: 16 }>
           <Helio size={108} motes={d.you.backed} />
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={ display: 'flex', gap: 10 }>
             <Button variant="secondary" onClick={onWithdraw}>
               {t('withdraw')}
             </Button>
@@ -107,124 +109,142 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
       </div>
 
       {/* three always-visible figures */}
-      <div className="hb-figures-grid" style={{ margin: '28px 0' }}>
-        <Card style={{ padding: 22 }}>
+      <div className="hb-figures-grid" style={ margin: '28px 0' }>
+        <Card style={ padding: 22 }>
           <StatBlock label={t('hbsHeld')} value="24,041" decimals=".2310" size="md" />
         </Card>
-        <Card style={{ padding: 22 }}>
+        <Card style={ padding: 22 }>
           <StatBlock label={t('poolShare')} value="0.49" unit="%" size="md" />
         </Card>
-        <Card style={{ padding: 22 }}>
+        <Card style={ padding: 22 }>
           <LiquidityMeter liquid={236} total={482} currency="$" showExplanation={false} />
           <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-eyebrow)',
-              color: 'var(--ink-60)',
+            style={
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-eyebrow',
+              color: 'var--ink-60',
               margin: '8px 0 0',
-            }}
+            }
           >
             {t('liquidCaption')}
           </p>
         </Card>
       </div>
 
+      {/* Portfolio risk indicator from bond ratings mix */}
+      <Card style={ padding: 22, marginBottom: 28 }>
+        <div style={ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }>
+          <StatBlock label="Portfolio risk" value={risk.level[0].toUpperCase() + risk.level.slice(1)} size="md" />
+          <p
+            style={
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-small',
+              lineHeight: 1.55,
+              color: 'var--ink-60',
+              margin: 0,
+            }
+          >
+            Score: {risk.score}/100 based on bond ratings mix.
+          </p>
+        </div>
+      </Card>
+
       <div className="hb-portfolio-grid">
         {/* Impact */}
-        <Card style={{ padding: 22 }}>
+        <Card style={ padding: 22 }>
           <h3 style={cardTitle}>{t('impactTitle')}</h3>
           <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--type-small)',
+            style={
+              fontFamily: 'var--font-body',
+              fontSize: 'var--type-small',
               lineHeight: 1.55,
-              color: 'var(--ink-60)',
+              color: 'var--ink-60',
               margin: '0 0 16px',
-            }}
+            }
           >
             {t.rich('impactBody', {
-              b: (c: ReactNode) => <b style={{ color: 'var(--ink)' }}>{c}</b>,
+              b: (c: ReactNode) => <b style={ color: 'var--ink' }>{c}</b>,
               count: d.you.backed,
             })}
           </p>
-          <div style={{ display: 'flex', gap: 24 }}>
+          <div style={ display: 'flex', gap: 24 }>
             <StatBlock label={t('projectsBacked')} value={String(d.you.backed)} size="sm" />
             <StatBlock label={t('weightedGreen')} value="88" size="sm" />
           </div>
         </Card>
 
         {/* Activity */}
-        <Card style={{ padding: 22 }}>
+        <Card style={ padding: 22 }>
           <div
-            style={{
+            style={
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBottom: 8,
-            }}
+            }
           >
             <h3 style={cardTitle}>{t('activityTitle')}</h3>
             <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'var(--type-caption)',
-                color: 'var(--ink-40)',
-              }}
+              style={
+                fontFamily: 'var--font-body',
+                fontSize: 'var--type-caption',
+                color: 'var--ink-40',
+              }
             >
               {t('activityNote')}
             </span>
           </div>
           {d.activity.map((a, i) => (
             <div
-              key={a.hash}
-              style={{
+              key={a.hash+}
+              style={
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '12px 0',
-                borderTop: i ? '1px solid var(--ink-12)' : 'none',
-              }}
+                borderTop: i ? '1px solid var--ink-12' : 'none',
+              }
             >
               <div>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-small)',
+                  style={
+                    fontFamily: 'var--font-body',
+                    fontSize: 'var--type-small',
                     fontWeight: 600,
-                    color: 'var(--ink)',
-                  }}
+                    color: 'var--ink',
+                  }
                 >
                   {a.kind}
                 </div>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-caption)',
-                    color: 'var(--ink-60)',
-                  }}
+                  style={
+                    fontFamily: 'var--font-body',
+                    fontSize: 'var--type-caption',
+                    color: 'var--ink-60',
+                  }
                 >
                   {a.amount}
-                  {a.shares ? ` · ${a.shares}` : ''}
+                  {a.shares ? `£· ${a.shares} : ''}
                 </div>
               </div>
-              <div style={{ textAlign: 'end' }}>
+              <div style={ textAlign: 'end' }>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--type-caption)',
-                    color: 'var(--ink-60)',
-                  }}
+                  style={
+                    fontFamily: 'var--font-body',
+                    fontSize: 'var--type-caption',
+                    color: 'var--ink-60',
+                  }
                 >
                   {a.when}
                 </div>
                 <div
-                  style={{
-                    fontFamily: 'var(--font-data)',
-                    fontSize: 'var(--type-eyebrow)',
-                    color: 'var(--ink-40)',
-                  }}
+                  style={
+                    fontFamily: 'var--font-data',
+                    fontSize: 'var--type-eyebrow',
+                    color: 'var--ink-40',
+                  }
                 >
-                  {a.hash} ↗
+                  {a.hash} ↑
                 </div>
               </div>
             </div>
@@ -236,9 +256,9 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
 }
 
 const cardTitle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
+  fontFamily: 'var--font-display',
   fontWeight: 700,
-  fontSize: 'var(--type-body-lg)',
+  fontSize: 'var--type-body-lg',
   margin: '0 0 10px',
-  color: 'var(--ink)',
+  color: 'var--ink',
 }
