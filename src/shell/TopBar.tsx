@@ -36,6 +36,37 @@ export function TopBar() {
   const { connected, address, connecting, isDemo } = useWallet()
   const { theme, toggle } = useTheme()
 
+  const [networkOnline, setNetworkOnline] = useState(true)
+  useEffect(() => {
+    let cancelled = false
+    let currentController: AbortController | undefined
+
+    const check = async () => {
+      const controller = new AbortController()
+      currentController = controller
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      try {
+        const res = await fetch('https://horizon-testnet.stellar.org', {
+          signal: controller.signal,
+          cache: 'no-store',
+        })
+        if (!cancelled) setNetworkOnline(res.ok || res.status < 500)
+      } catch {
+        if (!cancelled) setNetworkOnline(false)
+      } finally {
+        clearTimeout(timeoutId)
+      }
+    }
+
+    void check()
+    const interval = setInterval(() => { void check() }, 15000)
+    return () => {
+      cancelled = true
+      clearInterval(interval)
+      currentController?.abort()
+    }
+  }, [])
+
   // Theme state starts 'light' on server/first render (to avoid a hydration
   // mismatch), so the toggle icon can't be trusted until after mount — a
   // dark-mode user would briefly see the wrong icon. Gate it on `mounted`.
@@ -137,14 +168,17 @@ export function TopBar() {
       <div style={{ marginInlineStart: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
         <span
           role="status"
-          aria-label={t('networkStatus')}
+          aria-label={networkOnline ? t('networkStatus') : 'Offline'}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 7,
             fontFamily: 'var(--font-data)',
             fontSize: 12,
-            color: 'var(--ink-60)',
+            color: networkOnline ? 'var(--ink-60)' : '#fff',
+            background: networkOnline ? 'transparent' : 'var(--ember)',
+            borderRadius: networkOnline ? 0 : 'var(--radius-pill)',
+            padding: networkOnline ? 0 : '4px 10px',
           }}
         >
           <span
@@ -153,11 +187,11 @@ export function TopBar() {
               width: 8,
               height: 8,
               borderRadius: '50%',
-              background: 'var(--growth)',
-              boxShadow: '0 0 0 3px var(--growth-12)',
+              background: networkOnline ? 'var(--growth)' : '#fff',
+              boxShadow: networkOnline ? '0 0 0 3px var(--growth-12)' : 'none',
             }}
           />
-          {t('testnet')}
+          {networkOnline ? t('testnet') : 'Offline'}
         </span>
 
         <button
@@ -179,7 +213,7 @@ export function TopBar() {
           <Button
             variant="primary"
             size="md"
-            loading={connecting}
+            loading={connecting && networkOnline}
             onClick={() => router.push('/connect')}
           >
             {t('connect')}
