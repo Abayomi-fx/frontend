@@ -4,7 +4,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode
 }
 
-export function Card({ children, style, ...props }: CardProps) {
+export function Card({ children, style, className, ...props }: CardProps) {
   return (
     <div
       style={{
@@ -15,6 +15,7 @@ export function Card({ children, style, ...props }: CardProps) {
         boxShadow: 'var(--shadow-sm)',
         ...style,
       }}
+      className={'card', className].filter(Boolean).join(' ')}
       {...props}
     >
       {children}
