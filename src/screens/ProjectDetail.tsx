@@ -1,6 +1,6 @@
 import { type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
-import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon } from '../components'
+import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon, WatchlistButton } from '../components'
 import { Sparkline } from '../components/Sparkline'
 import { formatMoney } from '../lib/format'
 
@@ -58,7 +58,7 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
           marginBottom: 28,
         }}
       >
-        {/* Creator verification, top area */}
+        {/* Creator verification + watchlist toggle, top area */}
         <div
           style={{
             position: 'absolute',
@@ -66,12 +66,15 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
             insetInlineStart: 16,
             insetInlineEnd: 16,
             display: 'flex',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 12,
           }}
         >
           <Badge tone="growth" icon={<ShieldCheckIcon />}>
             {t('verifiedSince', { since: detail.creator.since })}
           </Badge>
+          <WatchlistButton bondId={project.id} bondName={project.name} size="md" />
         </div>
 
         {/* Project name, display font */}

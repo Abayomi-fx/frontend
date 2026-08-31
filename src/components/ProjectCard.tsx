@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import { ScoreGauge } from './ScoreGauge'
 import { PinIcon } from './icons'
 import { formatMoney } from '../lib/format'
@@ -23,6 +23,8 @@ export interface ProjectCardProps {
   style?: CSSProperties
   fundingGoal?: number
   fundedAmount?: number
+  /** Optional control pinned to the top-right of the hero (e.g. watchlist star). */
+  action?: ReactNode
 }
 
 export function ProjectCard({
@@ -39,6 +41,7 @@ export function ProjectCard({
   style,
   fundingGoal,
   fundedAmount,
+  action,
 }: ProjectCardProps) {
   const [hover, setHover] = useState(false)
   const resolvedVerifiedLabel = verifiedLabel ?? verifiedAgo
@@ -73,6 +76,9 @@ export function ProjectCard({
           position: 'relative',
         }}
       >
+        {action && (
+          <div style={{ position: 'absolute', top: 12, right: 12, zIndex: 1 }}>{action}</div>
+        )}
         <span
           style={{
             position: 'absolute',

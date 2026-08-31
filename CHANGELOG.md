@@ -29,6 +29,8 @@ once it cuts its first tagged release (it currently ships continuously from
 
 ### Added
 
+- Bond watchlist — save bonds of interest without investing, reach them from the
+  wallet menu at `/watchlist`, and see which are open for funding (#407).
 - Preemptive session timeout warning on auth forms, so in-progress form data
   isn't silently lost (#352).
 - Return projection on the investment form.
