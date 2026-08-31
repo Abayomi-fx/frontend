@@ -175,6 +175,11 @@
     "impactBody": "Your stake helps fund <b>{count} verified projects</b> across 6 countries.",
     "projectsBacked": "Projects backed",
     "weightedGreen": "Weighted green score",
+    "riskScore": "Portfolio risk score",
+    "riskTierConservative": "Conservative",
+    "riskTierModerate": "Moderate",
+    "riskTierAggressive": "Aggressive",
+    "riskCaption": "Based on the mix of bond ratings in your holdings.",
     "activityTitle": "Activity",
     "activityNote": "every entry → Stellar Expert"
   },
