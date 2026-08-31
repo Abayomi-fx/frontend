@@ -84,7 +84,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     }
 
     return (
-      >
+      <>
         {this.state.isOffline && (
           <div
             style={{
