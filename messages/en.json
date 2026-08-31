@@ -228,6 +228,7 @@
     "statusRejected": "Rejected",
     "rejectionReason": "Reason",
     "actionRevoke": "Revoke",
+    "revokeConfirmTitle": "Revoke creator?",
     "revokeConfirm": "Yes, revoke",
     "revokeConfirmBody": "Are you sure you want to revoke {name}? You can undo this action.",
     "revokeCancel": "Cancel",
