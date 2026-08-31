@@ -12,6 +12,7 @@ const TOTAL_LIQUID = 482
 const TOTAL_LIQUID_BALANCE = '482.00'
 const QUICK_WITHDRAW_AMOUNTS = [25, 50, 100]
 const MIN_WITHDRAWAL_AMOUNT = 1
+const DISPLAY_DECIMALS = 2
 
 /**
  * Withdraw — designed with the most care of all. Capped at the live liquid
@@ -122,7 +123,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
                     toast({
                       tone: 'success',
                       title: 'Withdrawal settled',
-                      message: `${formatDecimal(n, 2)} USDC is on its way to your wallet.`,
+                      message: `${formatDecimal(n, DISPLAY_DECIMALS)} USDC is on its way to your wallet.`,
                     })
                   }
                 } catch (e) {
@@ -231,7 +232,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
               }}
             >
               {t.rich('successBody', {
-                amount: formatDecimal(n, 2),
+                amount: formatDecimal(n, DISPLAY_DECIMALS),
                 num: (c: ReactNode) => (
                   <b className="hb-data" style={{ color: 'var(--ink)' }}>
                     {c}
