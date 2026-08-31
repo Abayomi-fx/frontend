@@ -110,7 +110,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
             <Button
               variant="primary"
               size="lg"
-              style={{ width: '100%', marginTop: 20 }}
+              style={{ width: '100%', marginTop: 20, background: 'var(--primary)' }}
               disabled={n < MIN_WITHDRAWAL_AMOUNT || n > liquid}
               reason={n > liquid ? t('reasonExceeds') : n < MIN_WITHDRAWAL_AMOUNT ? t('reasonMin') : undefined}
               onClick={async () => {
@@ -252,7 +252,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
                 />
               </div>
             )}
-            <Button variant="primary" size="lg" style={{ width: '100%' }} onClick={onDone}>
+            <Button variant="primary" size="lg" style={{ width: '100%', background: 'var(--primary)' }} onClick={onDone}>
               {t('backToPortfolio')}
             </Button>
           </div>

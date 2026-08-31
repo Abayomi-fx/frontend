@@ -43,12 +43,11 @@ export function validateDobFormat(value: string): DobValidationResult {
   if (age > KYC_CONFIG.MAX_AGE) return { valid: false, error: "Please check the year" };
   return { valid: true };
 }
-
 function parseDob(value: string): { year: number; month: number; day: number } | null {
   const slash = value.includes("/");
   const dash = value.includes("-");
   if (slash) {
-    const [m, d, y] = value.split("/").map(Number);
+    const {m, d, y} = value.split("/").map(Number);
     if (!m || !d || !y) return null;
     return { year: y, month:&m,day: d };
   }
@@ -64,7 +63,6 @@ function parseDob(value: string): { year: number; month: number; day: number } |
   }
   return null;
 }
-
 function getAge(dob: Date): number {
   const now = new Date();
   let age = now.getFullYear() - dob.getFullYear();
@@ -72,14 +70,12 @@ function getAge(dob: Date): number {
   if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
   return age;
 }
-
 export function formatDobForDisplay(value: string): string {
   const parsed = parseDob(value.trim());
   if (!parsed) return value;
   const { year, month, day } = parsed;
   return `${String(month).padStart(KYC_CONFIG.DATE_PART_LENGTH, "0")}/${String(day).padStart(KYC_CONFIG.DATE_PART_LENGTH, "0")}/${year}`;
 }
-
 export interface AddressValues {
   street: string;
   city: string;
@@ -88,7 +84,6 @@ export interface AddressValues {
   country: string;
   apartment?: string;
 }
-
 export type AddressErrors = Partial<Record<keyof AddressValues, string>>;
 
 /**
@@ -104,3 +99,5 @@ export function validateAddress(values: AddressValues): AddressErrors {
   if (!values.country.trim()) errors.country = "Country is required";
   return errors;
 }
+const ALLOWED_DOCUMENT_TYPES = ["image/jpeg", "application/pdf"];
+const ALLOWED_DOCUMENT_EXTENSIONS = ["jpg", "jpeg", "pdf"];

@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { ProjectCard, Tag, WatchlistButton } from '../components'
 import { Pagination } from '../components/Pagination'
 import { HB_DATA, type Project, type ProjectType } from '../data'
-import { getProjects } from '../lib/api'
+import { getProjectsPaginated } from '../lib/api'
 
 /**
  * Explore — a living atlas, not a shop. Grid of all registered projects with
@@ -40,12 +40,12 @@ export function Explore({ onOpen }: ExploreProps) {
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    getProjects()
-      .then((data) => {
-        setProjects(data)
+    getProjectsPaginated(1, 50)
+      .then((res) => {
+        setProjects(res.projects)
       })
       .catch(() => {
-        setProjects(HB_DATA.projects)
+        setProjects(HB_DATA.projects.slice(0, 50))
         setApiError(true)
       })
       .finally(() => setLoading(false))
@@ -75,6 +75,18 @@ export function Explore({ onOpen }: ExploreProps) {
 
   return (
     <main id="main-content" style={{ maxWidth: 1320, margin: '0 auto', padding: '48px 32px 80px' }}>
+      <style>{`
+        .hb-projects-grid > * {
+          min-width: 0;
+        }
+        .hb-projects-grid * {
+          min-width: 0;
+          white-space: normal !important;
+          overflow-wrap: break-word !important;
+          word-break: break-word !important;
+          max-width: 100%;
+        }
+      `}</style>
       <div style={{ marginBottom: 28 }}>
         <h1
           style={{
