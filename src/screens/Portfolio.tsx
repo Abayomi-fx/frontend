@@ -174,7 +174,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
         </Card>
 
         {/* Activity */}
-        <Card style={ padding: 22 }>
+        <Card style={{ minWidth: 0, padding: 22 }}>
           <div
             style={
               display: 'flex',
