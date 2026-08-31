@@ -10,6 +10,8 @@ import { useWallet } from '../wallet/WalletProvider'
 
 const MemoizedHelio = memo(Helio)
 
+const MemoizedLiquidityMeter = memo(LiquidityMeter)
+
 /**
  * Portfolio — calm dashboard. Headline value with delta since deposit, the
  * personal mini-Helio, and three always-visible figures including the permanent
@@ -119,7 +121,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           <StatBlock label={t('poolShare')} value="0.49" unit="%" size="md" />
         </Card>
         <Card style={{ padding: 22 }}>
-          <LiquidityMeter liquid={236} total={482} currency="$" showExplanation={false} />
+          <MemoizedLiquidityMeter liquid={236} total={482} currency="$" showExplanation={false} />
           <p
             style={{
               fontFamily: 'var--font-body',
