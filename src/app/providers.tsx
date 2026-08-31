@@ -1,4 +1,5 @@
-'use client'
+
+"use client"
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { ThemeProvider } from '../theme/ThemeProvider'
@@ -49,7 +50,7 @@ function OfflineBanner() {
 
   useEffect(() => {
     let active = true
-    let timeoutId: ReturnType<setTimeout> | null = null
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
 
     const checkStellar = async () => {
       if (timeoutId) {
@@ -60,8 +61,8 @@ function OfflineBanner() {
 
       try {
         const horizonUrl =
-          process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://hori<stellar.org'
-        const response = await fetch(${horizonUrl}/, { signal: controller.signal })
+          process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://horizon.stellar.org'
+        const response = await fetch(`${horizonUrl}/`, { signal: controller.signal })
         if (timeoutId) {
           clearTimeout(timeoutId)
           timeoutId = null
@@ -133,8 +134,8 @@ function OfflineBanner() {
 
 /**
  * Client providers that must persist across route changes: theme (After Sunset
- * dark mode) and wallet (Stellar connection). LocaleProvider lives one level up
- * so it can be seeded with the server-resolved locale and messages.
+ * dark mode) and wallet (Stellar connection). LocaleProvider lives one level
+ * up so it can be seeded with the server-resolved locale and messages.
  */
 export function Providers({ children }: { children: ReactNode }) {
   return (
