@@ -38,3 +38,7 @@ export interface Portfolio {
 
 export const KYC_ALLOWED_DOCUMENT_TYPES = ['image/jpeg', 'application/pdf'] as const;
 export type KycAllowedDocumentType = typeof KYC_ALLOWED_DOCUMENT_TYPES[number];
+
+export function isKycAllowedDocumentType(fileType: string): fileType is KycAllowedDocumentType {
+  return (KYC_ALLOWED_DOCUMENT_TYPES as readonly string[]).includes(fileType);
+}
