@@ -62,8 +62,7 @@ export const vault = {
 
 const CONTRACT_ID = process.env.NEXT_PUBLIC_VAULT_CONTRACT_ID
 const STELLAR_NETWORK =
-  process.env.NEXT_PUBLIC_STELLAR_NETWORK ??
-  (process.env.NODE_ENV === 'production' ? 'public' : 'testnet')
+  process.env.NEXT_PUBLIC_STELLAR_NETWORK ?? 'testnet'
 const RPC_URL =
   process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ??
   (STELLAR_NETWORK === 'public' ? 'https://soroban.stellar.org' : 'https://soroban-testnet.stellar.org')
