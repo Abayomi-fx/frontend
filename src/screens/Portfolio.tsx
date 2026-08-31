@@ -23,7 +23,7 @@ export function Portfolio({ onWithdraw, onDeposit }: PortfolioProps) {
   const { connected, connect } = useWallet()
   const d = HB_DATA
   const risk = getPortfolioRisk(d.holdings)
-  const referralLink = d.referralLink
+  const referralLink = (d as { referralLink?: string }).referralLink
 
   if (!connected) {
     return (
