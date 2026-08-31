@@ -223,7 +223,7 @@ export function Deposit({ onDone }: DepositProps) {
             <Button
               variant="primary"
               size="lg"
-              style={{ width: '100%', marginTop: 20, background: 'var(--primary)' }}
+              style={{ width: '100%', marginTop: 20 }}
               disabled={n < 1 || n > balance}
               reason={n > balance ? t('reasonExceeds') : n < 1 ? t('reasonMin') : undefined}
               onClick={() => {
