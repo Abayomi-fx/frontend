@@ -15,8 +15,8 @@ export interface VaultState {
 }
 
 export function useVault(): VaultState {
-  const { address, isDemo } = useWallet()
-  const network = process.env.NEXT_PUBLIC_STELLAR_NETWORK || 'public'
+  const { address, isDemo, network: walletNetwork } = useWallet()
+  const network = walletNetwork.toLowerCase() as 'public' | 'testnet'
   const [sharePrice, setSharePrice] = useState(HB_DATA.pool.sharePrice)
   const [totalAssets, setTotalAssets] = useState(HB_DATA.pool.totalAssets)
   const [loading, setLoading] = useState(!!process.env.NEXT_PUBLIC_VAULT_CONTRACT_ID && !isDemo)
