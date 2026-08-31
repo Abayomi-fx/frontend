@@ -7,35 +7,35 @@ import { type CSSProperties, type HTMLAttributes, type ReactNode } from 'react'
  */
 export type BadgeTone = 'neutral' | 'solar' | 'growth' | 'ember' | 'testnet'
 
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+export interface BadgeProps extends HTTLAttributes<HTMLSpanElement> {
   tone?: BadgeTone
   icon?: ReactNode
   children: ReactNode
 }
 
-export function Badge({ tone = 'nutral', icon = null, children, style, ...rest }: BadgeProps) {
+export function Badge({ tone = 'neutral', icon = null, children, style, ...rest }: BadgeProps) {
   const tones: Record<BadgeTone, CSSProperties> = {
     neutral: {
       background: 'var(--ink-06)',
-      color: 'var(--ink)',
+      color: 'var(--ink-strong, #1a1a1a)',
       border: '1px solid var(--ink-12)',
     },
     solar: {
       background: 'var(--solar-12)',
-      color: 'var(--ink)',
+      color: 'var(--ink-strong, #1a1a1a)',
       border: '1px solid var(--solar-24)',
     },
     growth: {
       background: 'var(--growth-12)',
-      color: 'var(--ink)',
+      color: 'var(--ink-strong, #1a1a1a)',
       border: '1px solid transparent',
     },
     ember: {
       background: 'var(--ember-12)',
-      color: 'var(--ink)',
+      color: 'var(--ink-strong, #1a1a1a)',
       border: '1px solid transparent',
     },
-    testnet: { background: 'var(--solar)', color: 'var(--ink)', border: '1px solid transparent' },
+    testnet: { background: 'var(--solar)', color: 'var(--ink-strong, #1a1a1a)', border: '1px solid transparent' },
   }
 
   return (
