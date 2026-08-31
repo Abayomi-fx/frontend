@@ -1,1 +1,99 @@
-import { formatPoolCounters } from './lib/format'\n\nexport type ProjectType = 'Solar' | 'Wind' | 'Hydro'\ntype BondStatus = 'open' | 'upcoming' | 'funded'\n\nexport interface Project {\n  id: number\n  name: string\n  location: string\n  type: ProjectType\n  credit: number\n  green: number\n  funded: string\n  fundedAmount: number\n  fundingGoal: number\n  status?: BondStatus\n}\n\nexport interface Activity {\n  kind: 'Deposit' | 'Withdrawal' | 'Score update'\n  amount: string\n  shares: string\n  when: string\n  hash: string\n}\n\nexport function formatCurrency(n: number): string {\n  return '$' + Math.floor(n).toLocaleString('en-US')\n}\n\nexport function formatNumber(n: number): string {\n  return n.toLocaleString('en-US')\n}\n\nexport function formatFixed(n: number, digits: number = 1): string {\n  return n.toFixed(digits)\n}\n\nexport interface HeliobondData {\n  pool: {\n    totalAssets: number\n    sharePrice: number\n    projectedRate: number\n    liquid: number\n    projectsFunded: number\n  }\n  counters: {\n    totalAssets: string\n    projectsFunded: string\n    projectedRate: string\n  }\n  you: {\n    value: number\n    deltaAbs: number\n    deltaPct: number\n    hbs: number\n    poolSharePct: number\n    weightedGreen: number\n    backed: number\n    riskScore: number\n    riskLevel: 'conservative' | 'moderate' | 'aggressive'\n  }\n  projects: Project[]\n  activity: Activity[]\n  search: (query: string) => Project[]\n}\n\nconst INITIAL_PROJECTS: Project[] = []\nconst OFF_SCREEN_PROJECTS_COUNT = 8\nconst PROJECTS_FUNDED = INITIAL_PROJECTS.length + OFF_SCREEN_PROJECTS_COUNT\n\nconst POOL = {\n  totalAssets: 4862014.55,\n  sharePrice: 1.0058,\n  projectedRate: 7.4,\n  liquid: 1420300,\n  projectsFunded: PROJECTS_FUNDED,\n}\n\nconst POOL_COUNTERS = formatPoolCounters({\n  tvl: POOL.totalAssets,\n  investors: POOL.projectsFunded,\n  apy: POOL.projectedRate,\n})\n\nexport const HB_DATA: HeliobondData = {\n  pool: POOL,\n  counters: {\n    totalAssets: POOL_COUNTERS.tvl,\n    projectsFunded: POOL_COUNTERS.investors,\n    projectedRate: POOL_COUNTERS.apy,\n  },\n  you: {\n    value: 24180.45,\n    deltaAbs: 612.18,\n    deltaPct: 2.6,\n    hbs: 24041.231,\n    poolSharePct: 0.49,\n    weightedGreen: 88,\n    backed: PROJECTS_FUNDED,\n    riskScore: 0,\n    riskLevel: 'conservative',\n  },\n  projects: INITIAL_PROJECTS,\n  activity: [],\n  search: (_query: string) => INITIAL_PROJECTS,\n}\n
+import { formatPoolCounters } from './lib/format'
+
+export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
+type BondStatus = 'open' | 'upcoming' | 'funded'
+
+export interface Project {
+  id: number
+  name: string
+  location: string
+  type: ProjectType
+  credit: number
+  green: number
+  funded: string
+  fundedAmount: number
+  fundingGoal: number
+  status?: BondStatus
+}
+
+export interface Activity {
+  kind: 'Deposit' | 'Withdrawal' | 'Score update'
+  amount: string
+  shares: string
+  when: string
+  hash: string
+}
+
+export function formatCurrency(n: number): string {
+  return '$' + Math.floor(n).toLocaleString('en-US')
+}
+
+export function formatNumber(n: number): string {
+  return n.toLocaleString('en-US')
+}
+
+export function formatFixed(n: number, digits: number = 1): string {
+  return n.toFixed(digits)
+}
+
+export interface HeliobondData {
+  pool: {
+    totalAssets: number
+    sharePrice: number
+    projectedRate: number
+    liquid: number
+    projectsFunded: number
+  }
+  counters: {
+    totalAssets: string
+    projectsFunded: string
+    projectedRate: string
+  }
+  you: {
+    value: number
+    deltaAbs: number
+    deltaPct: number
+    hbs: number
+    poolSharePct: number
+    weightedGreen: number
+    backed: number
+    riskScore: number
+    riskLevel: 'conservative' | 'moderate' | 'aggressive'
+  }
+  projects: Project[]
+  activity: Activity[]
+  search: (query: string) => Project[]
+}
+
+const INITIAL_PROJECTS: Project[] = []
+const OFF_SCREEN_PROJECTS_COUNT = 8
+const PROJECTS_FUNDED = INITIAL_PROJECTS.length + OFF_SCREEN_PROJECTS_COUNT
+
+const POOL = {
+  totalAssets: 4862014.55,
+  sharePrice: 1.0058,
+  projectedRate: 7.4,
+  liquid: 1420300,
+  projectsFunded: PROJECTS_FUNDED,
+}
+
+const POOL_COUNTERS = formatPoolCounters(POOL)
+
+export const HB_DATA: HeliobondData = {
+  pool: POOL,
+  counters: POOL_COUNTERS,
+  you: {
+    value: 24180.45,
+    deltaAbs: 612.18,
+    deltaPct: 2.6,
+    hbs: 24041.231,
+    poolSharePct: 0.49,
+    weightedGreen: 88,
+    backed: PROJECTS_FUNDED,
+    riskScore: 0,
+    riskLevel: 'conservative',
+  },
+  projects: INITIAL_PROJECTS,
+  activity: [],
+  search: (_query: string) => INITIAL_PROJECTS,
+}
