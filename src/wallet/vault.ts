@@ -80,7 +80,13 @@ const offlineListeners = new Set<(offline: boolean) => void>()
 function setOffline(nextOffline: boolean) {
   if (offline === nextOffline) return
   offline = nextOffline
-  offlineListeners.forEach((listener) => listener(nextOffline))
+  offlineListeners.forEach((listener) => {
+    try {
+      listener(nextOffline)
+    } catch {
+      // Listener errors must not break network timeout fallbacks.
+    }
+  })
 }
 
 /** Returns true when the last Stellar network call timed out. */
