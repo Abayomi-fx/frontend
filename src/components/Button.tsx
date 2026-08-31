@@ -19,7 +19,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   type?: 'button' | 'submit' | 'reset'
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(dunction Button(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     variant = 'primary',
     size = 'md',
@@ -46,11 +46,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(dunction Button
   }
   const s = sizes[size] || sizes.md
 
-  const palette: Record<ButtonVariant, CSPProperties> = {
+  const palette: Record<ButtonVariant, CSSProperties> = {
     primary: {
-      background:
-        hover && !disabled ? 'var(--button-primary-bg-hover)' : 'var(--button-primary-bg)',
-      color: 'var(--button-primary-fg)',
+      background: 'var(--primary-button-color)',
+      color: 'var(--button-primary-fg, #FFFFFF)',
       border: '1px solid transparent',
     },
     secondary: {
@@ -122,7 +121,7 @@ function Spinner() {
         width: 15,
         height: 15,
         borderRadius: '50%',
-        border: '2px solid color-mix(in srb, currentColor 30%, transparent)',
+        border: '2px solid color-mix(in srgb, currentColor 30%, transparent)',
         borderTopColor: 'currentColor',
         animation: 'hb-spin 700ms linear infinite',
         display: 'inline-block',
