@@ -13,11 +13,12 @@ import {
 import { NextIntlClientProvider } from 'next-intl'
 import en from '../../messages/en.json'
 import fr from '../../messages/fr.json'
+import es from '../../messages/es.json'
 import { type Locale } from './request'
 
 export type Messages = typeof en
 
-const CATALOGS: Record<Locale, Messages> = { en, fr }
+const CATALOGS: Record<Locale, Messages> = { en, fr, es }
 
 interface LocaleSwitcherValue {
   locale: Locale
@@ -43,7 +44,7 @@ export function LocaleProvider({
   }, [locale])
 
   const switchLocale = useCallback(() => {
-    const next = locale === 'en' ? 'fr' : 'en'
+    const next = locale === 'en' ? 'fr' : locale === 'fr' ? 'es' : 'en'
     document.cookie = `NEXT_LOCALE=${next};path=/;max-age=31536000;samesite=lax`
 
     startTransition(() => {

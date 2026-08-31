@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import en from '../../messages/en.json'
 import fr from '../../messages/fr.json'
+import es from '../../messages/es.json'
 
 function getLeafKeys(obj: Record<string, unknown>, prefix = ''): string[] {
   const keys: string[] = []
@@ -17,18 +18,25 @@ function getLeafKeys(obj: Record<string, unknown>, prefix = ''): string[] {
 }
 
 describe('Message catalog parity', () => {
-  it('en.json and fr.json have identical key sets', () => {
+  it.each([
+    ['fr.json', fr],
+    ['es.json', es],
+  ] as const)('en.json and %s have identical key sets', (_name, catalog) => {
     const enKeys = getLeafKeys(en).sort()
-    const frKeys = getLeafKeys(fr).sort()
-
-    const missingInFr = enKeys.filter((k) => !frKeys.includes(k))
-    const missingInEn = frKeys.filter((k) => !enKeys.includes(k))
-
+    const catalogKeys = getLeafKeys(catalog).sort()
+    const missingInCatalog = enKeys.filter((k) => !catalogKeys.includes(k))
+    const missingInEn = catalogKeys.filter((k) => !enKeys.includes(k))
     const missing = [
-      ...missingInFr.map((k) => `Missing in fr.json: ${k}`),
+      ...missingInCatalog.map((k) => `Missing in ${_name}: ${k}`),
       ...missingInEn.map((k) => `Missing in en.json: ${k}`),
     ]
-
     expect(missing).toEqual([])
+  })
+
+  it('uses rentabilidad del bono consistently for Spanish bond yield labels', () => {
+    expect(es.Landing.returnRate).toBe('Rentabilidad del bono proyectada')
+    expect(es.Deposit.projection).toContain('Rentabilidad del bono proyectada')
+    expect(es.Landing.returnRate.toLowerCase()).not.toContain('rendimiento del bono')
+    expect(es.Deposit.projection.toLowerCase()).not.toContain('rendimiento del bono')
   })
 })
