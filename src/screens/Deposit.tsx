@@ -10,7 +10,7 @@ import { scrollToFirstError } from '../lib/scrollToError'
 import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import { useWallet } from '../wallet/WalletProvider'
 import { HB_DATA } from '../data'
-import { roundToCents, formatDecimal, parseAmount } from '../lib/format'
+import { roundToCents, formatDecimal, formatSharePrice, parseAmount } from '../lib/format'
 import { projectedReturn } from '../lib/bondUtils'
 import { useDepositGuard } from '../hooks/useDepositGuard'
 
@@ -171,7 +171,7 @@ export function Deposit({ onDone }: DepositProps) {
                         Using estimated rate
                       </span>
                     )}
-                    {t.rich('preview', { shares: formatDecimal(n / price, 4), price, num })}
+                    {t.rich('preview', { shares: formatDecimal(n / price, 4), price: formatSharePrice(price), num })}
                     <span
                       style={{
                         display: 'block',
@@ -302,7 +302,7 @@ export function Deposit({ onDone }: DepositProps) {
             >
               <Row k={t('rowPay')} v={`${formatDecimal(n, 2)} USDC`} />
               <Row k={t('rowReceive')} v={`≈ ${formatDecimal(n / price, 4)} HBS`} />
-              <Row k={t('rowPrice')} v={`${price}`} />
+              <Row k={t('rowPrice')} v={formatSharePrice(price)} />
               <Row k="Price fetched" v={priceFetchedAt.toLocaleString()} />
               <Row k={t('rowFee')} v="< $0.01" />
             </div>
