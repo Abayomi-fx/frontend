@@ -361,7 +361,7 @@ const fieldLabel: CSSProperties = {
   marginBottom: 8,
 }
 const fieldSpacing: CSSProperties = {
-  marginBottom: 18,
+  marginBottom: 'var(--form-gap)',
 }
 const hintText: CSSProperties = {
   fontFamily: 'var(--font-body)',
