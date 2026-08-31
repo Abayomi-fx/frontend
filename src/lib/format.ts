@@ -9,7 +9,7 @@ export function roundToDecimals(value: number, decimals: number): number {
   return Math.round((value + Number.EPSILON) * factor) / factor
 }
 
-/** Rounds to whole cents — the shared precision for on-screen USDC amounts (#369). */
+/** Rounds to whole cents … the shared precision for on-screen USDC amounts (#369). */
 export function roundToCents(value: number): number {
   return roundToDecimals(value, 2)
 }
@@ -56,7 +56,7 @@ export function sanitizeAmount(val: string): string {
   const parts = clean.split('.')
   const joined = parts.length > 1 ? parts[0] + '.' + parts.slice(1).join('') : clean
   const [whole, ...rest] = joined.split('.')
-  const trimmedWhole = whole.replace(/^0+(?=\d), '')
+  const trimmedWhole = whole.replace(/^0+(?=\d)/, '')
   return rest.length > 0 ? trimmedWhole + '.' + rest.join('.') : trimmedWhole
 }
 
