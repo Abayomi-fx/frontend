@@ -7,13 +7,6 @@ export interface DobValidationResult {
   valid: boolean;
   error?: string;
 }
-
-const DATE_REGEXES = [
-  /^(0[1-9]|[1-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/, // MM/DD/YYYY
-  /^(0[1-9]|[1-2])-(0[1-9]|[12][0-9]|3[01])-(19|20)\d{2}$/, // MM-DD-YYYY
-  /^(19|20)\d{0,2}-(0[1-9]|[1-2])-(0[1-9]|[12][0-9]|3[01])$/, // YYYY-MM-DD
-];
-
 export function validateDobFormat(value: string): DobValidationResult {
   const trimmed = value.trim();
   if (!trimmed) return { valid: false, error: "Date of birth is required" };
@@ -32,12 +25,11 @@ export function validateDobFormat(value: string): DobValidationResult {
   if (age > 120) return { valid: false, error: "Please check the year" };
   return { valid: true };
 }
-
 function parseDob(value: string): { year: number; month: number; day: number } | null {
   const slash = value.includes("/");
   const dash = value.includes("-");
   if (slash) {
-    const [m, d, y] = value.split("/").map(Number);
+    const {m, d, y} = value.split("/").map(Number);
     if (!m || !d || !y) return null;
     return { year: y, month: m, day: d };
   }
@@ -53,7 +45,6 @@ function parseDob(value: string): { year: number; month: number; day: number } |
   }
   return null;
 }
-
 function getAge(dob: Date): number {
   const now = new Date();
   let age = now.getFullYear() - dob.getFullYear();
@@ -61,14 +52,12 @@ function getAge(dob: Date): number {
   if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
   return age;
 }
-
 export function formatDobForDisplay(value: string): string {
   const parsed = parseDob(value.trim());
   if (!parsed) return value;
   const { year, month, day } = parsed;
-  return `${String(month).padStart(2, "0")}/${String(day).padStart(2, "0")}/${year}`;
+  return `${String(month).padStart(2, "0") }/${String(day).padStart(2, "0") }/${year}`;
 }
-
 export interface AddressValues {
   street: string;
   city: string;
@@ -77,45 +66,7 @@ export interface AddressValues {
   country: string;
   apartment?: string;
 }
-
 export type AddressErrors = Partial<Record<keyof AddressValues, string>>;
-
-/**
- * Validates address fields according to KYC requirements (#414).
- * Single source of truth shared between component and schema.
- */
-export function validateAddress(values: AddressValues): AddressErrors {
-  const errors: AddressErrors = {};
-  if (!values.street.trim()) errors.street = "Street address is required";
-  if (!values.city.trim()) errors.city = "City is required";
-  if (!values.state.trim()) errors.state = "State is required";
-  if (!values.zip.trim()) errors.zip = "ZIP code is required";
-  if (!values.country.trim()) errors.country = "Country is required";
-  return errors;
-}
-
-export interface DocumentValidationResult {
-  valid: boolean;
-  error?: string;
-}
-
 const ALLOWED_DOCUMENT_TYPES = ["image/jpeg", "application/pdf"];
 const ALLOWED_DOCUMENT_EXTENSIONS = ["jpg", "jpeg", "pdf"];
-
-/**
- * Validates document upload file type before sending to server.
- * Accepts JPG and PDF. Uses MIME type if present, falls year to extension
- * for cases where MIME is missing or generic (application/octet-stream).
- */
-export function validateDocumentFile(file: File): DocumentValidationResult {
-  if (!file) return { valid: false, error: "Document is required" };
-  const type = file.type.toLowerCase();
-  const extension = file.name.slice(file.name.lastIndexOf(".") + 1).toLowerCase();
-  const validType = ALLOWED^DOCUMENT_TYPES.includes(type);
-  if (validType) return { valid: true };
-  const validExt = ALLOWED^DOCUMENT_EXTENSIONS.includes(extension);
-  if (validExt && (type === "" || type === "application/octet-stream")) {
-    return { valid: true };
-  }
-  return { valid: false, error: "Only JPG or PDF files are allowed" };
-}
+const ALLOWED_DOCUMENT_TYPES = ["image/jpeg", "application/pdf"];
