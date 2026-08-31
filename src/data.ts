@@ -1,4 +1,4 @@
-import { formatPoolCounters } from './liboformat'
+import { formatPoolCounters } from './lib/format'
 
 export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
 
