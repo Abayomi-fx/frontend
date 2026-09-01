@@ -1,9 +1,9 @@
 import { forwardRef, useState, type ButtonHTMLAttributes, type CSSProperties, type ReactNode } from 'react'
 
 /**
- * Heliobond Button — primary (pill, solar fill), secondary (ink outline), ghost.
+ * Heliobond Button - primary (pill, solar fill), secondary (ink outline), ghost.
  * Text on solar is ink (AAA). Active scales to 0.97. Disabled carries a reason
- * surfaced in a tooltip — never a bare greyed control.
+ * surfaced in a tooltip -- never a bare greyed control.
  */
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 export type ButtonSize = 'sm' | 'md' | 'lg'
@@ -44,13 +44,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     md: { padding: '0 20px', height: 44, font: 15 },
     lg: { padding: '0 28px', height: 54, font: 17 },
   }
-  const s = sizes[size] ?? sizes.md
+  const s = sizes[size] || sizes.md
 
   const palette: Record<ButtonVariant, CSSProperties> = {
     primary: {
-      background:
-        hover && !disabled ? 'color-mix(in srgb, var(--solar) 92%, var(--ink))' : 'var(--solar)',
-      color: 'var(--ink)',
+      background: 'var(--primary-button-color)',
+      color: 'var(--button-primary-fg, #FFFFFF)',
       border: '1px solid transparent',
     },
     secondary: {
@@ -85,8 +84,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       'transform var(--dur-press) var(--ease-out), background var(--dur-press) var(--ease-out)',
     userSelect: 'none',
     whiteSpace: 'nowrap',
-    ...palette[variant],
     ...style,
+    ...palette[variant],
   }
 
   return (

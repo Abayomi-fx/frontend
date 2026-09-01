@@ -1,7 +1,8 @@
-import { type CSSProperties } from 'react'
+import { memo, useState, useMemo, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
 import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon, WatchlistButton } from '../components'
-import { Sparkline } from '../components/Sparkline'
+import { Sparkline as SparklineUnmemoized } from '../components/Sparkline'
+const Sparkline = memo(SparklineUnmemoized)
 import { formatMoney } from '../lib/format'
 
 import { type Project } from '../data'
@@ -20,8 +21,17 @@ export interface ProjectDetailProps {
   onBack?: () => void
 }
 
-export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDetailProps) {
+export const ProjectDetail = memo(function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDetailProps) {
   const t = useTranslations('ProjectDetail')
+  const [investmentUrl, setInvestmentUrl] = useState<string | null>(null)
+  const creditHistory = useMemo(
+    () => detail.scoreHistory.credit.map((p) => p.value),
+    [detail.scoreHistory.credit],
+  )
+  const greenHistory = useMemo(
+    () => detail.scoreHistory.green.map((p) => p.value),
+    [detail.scoreHistory.green],
+  )
   return (
     <main id="main-content" style={{ maxWidth: 860, margin: '0 auto', padding: '40px 24px 96px' }}>
       {onBack && (
@@ -154,7 +164,7 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
           <ScoreColumn
             value={project.credit}
             label={t('creditLabel')}
-            history={detail.scoreHistory.credit.map((p) => p.value)}
+            history={creditHistory}
             sparkLabel={t('creditHistory')}
             onChainNote={t('onChainNote')}
             verifiedAgo={t('verifiedAgo')}
@@ -162,7 +172,7 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
           <ScoreColumn
             value={project.green}
             label={t('greenLabel')}
-            history={detail.scoreHistory.green.map((p) => p.value)}
+            history={greenHistory}
             sparkLabel={t('greenHistory')}
             onChainNote={t('onChainNote')}
             verifiedAgo={t('verifiedAgo')}
@@ -389,9 +399,9 @@ export function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDeta
       </section>
     </main>
   )
-}
+});
 
-function ScoreColumn({
+const ScoreColumn = memo(function ScoreColumn({
   value,
   label,
   history,
@@ -454,7 +464,7 @@ function ScoreColumn({
       </div>
     </div>
   )
-}
+});
 
 const sectionTitle: CSSProperties = {
   fontFamily: 'var(--font-display)',
