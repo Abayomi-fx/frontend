@@ -7,6 +7,16 @@ import { submitWithdraw } from '../wallet/vault'
 import { useWallet } from '../wallet/WalletProvider'
 import { formatDecimal, parseAmount } from '../lib/format'
 
+const LIQUID_SHARE = 236
+const TOTAL_LIQUID = 482
+const TOTAL_LIQUID_BALANCE = '482.00'
+const QUICK_WITHDRAW_AMOUNT_SMALL = 2000
+const QUICK_WITHDRAW_AMOUNT_MEDIUM = 5000
+const QUICK_WITHDRAW_AMOUNT_LARGE = 10000
+const QUICK_WITHDRAW_AMOUNTS = [QUICK_WITHDRAW_AMOUNT_SMALL, QUICK_WITHDRAW_AMOUNT_MEDIUM, QUICK_WITHDRAW_AMOUNT_LARGE]
+const MIN_WITHDRAWAL_AMOUNT = 1
+const DISPLAY_DECIMALS = 2
+
 /**
  * Withdraw — designed with the most care of all. Capped at the live liquid
  * maximum; typing past it explains instead of erroring, with one-tap max.
@@ -23,7 +33,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
   const t = useTranslations('Withdraw')
   const { toast } = useToast()
   const { address, sign } = useWallet()
-  const liquid = 236 // your liquid share, $
+  const liquid = LIQUID_SHARE // your liquid share, $
   const [step, setStep] = useState<WithdrawStep>('amount')
   const [amount, setAmount] = useState('')
   const [txHash, setTxHash] = useState<string | null>(null)
@@ -82,7 +92,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
               </div>
             )}
             <div style={{ marginBottom: 18 }}>
-              <LiquidityMeter liquid={liquid} total={482} currency="$" />
+              <LiquidityMeter liquid={liquid} total={TOTAL_LIQUID} currency="$" />
             </div>
             <AmountInput
               value={amount}
@@ -90,8 +100,8 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
               label={t('amountLabel')}
               currency="USDC"
               balanceLabel={t('yourValue')}
-              balance="482.00"
-              chips={[25, 50, 100]}
+              balance={TOTAL_LIQUID_BALANCE}
+              chips={QUICK_WITHDRAW_AMOUNTS}
               cap={liquid}
               capMessage={t('capMessage', { cap: liquid })}
               maxChipLabel={t('maxChip')}
@@ -101,8 +111,8 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
               variant="primary"
               size="lg"
               style={{ width: '100%', marginTop: 20, background: 'var(--primary)' }}
-              disabled={n < 1 || n > liquid}
-              reason={n > liquid ? t('reasonExceeds') : n < 1 ? t('reasonMin') : undefined}
+              disabled={n < MIN_WITHDRAWAL_AMOUNT || n > liquid}
+              reason={n > liquid ? t('reasonExceeds') : n < MIN_WITHDRAWAL_AMOUNT ? t('reasonMin') : undefined}
               onClick={async () => {
                 changeStep('pending')
                 setTxError(null)
@@ -116,7 +126,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
                     toast({
                       tone: 'success',
                       title: 'Withdrawal settled',
-                      message: `${formatDecimal(n, 2)} USDC is on its way to your wallet.`,
+                      message: `${formatDecimal(n, DISPLAY_DECIMALS)} USDC is on its way to your wallet.`,
                     })
                   }
                 } catch (e) {
@@ -136,7 +146,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
                 }
               }}
             >
-              {n >= 1 && n <= liquid ? t('withdrawCta', { amount: n }) : t('withdrawCtaEmpty')}
+              {n >= MIN_WITHDRAWAL_AMOUNT && n <= liquid ? t('withdrawCta', { amount: n }) : t('withdrawCtaEmpty')}
             </Button>
             <button
               onClick={onBack}
@@ -225,7 +235,7 @@ export function Withdraw({ onDone, onBack }: WithdrawProps) {
               }}
             >
               {t.rich('successBody', {
-                amount: formatDecimal(n, 2),
+                amount: formatDecimal(n, DISPLAY_DECIMALS),
                 num: (c: ReactNode) => (
                   <b className="hb-data" style={{ color: 'var(--ink)' }}>
                     {c}
