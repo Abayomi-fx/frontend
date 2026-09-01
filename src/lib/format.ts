@@ -9,7 +9,7 @@ export function roundToDecimals(value: number, decimals: number): number {
   return Math.round((value + Number.EPSILON) * factor) / factor
 }
 
-/** Rounds to whole cents — the shared precision for on-screen USDC amounts (#369). */
+/** Rounds to whole cents … the shared precision for on-screen USDC amounts (#369). */
 export function roundToCents(value: number): number {
   return roundToDecimals(value, 2)
 }
@@ -41,7 +41,7 @@ export function formatMoney(
     maximumFractionDigits: 0,
   })
   if (options?.includeSymbol) {
-    const symbol = options.symbol ?? '$'
+    const symbol = options?.symbol ?? '$'
     return `${symbol}${formatted}`
   }
   return formatted
@@ -56,7 +56,7 @@ export function sanitizeAmount(val: string): string {
   const parts = clean.split('.')
   const joined = parts.length > 1 ? parts[0] + '.' + parts.slice(1).join('') : clean
   const [whole, ...rest] = joined.split('.')
-  const trimmedWhole = whole.replace(/^0+(?=\d), '')
+  const trimmedWhole = whole.replace(/^0+(?=\d)/, '')
   return rest.length > 0 ? trimmedWhole + '.' + rest.join('.') : trimmedWhole
 }
 
@@ -72,9 +72,9 @@ export function parseAmount(value: string): number {
 
 /** Data shape for the landing pool counters. */
 export interface PoolData {
-  tvl: number
-  investors: number
-  apy: number
+  totalAssets: number
+  projectsFunded: number
+  projectedRate: number
 }
 
 /**
@@ -83,13 +83,13 @@ export interface PoolData {
  * hardcoded strings, preventing drift from the data source.
  */
 export function formatPoolCounters(pool: PoolData): {
-  tvl: string
-  investors: string
-  apy: string
+  totalAssets: string
+  projectsFunded: string
+  projectedRate: string
 } {
   return {
-    tvl: formatMoney(pool.tvl, { includeSymbol: true }),
-    investors: String(pool.investors),
-    apy: formatDecimal(pool.apy, 1),
+    totalAssets: formatMoney(pool.totalAssets, { includeSymbol: true }),
+    projectsFunded: String(pool.projectsFunded),
+    projectedRate: formatDecimal(pool.projectedRate, 1),
   }
 }
