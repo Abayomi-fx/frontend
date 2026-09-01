@@ -27,6 +27,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
   const { connected, connect } = useWallet()
   const d = HB_DATA
   const risk = getPortfolioRisk(d.holdings)
+  const referralLink = (d.you as { referralLink?: string }).referralLink
 
   if (!connected) {
     return (
@@ -152,6 +153,16 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           </p>
         </div>
       </Card>
+      {referralLink ? (
+        <Card style={{ padding: 22, marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+            <StatBlock label="Referral program" value={referralLink} size="sm" />
+            <Button variant="secondary" onClick={() => void navigator.clipboard?.writeText(referralLink)}>
+              Share
+            </Button>
+          </div>
+        </Card>
+      ) : null}
 
       <div className="hb-portfolio-grid">
         {/* Impact */}

@@ -2,6 +2,7 @@
   "Common": {
     "copyAddress": "Copier {label}",
     "copied": "Copié",
+    "referralShareLink": "Lien de parrainage",
     "viewOnExplorer": "Voir {label} sur Stellar Expert"
   },
   "Nav": {
@@ -20,6 +21,7 @@
     "watchlist": "Liste de suivi",
     "copyAddress": "Copier l'adresse",
     "copied": "Copié",
+    "referralShareLink": "Lien de parrainage",
     "viewOnExplorer": "Voir sur Stellar Expert",
     "disconnect": "Se déconnecter",
     "disconnectConfirm": "Oui, se déconnecter",

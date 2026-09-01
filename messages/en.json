@@ -14,6 +14,8 @@
     "testnet": "Testnet (active)",
     "networkStatus": "Network: Testnet active",
     "portfolio": "Your portfolio",
+    "referral": "Referral",
+    "shareLink": "Share your referral link",
     "switchToDark": "Switch to dark",
     "switchToLight": "Switch to light",
     "language": "Language",
@@ -185,6 +187,13 @@
     "riskCaption": "Based on the mix of bond ratings in your holdings.",
     "activityTitle": "Activity",
     "activityNote": "every entry → Stellar Expert"
+  },
+  "Referral": {
+    "title": "Referral program",
+    "shareLink": "Share your referral link",
+    "yourReferralLink": "Your referral link",
+    "copyLink": "Copy referral link",
+    "copied": "Copied"
   },
   "Withdraw": {
     "h1": "Withdraw from the pool",
