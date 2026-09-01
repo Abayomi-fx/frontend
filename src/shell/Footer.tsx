@@ -18,89 +18,20 @@ export function Footer() {
           <span className="hb-footer__wordmark">heliobond</span>
         </div>
         <div className="hb-footer__links">
-          <nav
-            style={{
-              display: 'flex',
-              gap: 22,
-              alignItems: 'center',
-              fontFamily: 'var(--font-body)',
-              fontSize: 14,
-              color: 'var(--ink-60)',
-              flexWrap: 'wrap',
-            }}
-            aria-label={t('trustLinks')}
-          >
-            <a
-              href="/verify"
-              className="hb-textlink"
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                fontSize: 'inherit',
-                color: 'var(--ink-60)',
-                textDecoration: 'none',
-              }}
-            >
+          <nav className="hb-footer__nav" aria-label={t('trustLinks')}>
+            <a href="/verify" className="hb-footer__link">
               {t('verify')}
             </a>
-            <a
-              href="/risk"
-              className="hb-textlink"
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                fontSize: 'inherit',
-                color: 'var(--ink-60)',
-                textDecoration: 'none',
-              }}
-            >
+            <a href="/risk" className="hb-footer__link">
               {t('risk')}
             </a>
-            <a
-              href="/learn"
-              className="hb-textlink"
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                fontSize: 'inherit',
-                color: 'var(--ink-60)',
-                textDecoration: 'none',
-              }}
-            >
+            <a href="/learn" className="hb-footer__link">
               {t('learn')}
             </a>
-            <a
-              href="/talk"
-              className="hb-textlink"
-              style={{
-                fontFamily: 'inherit',
-                fontSize: 'inherit',
-                color: 'var(--ink)',
-                fontWeight: 600,
-                textDecoration: 'none',
-              }}
-            >
+            <a href="/talk" className="hb-footer__link hb-footer__link--strong">
               {t('talk')}
             </a>
-            <Link
-              href="/admin"
-              className="hb-textlink"
-              style={{
-                color: 'var(--ink-40)',
-                textDecoration: 'none',
-                fontFamily: 'inherit',
-                fontSize: 13,
-              }}
-            >
+            <Link href="/admin" className="hb-footer__admin">
               {t('admin')}
             </Link>
           </nav>
