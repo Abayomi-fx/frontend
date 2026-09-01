@@ -24,6 +24,15 @@ export function formatDecimal(value: number, decimals: number): string {
 }
 
 /**
+ * Formats the vault share price with the shared precision used everywhere
+ * the figure appears (deposit preview, admin stat cell, data source) so the
+ * same value reads identically across screens (#394).
+ */
+export function formatSharePrice(value: number): string {
+  return formatDecimal(value, 4)
+}
+
+/**
  * Formats a number as a localized currency/money string.
  * Defaults to 'en-US' formatting.
  */
