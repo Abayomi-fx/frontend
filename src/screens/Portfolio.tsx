@@ -87,6 +87,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
             decimals=".45"
             delta={`++$612.18 (2.6%) ${t('sinceDeposit')} + $320 pending`}
             size="lg"
+            stackOnMobile
           />
           <p
             style={{

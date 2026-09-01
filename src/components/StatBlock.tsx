@@ -18,6 +18,7 @@ export interface StatBlockProps {
   size?: StatBlockSize
   href?: string
   style?: CSSProperties
+  stackOnMobile?: boolean
 }
 
 export function StatBlock({
@@ -30,6 +31,7 @@ export function StatBlock({
   size = 'md',
   href,
   style,
+  stackOnMobile = false,
 }: StatBlockProps) {
   // Each rung maps onto the shared type ladder (see tokens/typography.css):
   // value is the figure, label the caption, delta the signed change.
@@ -41,7 +43,7 @@ export function StatBlock({
   const s = sizes[size] ?? sizes.md
 
   const dir = deltaDirection || (delta && delta.trim().startsWith('-') ? 'down' : 'up')
-  const arrow = dir === 'down' ? '↓' : '⇑'
+  const arrow = dir === 'down' ? '↓' : '↑'
   const deltaColor = dir === 'down' ? 'var(--ember)' : 'var(--growth)'
 
   const wrapperStyle: CSSProperties = { display: 'block', textDecoration: 'none', ...style }
@@ -65,7 +67,10 @@ export function StatBlock({
           </span>
         )}
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+      <div
+        className={stackOnMobile ? 'hb-stat-block-row hb-stat-block-row--stack' : 'hb-stat-block-row'}
+        style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}
+      >
         <span
           style={{
             fontFamily: 'var(--font-data)',
@@ -74,10 +79,11 @@ export function StatBlock({
             color: 'var(--ink)',
             fontFeatureSettings: '"tnom" 1',
             lineHeight: 1.05,
+            minWidth: 0,
           }}
         >
           {value}
-          {decimals != null && <span style={{ color: 'var(--ink-60)' }}>{decimals}</span>
+          {decimals != null && <span style={{ color: 'var(--ink-60)' }}>{decimals}</span>}
           {unit && (
             <span style={{ fontSize: '0.55em', color: 'var(--ink-60)', marginInlineStart: 4 }}>
               {unit}
@@ -86,6 +92,7 @@ export function StatBlock({
         </span>
         {delta && (
           <span
+            className={stackOnMobile ? 'hb-stat-block-delta hb-stat-block-delta--stack' : 'hb-stat-block-delta'}
             style={{
               fontFamily: 'var(--font-data)',
               fontWeight: 'var(--font-weight-semibold)',
