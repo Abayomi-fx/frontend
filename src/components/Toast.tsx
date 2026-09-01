@@ -7,80 +7,89 @@ import {
   useCallback,
   type CSSProperties,
   type ReactNode,
-} from 'react'
-import { CloseIcon } from './icons'
+} from 'react';
+import { CloseIcon } from './icons';
 
-export type ToastTone = 'neutral' | 'success' | 'error' | 'solar'
+export type ToastTone = 'neutral' | 'success' | 'error' | 'solar';
 
 export interface ToastProps {
-  tone?: ToastTone
-  title?: string
-  message?: string
-  action?: ReactNode
-  undo:? () => void
-  onDismiss?: () => void
-  href?: string
-  style?: CSSProperties
+  tone?: ToastTone;
+  title?: string;
+  message?: string;
+  action?: ReactNode;
+  undo?: () => void;
+  onDismiss?: () => void;
+  href?: string;
+  style?: CSSProperties;
 }
 
-export function Toast({ tone = 'neutral', title, message, action, undo, onDismiss, href, style }: ToastProps) {
+export function Toast({
+  tone = 'neutral',
+  title,
+  message,
+  action,
+  undo,
+  onDismiss,
+  href,
+  style,
+}: ToastProps) {
   const accents: Record<ToastTone, string> = {
     neutral: 'var(--ink)',
     success: 'var(--growth)',
     error: 'var(--ember)',
     solar: 'var(--solar)',
-  }
-  const accent = accents[tone] || accents.neutral
+  };
+  const accent = accents[tone] || accents.neutral;
 
-  const hasActions = Boolean(action) || Boolean(undo)
+  const hasActions = Boolean(action) || Boolean(undo);
 
   const content = (
     <>
       <span
-        style={
+        style={{
           width: 4,
           alignSelf: 'stretch',
           borderRadius: 'var(--radius-pill)',
           background: accent,
-          flex: '0 0 auto',
-        }
+          flex: '0 auto',
+        }}
         aria-hidden="true"
       />
-      <div style={ flex: 1, minWidth: 0 }>
+      <div style={{ flex: 1, minWidth: 0 }}>
         {title && (
           <div
-            style={
+            style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 600,
               fontSize: 'var(--type-data)',
               color: 'var(--ink)',
               marginBottom: message ? 2 : 0,
-            }
+            }}
           >
             {title}
           </div>
         )}
         {message && (
           <div
-            style={
+            style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--type-small)',
               lineHeight: 1.45,
               color: 'var(--ink-60)',
-            }
+            }}
           >
             {message}
           </div>
         )}
         {undo && (
-          <div style={ marginTop: 10 }>
+          <div style={{ marginTop: 10 }}>
             <button
               type="button"
               onClick={() => {
-                undo()
-                onDismiss?.()
+                undo();
+                onDismiss?.();
               }}
-              style={
+              style={{
                 fontFamily: 'var(--font-body)',
                 fontWeight: 600,
                 fontSize: 'var(--type-small)',
@@ -90,22 +99,22 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
                 padding: 0,
                 cursor: 'pointer',
                 textDecoration: 'underline',
-              }
+              }}
             >
               Undo
             </button>
           </div>
         )}
-        {action && <div style={ marginTop: 10 }>{action}</div>}
+        {action && <div style={{ marginTop: 10 }}>{action}</div>}
       </div>
     </>
-  )
+  );
 
   return (
     <div
       role={hasActions ? 'alertdialog' : 'status'}
       aria-label={hasActions ? (title || message) : undefined}
-      style={
+      style={{
         display: 'flex',
         alignItems: 'flex-start',
         gap: 12,
@@ -117,12 +126,12 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
         borderRadius: 'var(--radius-card)',
         boxShadow: 'var(--shadow-md)',
         ...style,
-      }
+      }}
     >
       {href && !hasActions ? (
         <a
           href={href}
-          style={
+          style={{
             display: 'flex',
             alignItems: 'flex-start',
             gap: 12,
@@ -130,7 +139,7 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
             minWidth: 0,
             textDecoration: 'none',
             color: 'inherit',
-          }
+          }}
         >
           {content}
         </a>
@@ -142,7 +151,7 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
           type="button"
           aria-label="Dismiss"
           onClick={onDismiss}
-          style={
+          style={{
             flex: '0 0 auto',
             width: 28,
             height: 28,
@@ -154,63 +163,70 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-          }
+          }}
         >
           <CloseIcon />
         </button>
       )}
     </div>
-  )
+  );
 }
 
 export interface ToastContextType {
-  toast: (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => void
-  dismiss: (id?: string) => void
+  toast: (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => void;
+  dismiss: (id?: string) => void;
 }
 
-const ToastContext = createContext<ToastContextType | null>(null)
+const ToastContext = createContext<ToastContextType | null>(null);
 
-const MAX_ACTIVE_TOACTS = 3
+const MAX_ACTIVE_TOASTS = 3;
+const DEFAULT_TOAST_DURATION = 5000;
+const MIN_SUCCESS_TOAST_DURATION = 10000;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [activeToasts, setActiveToasts] = useState<
     (ToastProps & { id: string; duration?: number })[]
-  >([])
+  >([]);
 
   const showToast = useCallback(
-    (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
-      const id = Math.random().toString(36).substring(2, 9)
-      const hasActions = Boolean(options.action) || Boolean(options.undo)
-      const duration = options.duration ?? (hasDctions ? 0 : 5000)
+    (
+      options: Omit<ToastProps, 'onDismiss'> & { duration?: number }
+    ) => {
+      const id = Math.random().toString(36).substring(2, 9);
       setActiveToasts((prev) => {
-        const next = [...prev, { ...options, id, duration }]
-        return next.length > MAX_ACTIVE_TOACTS ? next.slice(next.length - MAX_ACTIVE_TOACTS) : next
-      })
-
-      if (duration > 0) {
+        const next = [...prev, { ...options, id }];
+        return next.length > MAX_ACTIVE_TOASTS
+          ? next.slice(next.length - MAX_ACTIVE_TOASTS)
+          : next;
+      });
+      const ms = Math.max(
+        options.duration ?? DEFAULT_TOAST_DURATION,
+        options.tone === 'success' ? MIN_SUCCESS_TOAST_DURATION : 0,
+      );
+      if (ms > 0) {
         setTimeout(() => {
-          setActiveToasts((prev) => prev.filter((t) => t.id !== id))
-        }, duration)
+          setActiveToasts((prev) => prev.filter((t) => t.id !== id));
+        }, ms);
       }
     },
     [],
-  )
+  );
 
   const dismiss = useCallback((id?: string) => {
     if (id) {
-      setActiveToasts((prev) => prev.filter((t) => t.id !== id))
+      setActiveToasts((prev) => prev.filter((t) => t.id !== id));
     } else {
-      setActiveToasts([])
+      setActiveToasts([]);
     }
-  }, [])
+  }, []);
 
   return (
-    <ToastContext.Provider value={ toast: showToast, dismiss }>
+    <ToastContext.Provider value={{ toast: showToast, dismiss }}>
       {children}
       {activeToasts.length > 0 && (
-        <div role="status" aria-live="polite" aria-atomic="true" style={ position: 'fixed', insetEnd: 24, bottom: 24, zIndex: 9999, display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-end' }>
+        <div role="status" aria-live="polite" aria-atomic="true" style={{ position: 'fixed', insetEnd: 24, bottom: 24, zIndex: 9999, display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-end' }}>
           {activeToasts.map((activeToast) => (
-            <Toas
+            <Toast
               key={activeToast.id}
               tone={activeToast.tone}
               title={activeToast.title}
@@ -221,17 +237,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               onDismiss={() => dismiss(activeToast.id)}
               style={activeToast.style}
             />
-          )}
+          ))}
         </div>
       )}
     </ToastContext.Provider>
-  )
+  );
 }
 
 export function useToast() {
-  const context = useContext(ToastContext)
+  const context = useContext(ToastContext);
   if (!context) {
-    throw new Error('useToast must be used within a ToastProvider')
+    throw new Error('useToast must be used within a ToastProvider');
   }
-  return context
+  return context;
 }
