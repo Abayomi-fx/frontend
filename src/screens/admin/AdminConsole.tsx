@@ -89,6 +89,11 @@ export function AdminConsole() {
     status: Creator['status'],
     rejectionReason?: string,
   ) => {
+    // Revoking a creator is consequential: confirm first, then offer undo.
+    if (status === 'pending' || status === 'rejected') {
+      const c = whitelist.find((x) => x.address === address)
+      if (!window.confirm(`${t('actionRevoke')} ${c?.name ?? 'Creator'}?`)) return
+    }
     setWhitelist((list) =>
       list.map((c) =>
         c.address === address
@@ -116,6 +121,13 @@ export function AdminConsole() {
       tone: toneMap[status],
       title: titleMap[status],
       message: messageMap[status],
+      action:
+        status !== 'approved'
+          ? {
+              label: t('actionUndo'),
+              onClick: () => setCreatorStatus(address, 'approved'),
+            }
+          : undefined,
       duration: 5000,
       stackable: true,
     })

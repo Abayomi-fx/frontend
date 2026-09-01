@@ -66,7 +66,7 @@ export function RegistryTable({ rows, onSave }: RegistryTableProps) {
   }
 
   return (
-    <div style={{ overflowX: 'auto', maxHeight: 320, overflowY: 'auto' }}>
+    <div style={scrollWrapStyle}>
       <table style={tableStyle}>
         <thead>
           <tr>
@@ -122,7 +122,7 @@ export function RegistryTable({ rows, onSave }: RegistryTableProps) {
               sortLabel={t('sortBy', { col: t('colLastVerified') })}
               align="right"
             />
-            <th style={{ ...thBase, textAlign: 'end' }}>
+            <th style={thActions}>
               <span className="hb-eyebrow">{t('colActions')}</span>
             </th>
           </tr>
@@ -173,34 +173,22 @@ function Th({
   const active = k === sortKey
   const ariaSort = active ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'
 
+  const thCellStyle = align === 'right' ? thRight : thLeft
+
   return (
-    <th aria-sort={ariaSort} style={{ ...thBase, textAlign: align }}>
+    <th aria-sort={ariaSort} style={thCellStyle}>
       <button
         type="button"
         onClick={() => onSort(k)}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 4,
-          flexDirection: align === 'right' ? 'row-reverse' : 'row',
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          cursor: 'pointer',
-          color: active ? 'var(--ink)' : 'var(--ink-60)',
-        }}
+        style={align === 'right' ? thBtnRight : thBtnLeft}
         aria-label={sortLabel}
       >
-        <span className="hb-eyebrow" style={{ color: 'inherit' }}>
+        <span className="hb-eyebrow" style={active ? thLabelActive : thLabelInactive}>
           {label}
         </span>
         <span
           aria-hidden="true"
-          style={{
-            fontFamily: 'var(--font-data)',
-            fontSize: 'var(--type-micro)',
-            color: active ? 'var(--ink)' : 'var(--ink-40)',
-          }}
+          style={active ? thIndicatorActive : thIndicatorInactive}
         >
           {active ? (sortDir === 'asc' ? '↑' : '↓') : '↕'}
         </span>
@@ -246,21 +234,21 @@ function Row({
 
   return (
     <>
-      <tr style={{ borderTop: '1px solid var(--ink-12)' }}>
+      <tr style={rowBorderStyle}>
         <td style={tdStyle}>
-          <div style={{ fontWeight: 600, color: 'var(--ink)' }}>{row.name}</div>
-          <div style={{ fontSize: 'var(--type-eyebrow)', color: 'var(--ink-60)' }}>
+          <div style={nameStyle}>{row.name}</div>
+          <div style={locationStyle}>
             {row.location}
           </div>
         </td>
         <td style={tdStyle}>
           <span style={typePill}>{row.type}</span>
         </td>
-        <td style={{ ...tdStyle, ...numCell }}>{row.credit}</td>
-        <td style={{ ...tdStyle, ...numCell }}>{row.green}</td>
-        <td style={{ ...tdStyle, ...numCell }}>{row.funded}</td>
-        <td style={{ ...tdStyle, ...numCell, color: 'var(--ink-60)' }}>{row.lastVerified}</td>
-        <td style={{ ...tdStyle, textAlign: 'end' }}>
+        <td style={tdNumStyle}>{row.credit}</td>
+        <td style={tdNumStyle}>{row.green}</td>
+        <td style={tdNumStyle}>{row.funded}</td>
+        <td style={tdLastVerifiedStyle}>{row.lastVerified}</td>
+        <td style={tdActionsStyle}>
           {!editing && (
             <Button size="sm" variant="ghost" onClick={open}>
               {updateLabel}
@@ -269,22 +257,15 @@ function Row({
         </td>
       </tr>
       {editing && (
-        <tr style={{ background: 'var(--ink-06)' }}>
-          <td colSpan={7} style={{ padding: '12px 14px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--type-caption)',
-                  color: 'var(--ink-60)',
-                  alignSelf: 'center',
-                }}
-              >
+        <tr style={editingRowStyle}>
+          <td colSpan={7} style={editingCellStyle}>
+            <div style={editorFlexStyle}>
+              <span style={reVerifySpanStyle}>
                 {reVerifyLabel}
               </span>
               <ScoreField label={creditFieldLabel} value={credit} onChange={setCredit} />
               <ScoreField label={greenFieldLabel} value={green} onChange={setGreen} />
-              <div style={{ display: 'flex', gap: 8, marginInlineStart: 'auto' }}>
+              <div style={btnGroupStyle}>
                 <Button size="sm" variant="ghost" onClick={onCancel}>
                   {cancelLabel}
                 </Button>
@@ -314,7 +295,7 @@ function ScoreField({
   onChange: (v: string) => void
 }) {
   return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+    <label style={scoreLabelStyle}>
       <span className="hb-eyebrow">{label}</span>
       <input
         type="number"
@@ -328,3 +309,133 @@ function ScoreField({
     </label>
   )
 }
+
+const scrollWrapStyle: CSSProperties = {
+  overflowX: 'auto',
+  maxHeight: 320,
+  overflowY: 'auto',
+}
+
+const tableStyle: CSSProperties = {
+  width: '100%',
+  borderCollapse: 'collapse',
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-small)',
+}
+
+const thBase: CSSProperties = {
+  background: 'var(--ink-06)',
+  padding: '10px 14px',
+  position: 'sticky',
+  top: 0,
+  whiteSpace: 'nowrap',
+  zIndex: 1,
+}
+
+const tdStyle: CSSProperties = {
+  padding: '12px 14px',
+  verticalAlign: 'middle',
+  color: 'var(--ink)',
+}
+
+const numCell: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontFeatureSettings: '"tnum" 1',
+  textAlign: 'end',
+  whiteSpace: 'nowrap',
+}
+
+const typePill: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  height: 22,
+  padding: '0 9px',
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-eyebrow)',
+  fontWeight: 500,
+  color: 'var(--ink)',
+  background: 'var(--ink-06)',
+  border: '1px solid var(--ink-12)',
+  borderRadius: 'var(--radius-pill)',
+  whiteSpace: 'nowrap',
+}
+
+const inputStyle: CSSProperties = {
+  width: 72,
+  height: 36,
+  padding: '0 10px',
+  fontFamily: 'var(--font-data)',
+  fontSize: 'var(--type-small)',
+  fontFeatureSettings: '"tnum" 1',
+  color: 'var(--ink)',
+  background: 'var(--surface)',
+  border: '1px solid var(--ink-12)',
+  borderRadius: 'var(--radius-input)',
+  outline: 'none',
+}
+
+// ── Th static styles ────────────────────────────────────────────────────────
+const thLeft: CSSProperties = { ...thBase, textAlign: 'left' }
+const thRight: CSSProperties = { ...thBase, textAlign: 'right' }
+const thActions: CSSProperties = { ...thBase, textAlign: 'end' }
+
+const thBtnBase: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 4,
+  background: 'none',
+  border: 'none',
+  padding: 0,
+  cursor: 'pointer',
+}
+const thBtnLeft: CSSProperties = { ...thBtnBase, flexDirection: 'row' }
+const thBtnRight: CSSProperties = { ...thBtnBase, flexDirection: 'row-reverse' }
+
+const thLabelActive: CSSProperties = { color: 'var(--ink)' }
+const thLabelInactive: CSSProperties = { color: 'var(--ink-60)' }
+const thIndicatorActive: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontSize: 'var(--type-micro)',
+  color: 'var(--ink)',
+}
+const thIndicatorInactive: CSSProperties = {
+  fontFamily: 'var(--font-data)',
+  fontSize: 'var(--type-micro)',
+  color: 'var(--ink-40)',
+}
+
+// ── Row static styles ────────────────────────────────────────────────────────
+const rowBorderStyle: CSSProperties = { borderTop: '1px solid var(--ink-12)' }
+
+const nameStyle: CSSProperties = { fontWeight: 600, color: 'var(--ink)' }
+const locationStyle: CSSProperties = {
+  fontSize: 'var(--type-eyebrow)',
+  color: 'var(--ink-60)',
+}
+
+const tdNumStyle: CSSProperties = { ...tdStyle, ...numCell }
+const tdLastVerifiedStyle: CSSProperties = { ...tdStyle, ...numCell, color: 'var(--ink-60)' }
+const tdActionsStyle: CSSProperties = { ...tdStyle, textAlign: 'end' }
+
+const editingRowStyle: CSSProperties = { background: 'var(--ink-06)' }
+const editingCellStyle: CSSProperties = { padding: '12px 14px' }
+const editorFlexStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'flex-end',
+  gap: 16,
+  flexWrap: 'wrap',
+}
+const reVerifySpanStyle: CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-caption)',
+  color: 'var(--ink-60)',
+  alignSelf: 'center',
+}
+const btnGroupStyle: CSSProperties = {
+  display: 'flex',
+  gap: 8,
+  marginInlineStart: 'auto',
+}
+
+// ── ScoreField static styles ─────────────────────────────────────────────────
+const scoreLabelStyle: CSSProperties = { display: 'flex', flexDirection: 'column', gap: 4 }

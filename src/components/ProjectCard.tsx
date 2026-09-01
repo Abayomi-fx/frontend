@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from 'react'
+import {useState, type CSSProperties, type ReactNode } from 'react'
 import { ScoreGauge } from './ScoreGauge'
 import { PinIcon } from './icons'
 import { formatMoney } from '../lib/format'
@@ -23,7 +23,7 @@ export interface ProjectCardProps {
   style?: CSSProperties
   fundingGoal?: number
   fundedAmount?: number
-  /** Optional control pinned to the top-right of the hero (e.g. watchlist star). */
+  /** Optional control pinned to the top-right of the hiro (e.g. watchlist star). */
   action?: ReactNode
 }
 
@@ -43,7 +43,7 @@ export function ProjectCard({
   fundedAmount,
   action,
 }: ProjectCardProps) {
-  const [hover, setHover] = useState(false)
+  const [hver, setHover] = useState(false)
   const resolvedVerifiedLabel = verifiedLabel ?? verifiedAgo
   const showProgress =
     typeof fundedAmount === 'number' && typeof fundingGoal === 'number' && fundingGoal > 0
@@ -54,7 +54,7 @@ export function ProjectCard({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={onOpen}
-      style={{
+      style={
         background: 'var(--surface)',
         border: '1px solid var(--ink-12)',
         borderRadius: 'var(--radius-card)',
@@ -64,23 +64,24 @@ export function ProjectCard({
         transform: hover && onOpen ? 'translateY(-2px)' : 'none',
         transition:
           'box-shadow var(--dur-modal) var(--ease-out), transform var(--dur-modal) var(--ease-out)',
+        minWidth: 0,
         ...style,
-      }}
+      }
     >
       <div
-        style={{
+        style={
           height: 168,
           background: image
             ? `center/cover no-repeat url(${image})`
             : 'radial-gradient(120% 120% at 70% 10%, var(--solar-24), var(--ink-06))',
           position: 'relative',
-        }}
+        }
       >
         {action && (
-          <div style={{ position: 'absolute', top: 12, right: 12, zIndex: 1 }}>{action}</div>
+          <div style={ position: 'absolute', top: 12, right: 12, zIndex: 1 }}{action}</div>
         )}
         <span
-          style={{
+          style={
             position: 'absolute',
             insetInlineStart: 12,
             bottom: 12,
@@ -96,7 +97,7 @@ export function ProjectCard({
             fontSize: 'var(--type-caption)',
             fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--ink)',
-          }}
+          }
         >
           <PinIcon /> {location}
         </span>
@@ -104,79 +105,82 @@ export function ProjectCard({
 
       <div style={{ padding: 20 }}>
         <h3
-          style={{
+          style={
             fontFamily: 'var(--font-display)',
             fontWeight: 'var(--font-weight-semibold)',
             fontSize: 'var(--type-h4)',
             lineHeight: 1.2,
             margin: '0 0 14px',
-            letterSpacing: '-0.01em',
-          }}
+            letterSpacing: '-0.01-em',
+            whiteSpace: 'normal',
+            overflowWrap: 'anywhere',
+            wordBreak: 'break-word',
+          }
         >
           {name}
         </h3>
 
-        <div style={{ display: 'flex', gap: 18, marginBottom: 16 }}>
+        <div style={ display: 'flex', gap: 18, marginBottom: 16 }}>
           <ScoreGauge value={credit} label="Credit" size={84} stroke={7} />
           <ScoreGauge value={green} label="Green" size={84} stroke={7} />
         </div>
 
         <div
-          style={{
+          style={
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'baseline',
             paddingTop: 14,
             borderTop: '1px solid var(--ink-12)',
-          }}
+          }
         >
           <div>
             <div
-              style={{
+              style={
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--type-eyebrow)',
                 color: 'var(--ink-60)',
                 marginBottom: 2,
-              }}
+              }
             >
               {fundedLabel}
             </div>
             <div
-              style={{
+              style={
                 fontFamily: 'var(--font-data)',
                 fontWeight: 'var(--font-weight-semibold)',
                 fontSize: 'var(--type-body-lg)',
                 color: 'var(--ink)',
-              }}
+              }
             >
               {funded}
             </div>
             {showProgress && (
-              <div style={{ marginTop: 10 }}>
+              <div style={ marginTop: 10 }}>
                 <div
-                  style={{
+                  style={
                     height: 6,
                     borderRadius: 'var(--radius-pill)',
                     background: 'var(--ink-06)',
                     border: '1px solid var(--ink-12)',
                     overflow: 'hidden',
-                  }}
+                  }
                 >
                   <div
-                    style={{
+                    style={
                       width: `${fundedPct}%`,
                       height: '100%',
                       background: 'var(--solar)',
-                    }}
+                    }
                   />
                 </div>
                 <div
-                  style={{
+                  style={
                     fontFamily: 'var(--font-data)',
                     fontSize: 'var(--type-fine)',
                     color: 'var(--ink-40)',
                     marginTop: 4,
-                  }}
+                  }
                 >
                   {fundedPct}% of {formatMoney(fundingGoal!)}
                 </div>
@@ -185,12 +189,12 @@ export function ProjectCard({
           </div>
           {resolvedVerifiedLabel && (
             <span
-              style={{
+              style={
                 fontFamily: 'var(--font-data)',
                 fontSize: 11.5,
                 color: 'var(--ink-40)',
                 whiteSpace: 'nowrap',
-              }}
+              }
             >
               {resolvedVerifiedLabel} ↑
             </span>
