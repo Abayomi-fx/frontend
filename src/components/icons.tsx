@@ -161,3 +161,24 @@ export function StarFilledIcon({ size = 18, ...rest }: IconProps) {
     </Icon>
   )
 }
+
+/** Bell — "set a yield alert". */
+export function BellIcon({ size = 18, ...rest }: IconProps) {
+  return (
+    <Icon size={size} {...rest}>
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </Icon>
+  )
+}
+
+/** Filled bell with dot — "yield alert active". */
+export function BellActiveIcon({ size = 18, ...rest }: IconProps) {
+  return (
+    <Icon size={size} fill="currentColor" {...rest}>
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      <circle cx="18" cy="5" r="3" fill="var(--solar)" stroke="var(--surface)" strokeWidth="1.5" />
+    </Icon>
+  )
+}

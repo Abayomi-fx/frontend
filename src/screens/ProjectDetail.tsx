@@ -1,6 +1,6 @@
 import { memo, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
-import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon, WatchlistButton } from '../components'
+import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon, WatchlistButton, YieldAlertButton } from '../components'
 import { Sparkline as SparklineUnmemoized } from '../components/Sparkline'
 const Sparkline = memo(SparklineUnmemoized)
 import { formatMoney } from '../lib/format'
@@ -84,7 +84,15 @@ export const ProjectDetail = memo(function ProjectDetail({ project, detail, onIn
           <Badge tone="growth" icon={<ShieldCheckIcon />}>
             {t('verifiedSince', { since: detail.creator.since })}
           </Badge>
-          <WatchlistButton bondId={project.id} bondName={project.name} size="md" />
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <YieldAlertButton
+              bondId={project.id}
+              bondName={project.name}
+              currentYield={(project.credit + project.green) / 2}
+              size="md"
+            />
+            <WatchlistButton bondId={project.id} bondName={project.name} size="md" />
+          </div>
         </div>
 
         {/* Project name, display font */}

@@ -415,5 +415,26 @@
     "sendLinkAnyway": "Link this email to my account",
     "linkSentMessage": "A magic sign-in link has been sent to {email}.",
     "close": "Close"
+  },
+  "YieldAlert": {
+    "modalTitle": "Set yield alert",
+    "editTitle": "Edit yield alert",
+    "conditionLabel": "Alert when yield goes",
+    "thresholdLabel": "Threshold",
+    "operatorAbove": "Above",
+    "operatorBelow": "Below",
+    "previewText": "Alert me when {name} yield goes {direction} {threshold}%",
+    "saveCta": "Save alert",
+    "deleteCta": "Delete",
+    "cancelCta": "Cancel",
+    "addLabel": "Set yield alert for {name}",
+    "editLabel": "Edit yield alert for {name}",
+    "createdToastTitle": "Yield alert set",
+    "createdToastMessage": "You'll be notified when {name} yield crosses {threshold}%.",
+    "updatedToastTitle": "Yield alert updated",
+    "updatedToastMessage": "Alert for {name} updated to {threshold}%.",
+    "deletedToastTitle": "Yield alert removed",
+    "triggeredToastTitle": "🔔 Yield alert triggered",
+    "triggeredToastMessage": "{name} yield is {yield}% — {direction} your {threshold}% threshold."
   }
 }
