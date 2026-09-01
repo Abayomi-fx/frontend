@@ -83,9 +83,9 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           </div>
           <StatBlock
             label={t('currentValue')}
-            value="$24,180"
-            decimals=".45"
-            delta={`++$612.18 (2.6%) ${t('sinceDeposit')} + $320 pending`}
+            value={`$${Math.floor(d.you.value).toLocaleString('en-US')}`}
+            decimals={`.${String(d.you.value).split('.')[1] ?? '00'}`}
+            delta={`+$${d.you.deltaAbs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${d.you.deltaPct}%) ${t('sinceDeposit')}`}
             size="lg"
             stackOnMobile
           />
