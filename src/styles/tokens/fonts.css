@@ -8,6 +8,14 @@
    NOTE: fonts load from their official CDNs (Fontshare + Google). Binaries are
    not vendored into this project. Licensed upgrades named in the brief:
    Display →F37 Jagger / Söhne Breit · Body →Suisse Int'l Data →Söhne Mono.
+
+   LOADING: both stylesheets are requested with `display=swap`, so every CDN
+   `@font-face` is emitted with `font-display: swap` — text paints immediately in
+   the fallback and swaps once the webfont arrives, instead of holding an
+   invisible-text block that shifts the layout when it resolves. Because these
+   `@import`s are only discovered after this file has parsed, the document head in
+   `src/app/layout.tsx` preconnects to the four origins involved (the two CSS hosts
+   and the two that serve the font binaries) so the handshakes are already done.
    =========================================================================================== */
 
 @import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&display=swap');
