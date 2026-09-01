@@ -165,6 +165,53 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
         </Card>
       ) : null}
 
+      {d.you.referralLink && (
+        <Card style={{ padding: 22, marginBottom: 28 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div>
+              <h3 style={cardTitle}>{t('referralProgram')}</h3>
+              <p
+                style={{
+                  fontFamily: 'var--font-body',
+                  fontSize: 'var--type-small',
+                  lineHeight: 1.55,
+                  color: 'var--ink-60',
+                  margin: '4px 0 0',
+                }}
+              >
+                {t('referralCaption')}
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                type="text"
+                readOnly
+                value={d.you.referralLink}
+                style={{
+                  flex: '1 1 280px',
+                  padding: '10px 14px',
+                  fontFamily: 'var--font-data',
+                  fontSize: 'var--type-small',
+                  background: 'var--ink-04',
+                  border: '1px solid var--ink-12',
+                  borderRadius: 'var(--radius-sm)',
+                  color: 'var--ink',
+                  outline: 'none',
+                }}
+              />
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  navigator.clipboard.writeText(d.you.referralLink ?? '')
+                }}
+              >
+                {t('copyLink')}
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
+
       <div className="hb-portfolio-grid">
         {/* Impact */}
         <Card style={{ padding: 22 }}>

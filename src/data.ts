@@ -61,6 +61,7 @@ export interface HeliobondData {
     backed: number
     riskScore: number
     riskLevel: 'conservative' | 'moderate' | 'aggressive'
+    referralLink?: string
   }
   projects: Project[]
   activity: Activity[]
@@ -94,6 +95,7 @@ export const HB_DATA: HeliobondData = {
     backed: PROJECTS_FUNDED,
     riskScore: 0,
     riskLevel: 'conservative',
+    referralLink: 'https://heliobond.fi/ref/HB24041',
   },
   projects: INITIAL_PROJECTS, 
   activity: [],
