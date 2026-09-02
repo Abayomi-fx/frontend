@@ -1,8 +1,16 @@
 'use client'
 
-import { useMemo, useState, type CSSProperties } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components'
+import {
+  tableStyle,
+  thBase,
+  tdStyle,
+  numCell,
+  typePill,
+  scoreInputStyle as inputStyle,
+} from '@/theme'
 import { type RegistryEntry } from '@/data/admin'
 import { clampScore, parseFundedNum } from './utils'
 

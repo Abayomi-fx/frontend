@@ -367,7 +367,7 @@ export const ProjectDetail = memo(function ProjectDetail({ project, detail, onIn
         <Button
           variant="primary"
           size="lg"
-          onClick={() => onInvest()}
+          onClick={onInvest}
           style={{ width: '100%' }}
         >
           {t('investCta')}

@@ -1,8 +1,9 @@
 'use client'
 
-import { memo, type CSSProperties, type ReactNode } from 'react'
+import { memo, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
+import { cardTitleLg as cardTitle } from '@/theme'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
 import { getPortfolioRisk } from '../lib/bondUtils'
@@ -319,11 +320,3 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
     </main>
   )
 })
-
-const cardTitle: CSSProperties = {
-  fontFamily: 'var--font-display',
-  fontWeight: 700,
-  fontSize: 'var--type-body-lg',
-  margin: '0 0 10px',
-  color: 'var--ink',
-}

@@ -409,6 +409,7 @@ export function Deposit({ onDone }: DepositProps) {
                         tone: 'success',
                         title: 'Deposit confirmed',
                         message: `Successfully invested ${n} USDC in the pool.`,
+                        href: `/investments/${hash}`,
                       })
                     }
                   } catch (e) {
