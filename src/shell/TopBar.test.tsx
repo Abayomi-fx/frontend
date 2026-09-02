@@ -4,7 +4,7 @@ import { TopBar } from './TopBar'
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/explore',
-  useRouter: () => ({ push: vi.fn() }),
+  useRouter: () => ({ push: vi.fn(), prefetch: vi.fn() }),
 }))
 
 vi.mock('../wallet/WalletProvider', () => ({

@@ -59,6 +59,10 @@ export function useSessionTimeout({
 
   const lastActivityRef = useRef<number>(Date.now())
   const lastThrottleRef = useRef<number>(0)
+  // Mirrors `isWarningOpen` for the activity listener, so the listener stays
+  // stable while the warning state changes (re-scheduling on every open/close
+  // would clear the countdown and re-arm the warning timer).
+  const isWarningOpenRef = useRef(false)
   const warningTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -72,6 +76,10 @@ export function useSessionTimeout({
   useEffect(() => {
     onWarningRef.current = onWarning
   }, [onWarning])
+
+  useEffect(() => {
+    isWarningOpenRef.current = isWarningOpen
+  }, [isWarningOpen])
 
   const clearTimers = useCallback(() => {
     if (warningTimerRef.current) {
@@ -129,11 +137,6 @@ export function useSessionTimeout({
   const extendSession = useCallback(() => {
     scheduleWarning()
   }, [scheduleWarning])
-
-  const isWarningOpenRef = useRef(isWarningOpen)
-  useEffect(() => {
-    isWarningOpenRef.current = isWarningOpen
-  }, [isWarningOpen])
 
   // Track user activity with throttled event handler
   useEffect(() => {

@@ -3,7 +3,6 @@ import { sanitizeAmount } from '../lib/format'
 
 export { sanitizeAmount }
 
-
 /**
  * Heliobond AmountInput — the heart of deposit & withdraw. Mono numerals, a
  * visible balance, quick chips (25/50/100/Max), a live on-chain preview slot,

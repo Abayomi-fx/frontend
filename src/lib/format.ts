@@ -16,7 +16,7 @@ export function roundToCents(value: number): number {
 
 /**
  * Formats a number to a fixed number of decimals, rounding once with
- * {roundToDecimals} first so every caller displays the same rounded
+ * {@link roundToDecimals} first so every caller displays the same rounded
  * value instead of re-rounding raw floating-point results independently (#369).
  */
 export function formatDecimal(value: number, decimals: number): string {

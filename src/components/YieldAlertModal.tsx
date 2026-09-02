@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from './Button'
 import { CloseIcon } from './icons'
@@ -349,7 +349,10 @@ export function YieldAlertModal({
               🔔{' '}
               {t('previewText', {
                 name: bondName,
-                direction: operator === 'above' ? t('operatorAbove').toLowerCase() : t('operatorBelow').toLowerCase(),
+                direction:
+                  operator === 'above'
+                    ? t('operatorAbove').toLowerCase()
+                    : t('operatorBelow').toLowerCase(),
                 threshold: parsedThreshold.toFixed(1),
               })}
             </div>

@@ -61,7 +61,6 @@ export function AdminConsole() {
       title: t('toastScoresTitle'),
       message: t('toastScoresMsg', { name, credit, green }),
       duration: 5000,
-      stackable: true,
     })
   }
 
@@ -80,7 +79,6 @@ export function AdminConsole() {
       title: t('toastFundTitle'),
       message: t('toastFundMsg', { name, amount: sharedFormatMoney(safe) }),
       duration: 5000,
-      stackable: true,
     })
   }
 
@@ -122,14 +120,26 @@ export function AdminConsole() {
       title: titleMap[status],
       message: messageMap[status],
       action:
-        status !== 'approved'
-          ? {
-              label: t('actionUndo'),
-              onClick: () => setCreatorStatus(address, 'approved'),
-            }
-          : undefined,
+        status !== 'approved' ? (
+          <button
+            type="button"
+            onClick={() => setCreatorStatus(address, 'approved')}
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontWeight: 600,
+              fontSize: 'var(--type-data)',
+              color: 'var(--solar)',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer',
+              textDecoration: 'underline',
+            }}
+          >
+            {t('actionUndo')}
+          </button>
+        ) : undefined,
       duration: 5000,
-      stackable: true,
     })
   }
 

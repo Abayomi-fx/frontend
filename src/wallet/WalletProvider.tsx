@@ -41,7 +41,7 @@ export function shortAddress(address: string, lead = 4, tail = 3): string {
   return `${address.slice(0, lead)}…${suffix}`
 }
 
-const DEMO_ADDRESS = 'GBQHWTVZ2K4M6N8P3R5T7W9YA2C4E6G8J3L5Q7S9U2X4Z6B8D1F3H59XQ'
+const DEMO_ADDRESS = 'GBQHWXVZ2K4M6N8P3R5T7W9YA2C4E6G8J3L5Q7S9U2X4Z6B8D1F3H59XQ'
 const CONNECT_TIMEOUT_MS = 15000
 const MAX_AUTO_RETRIES = 2
 
@@ -123,7 +123,7 @@ export function WalletProvider({ children }: {children: ReactNode}) {
           const { StellarWalletsKit } = await import('@creit.tech/stellar-wallets-kit')
           StellarWalletsKit.setWallet(savedWallet)
         } catch {
-          /* the wallet may be uninstalled now ℔ the address still shows */
+          /* the wallet may be uninstalled now — the address still shows */
         }
       })()
     }
@@ -139,17 +139,17 @@ export function WalletProvider({ children }: {children: ReactNode}) {
         setTimeout(() => reject(new Error('timeout')), CONNECT_TIMEOUT_MS)
       )
       const authPromise = StellarWalletsKit.authModal() as Promise<{ address: string }>
-      const { address: adr } = await Promise.race([authPromise, timeoutPromise])
+      const { address: addr } = await Promise.race([authPromise, timeoutPromise])
       let walletId = 'wallet'
       try {
         walletId = StellarWalletsKit.selectedModule?.productId ?? 'wallet'
       } catch {
         /* fallback */
       }
-      setAddress(adr)
+      setAddress(addr)
       setIsDemo(false)
       setRetryCount(0)
-      persist(adr, walletId)
+      persist(addr, walletId)
     } catch (e) {
       const isTimeout = e instanceof Error && e.message === 'timeout'
       const isCancelled = e instanceof Error && /dismiss|cancel|closed/i.test(e.message)

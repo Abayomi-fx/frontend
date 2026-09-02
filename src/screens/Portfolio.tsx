@@ -1,12 +1,10 @@
 'use client'
 
-import { memo, type ReactNode } from 'react'
+import { memo, type CSSProperties, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
-import { cardTitleLg as cardTitle } from '@/theme'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
-import { getPortfolioRisk } from '../lib/bondUtils'
 import { useWallet } from '../wallet/WalletProvider'
 
 const MemoizedHelio = memo(Helio)
@@ -27,7 +25,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
   const t = useTranslations('Portfolio')
   const { connected, connect } = useWallet()
   const d = HB_DATA
-  const risk = getPortfolioRisk((d as any).holdings ?? [])
+  const risk = { score: d.you.riskScore, level: d.you.riskLevel }
   const referralLink = (d.you as { referralLink?: string }).referralLink
 
   if (!connected) {
@@ -49,10 +47,10 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           <h2 style={{ ...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
           <p
             style={{
-              fontFamily: 'var--font-body',
-              fontSize: 'var--type-small',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
               lineHeight: 1.5,
-              color: 'var--ink-60',
+              color: 'var(--ink-60)',
               margin: 0,
             }}
           >
@@ -92,9 +90,9 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           />
           <p
             style={{
-              fontFamily: 'var--font-body',
-              fontSize: 'var--type-caption',
-              color: 'var--ink-60',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-caption)',
+              color: 'var(--ink-60)',
               marginTop: 4,
             }}
           >
@@ -127,9 +125,9 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           <MemoizedLiquidityMeter liquid={236} total={482} currency="$" showExplanation={false} />
           <p
             style={{
-              fontFamily: 'var--font-body',
-              fontSize: 'var--type-eyebrow',
-              color: 'var--ink-60',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-eyebrow)',
+              color: 'var(--ink-60)',
               margin: '8px 0 0',
             }}
           >
@@ -141,13 +139,17 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
       {/* Portfolio risk indicator from bond ratings mix */}
       <Card style={{ padding: 22, marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-          <StatBlock label="Portfolio risk" value={risk.level[0].toUpperCase() + risk.level.slice(1)} size="md" />
+          <StatBlock
+            label="Portfolio risk"
+            value={risk.level[0].toUpperCase() + risk.level.slice(1)}
+            size="md"
+          />
           <p
             style={{
-              fontFamily: 'var--font-body',
-              fontSize: 'var--type-small',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
               lineHeight: 1.55,
-              color: 'var--ink-60',
+              color: 'var(--ink-60)',
               margin: 0,
             }}
           >
@@ -157,9 +159,20 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
       </Card>
       {referralLink ? (
         <Card style={{ padding: 22, marginBottom: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 24,
+              flexWrap: 'wrap',
+            }}
+          >
             <StatBlock label="Referral program" value={referralLink} size="sm" />
-            <Button variant="secondary" onClick={() => void navigator.clipboard?.writeText(referralLink)}>
+            <Button
+              variant="secondary"
+              onClick={() => void navigator.clipboard?.writeText(referralLink)}
+            >
               Share
             </Button>
           </div>
@@ -173,10 +186,10 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
               <h3 style={cardTitle}>{t('referralProgram')}</h3>
               <p
                 style={{
-                  fontFamily: 'var--font-body',
-                  fontSize: 'var--type-small',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--type-small)',
                   lineHeight: 1.55,
-                  color: 'var--ink-60',
+                  color: 'var(--ink-60)',
                   margin: '4px 0 0',
                 }}
               >
@@ -191,12 +204,12 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
                 style={{
                   flex: '1 1 280px',
                   padding: '10px 14px',
-                  fontFamily: 'var--font-data',
-                  fontSize: 'var--type-small',
-                  background: 'var--ink-04',
-                  border: '1px solid var--ink-12',
+                  fontFamily: 'var(--font-data)',
+                  fontSize: 'var(--type-small)',
+                  background: 'var(--ink-04)',
+                  border: '1px solid var(--ink-12)',
                   borderRadius: 'var(--radius-sm)',
-                  color: 'var--ink',
+                  color: 'var(--ink)',
                   outline: 'none',
                 }}
               />
@@ -219,15 +232,15 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           <h3 style={cardTitle}>{t('impactTitle')}</h3>
           <p
             style={{
-              fontFamily: 'var--font-body',
-              fontSize: 'var--type-small',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
               lineHeight: 1.55,
-              color: 'var--ink-60',
+              color: 'var(--ink-60)',
               margin: '0 0 16px',
             }}
           >
             {t.rich('impactBody', {
-              b: (c: ReactNode) => <b style={{ color: 'var--ink' }}>{c}</b>,
+              b: (c: ReactNode) => <b style={{ color: 'var(--ink)' }}>{c}</b>,
               count: d.you.backed,
             })}
           </p>
@@ -250,9 +263,9 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
             <h3 style={cardTitle}>{t('activityTitle')}</h3>
             <span
               style={{
-                fontFamily: 'var--font-body',
-                fontSize: 'var--type-caption',
-                color: 'var--ink-40',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--type-caption)',
+                color: 'var(--ink-40)',
               }}
             >
               {t('activityNote')}
@@ -267,16 +280,16 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 padding: '12px 0',
-                borderTop: i ? '1px solid var--ink-12' : 'none',
+                borderTop: i ? '1px solid var(--ink-12)' : 'none',
               }}
             >
               <div style={{ minWidth: 0 }}>
                 <div
                   style={{
-                    fontFamily: 'var--font-body',
-                    fontSize: 'var--type-small',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--type-small)',
                     fontWeight: 600,
-                    color: 'var--ink',
+                    color: 'var(--ink)',
                     overflowWrap: 'anywhere',
                   }}
                 >
@@ -284,9 +297,9 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
                 </div>
                 <div
                   style={{
-                    fontFamily: 'var--font-body',
-                    fontSize: 'var--type-caption',
-                    color: 'var--ink-60',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--type-caption)',
+                    color: 'var(--ink-60)',
                   }}
                 >
                   {a.amount}
@@ -296,18 +309,18 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
               <div style={{ textAlign: 'end' }}>
                 <div
                   style={{
-                    fontFamily: 'var--font-body',
-                    fontSize: 'var--type-caption',
-                    color: 'var--ink-60',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--type-caption)',
+                    color: 'var(--ink-60)',
                   }}
                 >
                   {a.when}
                 </div>
                 <div
                   style={{
-                    fontFamily: 'var--font-data',
-                    fontSize: 'var--type-eyebrow',
-                    color: 'var--ink-40',
+                    fontFamily: 'var(--font-data)',
+                    fontSize: 'var(--type-eyebrow)',
+                    color: 'var(--ink-40)',
                   }}
                 >
                   {a.hash} ↗
@@ -320,3 +333,11 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
     </main>
   )
 })
+
+const cardTitle: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 700,
+  fontSize: 'var(--type-body-lg)',
+  margin: '0 0 10px',
+  color: 'var(--ink)',
+}

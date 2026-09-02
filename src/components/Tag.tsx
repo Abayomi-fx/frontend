@@ -19,7 +19,7 @@ export function Tag({ selected = false, onClick, children, style, ...rest }: Tag
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      style={
+      style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: 6,
@@ -40,7 +40,7 @@ export function Tag({ selected = false, onClick, children, style, ...rest }: Tag
         transition: 'background var(--dur-press) var(--ease-out)',
         whiteSpace: 'nowrap',
         ...style,
-      },
+      }}
       {...rest}
     >
       {children}

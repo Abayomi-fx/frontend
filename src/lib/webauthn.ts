@@ -18,7 +18,7 @@ function arrayBufferToBase64url(buffer: ArrayBuffer): string {
   for (let i = 0; i < bytes.byteLength; i++) {
     binary += String.fromCharCode(bytes[i])
   }
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+\$/, '')
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
 interface PublicKeyCredentialJSON {

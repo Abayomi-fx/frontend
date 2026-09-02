@@ -16,9 +16,11 @@ function deferred<T>() {
  */
 async function tripOpen(breaker: CircuitBreaker) {
   for (let i = 0; i < 20 && breaker.getState() !== 'OPEN'; i++) {
-    await breaker.execute(async () => {
-      throw new Error('downstream down')
-    }).catch(() => {})
+    await breaker
+      .execute(async () => {
+        throw new Error('downstream down')
+      })
+      .catch(() => {})
   }
   expect(breaker.getState()).toBe('OPEN')
 }
@@ -33,9 +35,11 @@ describe('CircuitBreaker', () => {
   it('opens after failureThreshold consecutive failures', async () => {
     const breaker = new CircuitBreaker({ failureThreshold: 3 })
     for (let i = 0; i < 3; i++) {
-      await breaker.execute(async () => {
-        throw new Error('fail')
-      }).catch(() => {})
+      await breaker
+        .execute(async () => {
+          throw new Error('fail')
+        })
+        .catch(() => {})
     }
     expect(breaker.getState()).toBe('OPEN')
     await expect(breaker.execute(async () => 1)).rejects.toBeInstanceOf(CircuitOpenError)
@@ -43,10 +47,17 @@ describe('CircuitBreaker', () => {
 
   it('rejects with fallback value when OPEN and fallback provided', async () => {
     const breaker = new CircuitBreaker({ failureThreshold: 1 })
-    await breaker.execute(async () => {
-      throw new Error('fail')
-    }).catch(() => {})
-    await expect(breaker.execute(async () => 1, () => 'fallback')).resolves.toBe('fallback')
+    await breaker
+      .execute(async () => {
+        throw new Error('fail')
+      })
+      .catch(() => {})
+    await expect(
+      breaker.execute(
+        async () => 'ignored',
+        () => 'fallback',
+      ),
+    ).resolves.toBe('fallback')
   })
 
   it('transitions to HALF_OPEN after recovery timeout', async () => {
@@ -60,7 +71,11 @@ describe('CircuitBreaker', () => {
   })
 
   it('closes after successThreshold trials in HALF_OPEN', async () => {
-    const breaker = new CircuitBreaker({ failureThreshold: 1, successThreshold: 2, recoveryTimeoutMs: 5 })
+    const breaker = new CircuitBreaker({
+      failureThreshold: 1,
+      successThreshold: 2,
+      recoveryTimeoutMs: 5,
+    })
     await tripOpen(breaker)
 
     // Trial 1: canary succeeds → stays HALF_OPEN (1/2 successes).
@@ -78,9 +93,11 @@ describe('CircuitBreaker', () => {
     await tripOpen(breaker)
     await sleep(10)
 
-    await breaker.execute(async () => {
-      throw new Error('still down')
-    }).catch(() => {})
+    await breaker
+      .execute(async () => {
+        throw new Error('still down')
+      })
+      .catch(() => {})
     expect(breaker.getState()).toBe('OPEN')
     await expect(breaker.execute(async () => 1)).rejects.toBeInstanceOf(CircuitOpenError)
   })
@@ -105,13 +122,18 @@ describe('CircuitBreaker', () => {
       // Concurrent callers during the trial: rejected, fn never invoked.
       let rivalRan = false
       const rivals = Promise.all([
-        breaker.execute(async () => {
-          rivalRan = true
-          return 'should-not-run'
-        }).catch((e) => e),
+        breaker
+          .execute(async () => {
+            rivalRan = true
+            return 'should-not-run'
+          })
+          .catch((e) => e),
         breaker.execute(async () => 'nor-this').catch((e) => e),
       ])
-      await expect(rivals).resolves.toEqual([expect.any(CircuitOpenError), expect.any(CircuitOpenError)])
+      await expect(rivals).resolves.toEqual([
+        expect.any(CircuitOpenError),
+        expect.any(CircuitOpenError),
+      ])
       expect(rivalRan).toBe(false)
 
       gate.resolve('probe-result')
@@ -128,10 +150,12 @@ describe('CircuitBreaker', () => {
       let invocations = 0
       const gate = deferred<string>()
       const burst = Array.from({ length: 10 }, () =>
-        breaker.execute(async () => {
-          invocations++
-          return gate.promise
-        }).catch((e) => e),
+        breaker
+          .execute(async () => {
+            invocations++
+            return gate.promise
+          })
+          .catch((e) => e),
       )
 
       // Let the rejections settle while the canary is still in flight.
@@ -146,7 +170,11 @@ describe('CircuitBreaker', () => {
     })
 
     it('waits-then-fails callers do not corrupt trial accounting', async () => {
-      const breaker = new CircuitBreaker({ failureThreshold: 1, successThreshold: 1, recoveryTimeoutMs: 5 })
+      const breaker = new CircuitBreaker({
+        failureThreshold: 1,
+        successThreshold: 1,
+        recoveryTimeoutMs: 5,
+      })
       await tripOpen(breaker)
       await sleep(10)
 
@@ -165,9 +193,11 @@ describe('CircuitBreaker', () => {
       await sleep(10)
 
       // First canary fails → OPEN again.
-      await breaker.execute(async () => {
-        throw new Error('still down')
-      }).catch(() => {})
+      await breaker
+        .execute(async () => {
+          throw new Error('still down')
+        })
+        .catch(() => {})
       expect(breaker.getState()).toBe('OPEN')
 
       // Window elapses again → fresh canary admitted.

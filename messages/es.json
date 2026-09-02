@@ -4,7 +4,7 @@
     "copied": "Copied",
     "viewInvestment": "Ver tu inversión",
     "viewOnExplorer": "View {label} on Stellar Expert",
-    "referralProgramShareLink": "Enlace para compartir el programa de referidos"
+    "viewInvestment": "View your investment"
   },
   "Nav": {
     "explore": "Explore",
@@ -30,7 +30,10 @@
     "disconnectConfirmBody": "Disconnecting ends your current session. Your on-chain assets are safe on Stellar, but you will need to reconnect your wallet to access your portfolio, invest, or withdraw.",
     "disconnectCancel": "Cancel",
     "demoSession": "Demo session",
-    "referralProgramShareLink": "Enlace para compartir el programa de referidos"
+    "referral": "Referral",
+    "shareLink": "Share your referral link",
+    "watchlist": "Watchlist",
+    "viewInvestment": "View your investment"
   },
   "Footer": {
     "trustLinks": "Trust links",
@@ -116,7 +119,8 @@
     "emptyTitle": "No projects found",
     "emptySub": "There are no projects matching the \"{filter}\" category in the pool right now.",
     "loadMore": "Show {count} more",
-    "showingCount": "Showing {shown} of {total} projects"
+    "showingCount": "Showing {shown} of {total} projects",
+    "searchLabel": "Search projects"
   },
   "Watchlist": {
     "title": "Tu lista de seguimiento",
@@ -131,7 +135,7 @@
     "availableBanner": "{count, plural, one {# bono seguido está abierto a financiación ahora mismo.} other {# bonos seguidos están abiertos a financiación ahora mismo.}}",
     "statusOpen": "Abierto a financiación",
     "statusUpcoming": "Aún no disponible",
-    "notYetAvailable": "Te avisaremos aquí en cuanto se abra.",
+    "notYetAvailable": "Te avisaremos aquí en cuanto se abra."
   },
   "Deposit": {
     "stepAmount": "Amount",
@@ -166,7 +170,8 @@
     "successBody": "You received <num>{shares} HBS</num> and now back <b>{count} verified projects</b>.",
     "viewInvestment": "Ver tu inversión",
     "viewExpert": "View on Stellar Expert",
-    "goPortfolio": "Go to portfolio"
+    "goPortfolio": "Go to portfolio",
+    "viewInvestment": "View your investment"
   },
   "Portfolio": {
     "eyebrow": "Your portfolio",
@@ -187,7 +192,17 @@
     "riskTierAggressive": "Agresivo",
     "riskCaption": "Basado en la combinación de calificaciones de bonos en sus tenencias.",
     "activityTitle": "Activity",
-    "activityNote": "every entry → Stellar Expert"
+    "activityNote": "every entry → Stellar Expert",
+    "riskScore": "Portfolio risk score",
+    "riskTierConservative": "Conservative",
+    "riskTierModerate": "Moderate",
+    "riskTierAggressive": "Aggressive",
+    "riskCaption": "Based on the mix of bond ratings in your holdings.",
+    "referralProgram": "Referral program",
+    "referralLink": "Your referral link",
+    "referralCaption": "Share your link to invite friends. You both get rewards when they invest.",
+    "copyLink": "Copy link",
+    "copied": "Copied"
   },
   "Withdraw": {
     "h1": "Withdraw from the pool",
@@ -232,10 +247,8 @@
     "rejectionReason": "Motivo",
     "actionRevoke": "Revoke",
     "actionApprove": "Approve",
-    "actionConfirmRevoke": "Sí, revocar",
-    "actionCancel": "Cancelar",
+    "actionCancel": "Cancel",
     "revokeConfirmBody": "{name} ya no podrá registrar nuevos proyectos. Esta acción puede deshacerse.",
-    "toastRevokedUndo": "Deshacer",
     "toastScoresTitle": "Scores written on-chain",
     "toastScoresMsg": "{name} re-verified: credit {credit}, green {green}.",
     "toastFundTitle": "Capital deployed",
@@ -274,8 +287,11 @@
     "reVerify": "Re-verify {name}",
     "scoreFieldCredit": "Credit quality",
     "scoreFieldGreen": "Green impact",
-    "actionCancel": "Cancel",
-    "actionSave": "Save"
+    "actionSave": "Save",
+    "revokeConfirmTitle": "Revoke creator?",
+    "revokeConfirm": "Yes, revoke",
+    "revokeCancel": "Cancel",
+    "actionUndo": "Undo"
   },
   "Creator": {
     "goalInvalid": "Enter a funding goal greater than 0",
@@ -429,5 +445,27 @@
     "deletedToastTitle": "Yield alert removed",
     "triggeredToastTitle": "🔔 Yield alert triggered",
     "triggeredToastMessage": "{name} yield is {yield}% — {direction} your {threshold}% threshold."
+  },
+  "Watchlist": {
+    "title": "Your watchlist",
+    "sub": "Bonds you're tracking. Saving one doesn't invest — it just keeps it close, and flags when it opens for funding.",
+    "cardFundedFromPool": "Funded from the pool",
+    "emptyTitle": "Nothing saved yet",
+    "emptySub": "Open a bond from Explore and tap the star to add it here. We'll show you when a saved bond is open for funding.",
+    "added": "Added to watchlist",
+    "removed": "Removed from watchlist",
+    "saveLabel": "Add {name} to watchlist",
+    "removeLabel": "Remove {name} from watchlist",
+    "availableBanner": "{count, plural, one {# saved bond is open for funding right now.} other {# saved bonds are open for funding right now.}}",
+    "statusOpen": "Open for funding",
+    "statusUpcoming": "Not yet available",
+    "notYetAvailable": "We'll flag it here when it opens."
+  },
+  "Referral": {
+    "title": "Referral program",
+    "shareLink": "Share your referral link",
+    "yourReferralLink": "Your referral link",
+    "copyLink": "Copy referral link",
+    "copied": "Copied"
   }
 }

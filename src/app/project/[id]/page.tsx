@@ -77,7 +77,10 @@ export default function ProjectDetailPage() {
     <ProjectDetail
       project={data.project}
       detail={data.detail}
-      onInvest={() => router.push('/connect')}
+      onInvest={async () => {
+        router.push('/connect')
+        return ''
+      }}
       onBack={() => router.push('/explore')}
     />
   )

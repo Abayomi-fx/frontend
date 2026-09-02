@@ -1,6 +1,14 @@
-import { memo, useState, useMemo, type CSSProperties } from 'react'
+import { memo, useMemo, useState, type CSSProperties } from 'react'
 import { useTranslations } from 'next-intl'
-import { Badge, Button, PinIcon, ScoreGauge, ShieldCheckIcon, WatchlistButton, YieldAlertButton } from '../components'
+import {
+  Badge,
+  Button,
+  PinIcon,
+  ScoreGauge,
+  ShieldCheckIcon,
+  WatchlistButton,
+  YieldAlertButton,
+} from '../components'
 import { Sparkline as SparklineUnmemoized } from '../components/Sparkline'
 const Sparkline = memo(SparklineUnmemoized)
 import { formatMoney } from '../lib/format'
@@ -17,12 +25,18 @@ import { type ProjectDetail as ProjectDetailData } from '../data/projectDetails'
 export interface ProjectDetailProps {
   project: Project
   detail: ProjectDetailData
-  onInvest: () => void
+  onInvest: () => Promise<string>
   onBack?: () => void
 }
 
-export const ProjectDetail = memo(function ProjectDetail({ project, detail, onInvest, onBack }: ProjectDetailProps) {
+export const ProjectDetail = memo(function ProjectDetail({
+  project,
+  detail,
+  onInvest,
+  onBack,
+}: ProjectDetailProps) {
   const t = useTranslations('ProjectDetail')
+  const tc = useTranslations('Common')
   const [investmentUrl, setInvestmentUrl] = useState<string | null>(null)
   const creditHistory = useMemo(
     () => detail.scoreHistory.credit.map((p) => p.value),
@@ -367,11 +381,30 @@ export const ProjectDetail = memo(function ProjectDetail({ project, detail, onIn
         <Button
           variant="primary"
           size="lg"
-          onClick={onInvest}
+          onClick={async () => {
+            const url = await onInvest()
+            setInvestmentUrl(url)
+          }}
           style={{ width: '100%' }}
         >
           {t('investCta')}
         </Button>
+        {investmentUrl && (
+          <a
+            href={investmentUrl}
+            style={{
+              display: 'block',
+              textAlign: 'center',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--type-small)',
+              fontWeight: 600,
+              color: 'var(--brand)',
+              textDecoration: 'none',
+            }}
+          >
+            View investment →
+          </a>
+        )}
         <p
           style={{
             fontFamily: 'var(--font-body)',
@@ -383,6 +416,27 @@ export const ProjectDetail = memo(function ProjectDetail({ project, detail, onIn
         >
           {t('investNote')}
         </p>
+        {investmentUrl && (
+          <div role="status">
+            <a
+              href={investmentUrl}
+              style={{
+                display: 'block',
+                padding: '14px 20px',
+                borderRadius: 'var(--radius-card)',
+                background: 'var(--growth)',
+                color: 'var(--surface)',
+                textAlign: 'center',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--type-data)',
+                fontWeight: 700,
+                textDecoration: 'none',
+              }}
+            >
+              {tc('viewInvestment')}
+            </a>
+          </div>
+        )}
         {onBack && (
           <div style={{ textAlign: 'center' }}>
             <button
@@ -407,7 +461,7 @@ export const ProjectDetail = memo(function ProjectDetail({ project, detail, onIn
       </section>
     </main>
   )
-});
+})
 
 const ScoreColumn = memo(function ScoreColumn({
   value,
@@ -472,7 +526,7 @@ const ScoreColumn = memo(function ScoreColumn({
       </div>
     </div>
   )
-});
+})
 
 const sectionTitle: CSSProperties = {
   fontFamily: 'var(--font-display)',
