@@ -16,7 +16,7 @@ export function roundToCents(value: number): number {
 
 /**
  * Formats a number to a fixed number of decimals, rounding once with
- * {roundToDecimals} first so every caller displays the same rounded
+ * {@link roundToDecimals} first so every caller displays the same rounded
  * value instead of re-rounding raw floating-point results independently (#369).
  */
 export function formatDecimal(value: number, decimals: number): string {
@@ -56,7 +56,7 @@ export function sanitizeAmount(val: string): string {
   const parts = clean.split('.')
   const joined = parts.length > 1 ? parts[0] + '.' + parts.slice(1).join('') : clean
   const [whole, ...rest] = joined.split('.')
-  const trimmedWhole = whole.replace(/^0+(?=\d), '')
+  const trimmedWhole = whole.replace(/^0+(?=\d)/, '')
   return rest.length > 0 ? trimmedWhole + '.' + rest.join('.') : trimmedWhole
 }
 
