@@ -110,6 +110,7 @@ export function AmountInput({
           id={id}
           type="text"
           inputMode="decimal"
+          pattern="[0-9.]*"
           placeholder="0.00"
           value={value}
           onFocus={(e) => e.target.select()}

@@ -82,7 +82,6 @@ const PROJECTS_FUNDED = INITIAL_PROJECTS.length + OFF_SCREEN_PROJECTS_COUNT
 
 // The pool has 14 funded projects in total: 6 active demo projects in the local registry,
 // plus 8 historical or off-screen projects funded in the past.
-
 const INITIAL_FUNDED_COUNT = INITIAL_PROJECTS.filter((p) => {
   const n = Number(p.funded.replace(/[^0-9.]/g, ''))
   return Number.isFinite(n) && n > 0

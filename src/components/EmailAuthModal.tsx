@@ -61,6 +61,7 @@ export function EmailAuthModal({ open, onClose, onSuccess, onSocialLogin }: Emai
     setBioError(null)
     try {
       await loginBiometric(email)
+      // On success, notify parent and close the modal
       if (onSuccess) onSuccess(email)
       onClose()
     } catch (err: any) {
@@ -76,6 +77,7 @@ export function EmailAuthModal({ open, onClose, onSuccess, onSocialLogin }: Emai
     setBioError(null)
     try {
       await registerBiometric(email)
+      // After registration, log in automatically
       if (onSuccess) onSuccess(email)
       onClose()
     } catch (err: any) {

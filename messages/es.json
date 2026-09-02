@@ -20,6 +20,7 @@
     "switchToLight": "Switch to light",
     "language": "Language",
     "account": "Account",
+    "watchlist": "Lista de seguimiento",
     "copyAddress": "Copy address",
     "copied": "Copied",
     "viewInvestment": "Ver tu inversión",
@@ -130,7 +131,7 @@
     "availableBanner": "{count, plural, one {# bono seguido está abierto a financiación ahora mismo.} other {# bonos seguidos están abiertos a financiación ahora mismo.}}",
     "statusOpen": "Abierto a financiación",
     "statusUpcoming": "Aún no disponible",
-    "notYetAvailable": "Te avisaremos aquí en cuanto se abra."
+    "notYetAvailable": "Te avisaremos aquí en cuanto se abra.",
   },
   "Deposit": {
     "stepAmount": "Amount",

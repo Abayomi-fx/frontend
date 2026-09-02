@@ -227,7 +227,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
             }}
           >
             {t.rich('impactBody', {
-              b: (c: ReactNode) => <b style={{ color: 'var(--ink)' }}>{c}</b>,
+              b: (c: ReactNode) => <b style={{ color: 'var--ink' }}>{c}</b>,
               count: d.you.backed,
             })}
           </p>
@@ -310,7 +310,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
                     color: 'var--ink-40',
                   }}
                 >
-                  {a.hash} ↑
+                  {a.hash} ↗
                 </div>
               </div>
             </div>

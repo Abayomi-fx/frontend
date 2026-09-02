@@ -27,6 +27,7 @@
     "switchToLight": "التبديل إلى الوضع الفاتح",
     "language": "اللغة",
     "account": "الحساب",
+    "watchlist": "قائمة المراقبة",
     "copyAddress": "نسخ العنوان",
     "copied": "تم النسخ",
     "viewInvestment": "عرض استثمارك",
@@ -137,7 +138,7 @@
     "availableBanner": "{count, plural, one {سند واحد متابع مفتوح للتمويل الآن.} other {# سندات متابعة مفتوحة للتمويل الآن.}}",
     "statusOpen": "مفتوح للتمويل",
     "statusUpcoming": "غير متاح بعد",
-    "notYetAvailable": "سنشير هنا بمجرد فتحه."
+    "notYetAvailable": "سنشير هنا بمجرد فتحه.",
   },
   "Deposit": {
     "stepAmount": "المبلغ",
