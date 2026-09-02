@@ -7,6 +7,18 @@ import { ToastProvider, SessionTimeoutModal, useToast } from '../components'
 import { WatchlistProvider } from '../watchlist/WatchlistProvider'
 import { YieldAlertProvider } from '../alerts/YieldAlertProvider'
 import { useSessionTimeout } from '../hooks/useSessionTimeout'
+import { usePathname } from 'next/navigation'
+import { track } from '../lib/analytics'
+
+function Analytics() {
+  const pathname = usePathname()
+
+  useEffect(() => {
+    void track('page_view', { path: pathname })
+  }, [pathname])
+
+  return null
+}
 
 function SessionWatcher() {
   const { connected, disconnect } = useWallet()
@@ -142,6 +154,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <ToastProvider>
           <WatchlistProvider>
             <YieldAlertProvider>
+              <Analytics />
               <SessionWatcher />
               <OfflineBanner />
               {children}
