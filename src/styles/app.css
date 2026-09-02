@@ -57,6 +57,14 @@
   gap: 24px;
 }
 
+.hb-stat-block-row {
+  min-width: 0;
+}
+
+.hb-stat-block-delta {
+  max-width: 100%;
+}
+
 /* --- Tablet ---------------------------------------------------------------- */
 @media (max-width: 960px) {
   .hb-how-grid {
@@ -86,6 +94,25 @@
   }
   .hb-projects-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hb-stat-block-row--stack {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .hb-stat-block-row--stack > span:first-child {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .hb-stat-block-delta--stack {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
   }
 }
 

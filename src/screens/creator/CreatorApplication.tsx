@@ -10,6 +10,12 @@ import {
   type ProjectType,
 } from '@/data/creator'
 
+const CREATOR_APPLICATION_LIMITS = {
+  orgName: 2000,
+  location: 5000,
+  links: 10000,
+} as const
+
 /**
  * CreatorApplication — the whitelist door for project creators. Plain criteria
  * up front, a labelled form (never placeholder-as-label), an honest review
@@ -124,6 +130,7 @@ export function CreatorApplication({
             type="text"
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
+            maxLength={CREATOR_APPLICATION_LIMITS.orgName}
           />
         </FormField>
 
@@ -144,6 +151,7 @@ export function CreatorApplication({
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            maxLength={CREATOR_APPLICATION_LIMITS.location}
           />
         </FormField>
 
@@ -157,6 +165,7 @@ export function CreatorApplication({
               setLinks(e.target.value)
               if (linkError) setLinkError(null)
             }}
+            maxLength={CREATOR_APPLICATION_LIMITS.links}
             aria-invalid={linkError != null}
           />
           {linkError && (
