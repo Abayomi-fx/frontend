@@ -97,6 +97,7 @@ export function Deposit({ onDone }: DepositProps) {
 
   const handleDone = () => {
     setAmount('')
+    setInvestmentId(null)
     setTxError(null)
     changeStep('amount')
     onDone()
@@ -415,12 +416,8 @@ export function Deposit({ onDone }: DepositProps) {
                       toast({
                         tone: 'success',
                         title: 'Deposit confirmed',
-                        message: (
-                          <>
-                            Successfully invested {n} USDC in the pool.{' '}
-                            <a href={`/investments/${hash}`}>View investment</a>
-                          </>
-                        ),
+                        message: `Successfully invested ${n} USDC in the pool.`,
+                        href: `/investments/${hash}`,
                       })
                     }
                   } catch (e) {

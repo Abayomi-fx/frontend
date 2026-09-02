@@ -2,6 +2,7 @@
   "Common": {
     "copyAddress": "Copy {label}",
     "copied": "Copied",
+    "viewInvestment": "Ver tu inversión",
     "viewOnExplorer": "View {label} on Stellar Expert",
     "viewInvestment": "View your investment"
   },
@@ -14,12 +15,15 @@
     "testnet": "Testnet (active)",
     "networkStatus": "Network: Testnet active",
     "portfolio": "Your portfolio",
+    "watchlist": "Lista de seguimiento",
     "switchToDark": "Switch to dark",
     "switchToLight": "Switch to light",
     "language": "Language",
     "account": "Account",
+    "watchlist": "Lista de seguimiento",
     "copyAddress": "Copy address",
     "copied": "Copied",
+    "viewInvestment": "Ver tu inversión",
     "viewOnExplorer": "View on Stellar Expert",
     "disconnect": "Disconnect",
     "disconnectConfirm": "Yes, disconnect",
@@ -106,6 +110,7 @@
   "Explore": {
     "title": "Where the pool works",
     "sub": "Every project the pool funds, with oracle-verified scores. Explore freely — connecting a wallet comes later.",
+    "searchLabel": "Buscar proyectos",
     "searchPlaceholder": "Search by name or location",
     "filterAll": "All",
     "countSorted": "{count} projects",
@@ -116,6 +121,21 @@
     "loadMore": "Show {count} more",
     "showingCount": "Showing {shown} of {total} projects",
     "searchLabel": "Search projects"
+  },
+  "Watchlist": {
+    "title": "Tu lista de seguimiento",
+    "sub": "Los bonos que sigues. Guardar uno no invierte — lo mantiene a mano y te avisa cuando se abre a financiación.",
+    "cardFundedFromPool": "Financiado por el fondo",
+    "emptyTitle": "Nada guardado por ahora",
+    "emptySub": "Abre un bono desde Explorar y toca la estrella para añadirlo aquí. Te avisaremos cuando un bono guardado esté abierto a financiación.",
+    "added": "Añadido a la lista de seguimiento",
+    "removed": "Eliminado de la lista de seguimiento",
+    "saveLabel": "Añadir {name} a la lista de seguimiento",
+    "removeLabel": "Eliminar {name} de la lista de seguimiento",
+    "availableBanner": "{count, plural, one {# bono seguido está abierto a financiación ahora mismo.} other {# bonos seguidos están abiertos a financiación ahora mismo.}}",
+    "statusOpen": "Abierto a financiación",
+    "statusUpcoming": "Aún no disponible",
+    "notYetAvailable": "Te avisaremos aquí en cuanto se abra."
   },
   "Deposit": {
     "stepAmount": "Amount",
@@ -148,6 +168,7 @@
     "pendingTx": "tx a91f…3c0d · view on Stellar Expert ↗",
     "successH1": "Welcome to the pool",
     "successBody": "You received <num>{shares} HBS</num> and now back <b>{count} verified projects</b>.",
+    "viewInvestment": "Ver tu inversión",
     "viewExpert": "View on Stellar Expert",
     "goPortfolio": "Go to portfolio",
     "viewInvestment": "View your investment"
@@ -165,6 +186,11 @@
     "impactBody": "Your stake helps fund <b>{count} verified projects</b> across 6 countries.",
     "projectsBacked": "Projects backed",
     "weightedGreen": "Weighted green score",
+    "riskScore": "Puntuación de riesgo de la cartera",
+    "riskTierConservative": "Conservador",
+    "riskTierModerate": "Moderado",
+    "riskTierAggressive": "Agresivo",
+    "riskCaption": "Basado en la combinación de calificaciones de bonos en sus tenencias.",
     "activityTitle": "Activity",
     "activityNote": "every entry → Stellar Expert",
     "riskScore": "Portfolio risk score",

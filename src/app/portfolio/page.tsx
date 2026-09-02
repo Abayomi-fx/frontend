@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { Portfolio } from '../../screens/Portfolio'
 import { RequireWallet } from '../../wallet/RequireWallet'
@@ -16,8 +17,10 @@ function PortfolioRoute() {
 
 export default function PortfolioPage() {
   return (
-    <RequireWallet>
-      <PortfolioRoute />
-    </RequireWallet>
+    <Suspense fallback={null}>
+      <RequireWallet>
+        <PortfolioRoute />
+      </RequireWallet>
+    </Suspense>
   )
 }

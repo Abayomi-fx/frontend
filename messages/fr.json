@@ -2,8 +2,8 @@
   "Common": {
     "copyAddress": "Copier {label}",
     "copied": "Copié",
-    "viewOnExplorer": "Voir {label} sur Stellar Expert",
-    "viewInvestment": "View your investment"
+    "viewInvestment": "Voir votre investissement",
+    "viewOnExplorer": "Voir {label} sur Stellar Expert"
   },
   "Nav": {
     "explore": "Explorer",
@@ -12,7 +12,7 @@
     "creator": "Créateurs",
     "connect": "Se connecter",
     "testnet": "Testnet (actif)",
-    "networkStatus": "Réseau : Testnet actif",
+    "networkStatus": "Réseau : Testnet actif",
     "portfolio": "Votre portefeuille",
     "switchToDark": "Passer en sombre",
     "switchToLight": "Passer en clair",
@@ -21,6 +21,7 @@
     "watchlist": "Liste de suivi",
     "copyAddress": "Copier l'adresse",
     "copied": "Copié",
+    "viewInvestment": "Voir votre investissement",
     "viewOnExplorer": "Voir sur Stellar Expert",
     "disconnect": "Se déconnecter",
     "disconnectConfirm": "Oui, se déconnecter",
@@ -163,6 +164,7 @@
     "pendingTx": "tx a91f…3c0d · voir sur Stellar Expert ↗",
     "successH1": "Bienvenue dans le pool",
     "successBody": "Vous avez reçu <num>{shares} HBS</num> et soutenez désormais <b>{count} projets vérifiés</b>.",
+    "viewInvestment": "Voir votre investissement",
     "viewExpert": "Voir sur Stellar Expert",
     "goPortfolio": "Aller au portefeuille",
     "viewInvestment": "View your investment"
@@ -180,6 +182,11 @@
     "impactBody": "Votre participation aide à financer <b>{count} projets vérifiés</b> dans 6 pays.",
     "projectsBacked": "Projets soutenus",
     "weightedGreen": "Score vert pondéré",
+    "riskScore": "Score de risque du portefeuille",
+    "riskTierConservative": "Conservateur",
+    "riskTierModerate": "Modéré",
+    "riskTierAggressive": "Agressif",
+    "riskCaption": "Basé sur la répartition des notations d'obligations dans vos avoirs.",
     "activityTitle": "Activité",
     "activityNote": "chaque entrée → Stellar Expert",
     "riskScore": "Portfolio risk score",
@@ -236,7 +243,7 @@
     "rejectionReason": "Raison",
     "actionRevoke": "Révoquer",
     "revokeConfirm": "Oui, révoquer",
-    "revokeConfirmBody": "{name} ne pourra plus enregistrer de nouveaux projets. Vous pourrez annuler.",
+    "revokeConfirmBody": "La révocation retirera immédiatement l'accès de ce créateur. Vous pourrez annuler cette action.",
     "revokeCancel": "Annuler",
     "actionApprove": "Approuver",
     "toastScoresTitle": "Scores écrits sur la chaîne",

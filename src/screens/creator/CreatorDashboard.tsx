@@ -1,8 +1,16 @@
 'use client'
 
-import { useId, type CSSProperties } from 'react'
+import { useId } from 'react'
 import { useTranslations } from 'next-intl'
 import { StatBlock, ScoreGauge, Badge, Card, Sparkline } from '@/components'
+import {
+  cardTitleLg as cardTitle,
+  subtleBlock,
+  cardInner,
+  scoreColumn,
+  sectionHeaderTop,
+  sectionHeaderBottom,
+} from '@/theme'
 import {
   CREATOR_DASHBOARD,
   type CreatorDashboard as CreatorDashboardModel,
@@ -296,47 +304,4 @@ function UpdateRow({ update, first }: UpdateRowProps) {
       </a>
     </div>
   )
-}
-
-const cardTitle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: 700,
-  fontSize: 'var(--type-body-lg)',
-  margin: 0,
-  color: 'var(--ink)',
-  letterSpacing: '-0.01em',
-}
-const subtleBlock: CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-small)',
-  lineHeight: 1.5,
-  color: 'var(--ink-60)',
-  margin: '0 0 16px',
-}
-
-const cardInner: CSSProperties = {
-  padding: 22,
-  height: '100%',
-  boxSizing: 'border-box',
-}
-
-const scoreColumn: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: 8,
-}
-
-const sectionHeaderTop: CSSProperties = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 12,
-}
-
-const sectionHeaderBottom: CSSProperties = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 8,
 }

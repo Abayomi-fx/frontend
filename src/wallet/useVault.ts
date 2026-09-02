@@ -40,7 +40,7 @@ export function useVault(): VaultState {
     setLoading(true)
     setError(null)
 
-    Promise.all([fetchSharePrice(address, network), fetchTotalAssets(address, network)])
+    Promise.all([fetchSharePrice(network), fetchTotalAssets(network)])
       .then(([price, assets]) => {
         setSharePrice(price)
         setTotalAssets(assets)
