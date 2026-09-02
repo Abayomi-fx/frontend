@@ -1,11 +1,11 @@
 /*
  * Bond utilities -- addresses multiple bond-related issues:
-  *  - #364 filter persistence via URL + localStorage
-  *  - #363 case-insensitive search
-  *  - #359 stable sort with tie-breaker
-  *  - #361 bond comparison view data helper
-  *  - #367 projected return from an investment amount + annual yield
-  *  - #portfolio-risk show portfolio risk score based on bond ratings mix
+ *  - #364 filter persistence via URL + localStorage
+ *  - #363 case-insensitive search
+ *  - #359 stable sort with tie-breaker
+ *  - #361 bond comparison view data helper
+ *  - #367 projected return from an investment amount + annual yield
+ *  - #portfolio-risk show portfolio risk score based on bond ratings mix
  */
 
 export interface Bond {
@@ -62,7 +62,7 @@ export function searchBondsByName(bonds: Bond[], query: string): Bond[] {
 // #359 -- stable sort with tie-breaker (name, then id)
 export function sortBondsByYield(bonds: Bond[], direction: 'asc' | 'desc' = 'asc'): Bond[] {
   const dir = direction === 'asc' ? 1 : -1
-  return [].concat(bonds).sort((a, b) => {
+  return bonds.slice().sort((a, b) => {
     if (a.yield !== b.yield) return (a.yield - b.yield) * dir
     const nameCmp = a.name.localeCompare(b.name)
     if (nameCmp !== 0) return nameCmp
@@ -104,28 +104,28 @@ export interface PortfolioRisk {
 }
 
 const RATING_RISK_SCORES: Record<string, number> = {
-  'AAA': 0,
+  AAA: 0,
   'AA+': 5,
-  'AA': 10,
+  AA: 10,
   'AA-': 15,
   'A+': 20,
-  'A': 25,
+  A: 25,
   'A-': 30,
   'BBB+': 35,
-  'BBB': 40,
+  BBB: 40,
   'BBB-': 45,
   'BB+': 55,
-  'BB': 60,
+  BB: 60,
   'BB-': 65,
   'B+': 70,
-  'B': 75,
+  B: 75,
   'B-': 80,
   'CCC+': 85,
-  'CCC': 90,
+  CCC: 90,
   'CCC-': 95,
-  'CC': 98,
-  'C': 99,
-  'D': 100,
+  CC: 98,
+  C: 99,
+  D: 100,
 }
 
 export function getPortfolioRisk(bonds: Bond[]): PortfolioRisk {

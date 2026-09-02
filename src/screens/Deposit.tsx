@@ -97,7 +97,6 @@ export function Deposit({ onDone }: DepositProps) {
 
   const handleDone = () => {
     setAmount('')
-    setTxHash(null)
     setTxError(null)
     changeStep('amount')
     onDone()
@@ -177,7 +176,11 @@ export function Deposit({ onDone }: DepositProps) {
                         Using estimated rate
                       </span>
                     )}
-                    {t.rich('preview', { shares: formatDecimal(n / price, 4), price: formatSharePrice(price), num })}
+                    {t.rich('preview', {
+                      shares: formatDecimal(n / price, 4),
+                      price: formatSharePrice(price),
+                      num,
+                    })}
                     <span
                       style={{
                         display: 'block',
@@ -186,8 +189,9 @@ export function Deposit({ onDone }: DepositProps) {
                         color: 'var(--ink-60)',
                       }}
                     >
-                      Fee: &lt; $0.01 · Net proceeds: ≈ {formatDecimal(roundToCents(n - DEPOSIT_FEE_USDC), 2)}{' '}
-                      USDC worth {formatDecimal(n / price, 4)} HBS (real-time)
+                      Fee: &lt; $0.01 · Net proceeds: ≈{' '}
+                      {formatDecimal(roundToCents(n - DEPOSIT_FEE_USDC), 2)} USDC worth{' '}
+                      {formatDecimal(n / price, 4)} HBS (real-time)
                     </span>
                     {n >= MIN_DEPOSIT_USDC && (
                       <div
@@ -231,7 +235,9 @@ export function Deposit({ onDone }: DepositProps) {
               size="lg"
               style={{ width: '100%', marginTop: 20 }}
               disabled={n < MIN_DEPOSIT_USDC || n > balance}
-              reason={n > balance ? t('reasonExceeds') : n < MIN_DEPOSIT_USDC ? t('reasonMin') : undefined}
+              reason={
+                n > balance ? t('reasonExceeds') : n < MIN_DEPOSIT_USDC ? t('reasonMin') : undefined
+              }
               onClick={() => {
                 if (n < MIN_DEPOSIT_USDC || n > balance) {
                   setTxError(n > balance ? 'amount_exceeds_balance' : 'amount_too_low')
@@ -241,7 +247,9 @@ export function Deposit({ onDone }: DepositProps) {
                 changeStep('review')
               }}
             >
-              {n >= MIN_DEPOSIT_USDC && n <= balance ? t('investCta', { amount: n }) : t('investCtaEmpty')}
+              {n >= MIN_DEPOSIT_USDC && n <= balance
+                ? t('investCta', { amount: n })
+                : t('investCtaEmpty')}
             </Button>
           </Panel>
         )
@@ -272,10 +280,9 @@ export function Deposit({ onDone }: DepositProps) {
                 <span style={{ fontFamily: 'var(--font-data)', fontWeight: 600 }}>
                   {formatDecimal(pendingDeposit.amount, 2)} USDC
                 </span>{' '}
-                (started{' '}
-                {Math.floor((Date.now() - pendingDeposit.startedAt) / 1000)}s ago) has not yet
-                confirmed. Submitting again before it settles may result in a duplicate investment.
-                Check your portfolio before proceeding.{' '}
+                (started {Math.floor((Date.now() - pendingDeposit.startedAt) / 1000)}s ago) has not
+                yet confirmed. Submitting again before it settles may result in a duplicate
+                investment. Check your portfolio before proceeding.{' '}
                 <button
                   type="button"
                   onClick={clearPending}
@@ -367,8 +374,8 @@ export function Deposit({ onDone }: DepositProps) {
                   color: 'var(--ember)',
                 }}
               >
-                Exchange rate is more than {RATE_STALE_AFTER_SECONDS} seconds old — please refresh to get the latest price
-                before confirming.
+                Exchange rate is more than {RATE_STALE_AFTER_SECONDS} seconds old — please refresh
+                to get the latest price before confirming.
               </div>
             )}
             <p
@@ -399,12 +406,11 @@ export function Deposit({ onDone }: DepositProps) {
                   const controller = new AbortController()
                   abortControllerRef.current = controller
                   try {
-                    const { investmentId } = await submitDeposit(n, address ?? '', sign, controller.signal)
+                    const hash = await submitDeposit(n, address ?? '', sign, controller.signal)
                     if (mountedRef.current) {
-                      setInvestmentId(investmentId)
+                      setInvestmentId(hash)
                       // Confirmed success — safe to clear the pending guard.
                       clearPending()
-                      setTxHash(hash)
                       changeStep('success')
                       toast({
                         tone: 'success',
@@ -412,7 +418,7 @@ export function Deposit({ onDone }: DepositProps) {
                         message: (
                           <>
                             Successfully invested {n} USDC in the pool.{' '}
-                            <a href={`/investments/${investmentId}`}>View investment</a>
+                            <a href={`/investments/${hash}`}>View investment</a>
                           </>
                         ),
                       })

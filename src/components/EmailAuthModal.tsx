@@ -60,7 +60,7 @@ export function EmailAuthModal({ open, onClose, onSuccess, onSocialLogin }: Emai
     setBioLoading(true)
     setBioError(null)
     try {
-      const result = await loginBiometric(email)
+      await loginBiometric(email)
       // On success, notify parent and close the modal
       if (onSuccess) onSuccess(email)
       onClose()
@@ -76,7 +76,7 @@ export function EmailAuthModal({ open, onClose, onSuccess, onSocialLogin }: Emai
     setBioLoading(true)
     setBioError(null)
     try {
-      const result = await registerBiometric(email)
+      await registerBiometric(email)
       // After registration, log in automatically
       if (onSuccess) onSuccess(email)
       onClose()
@@ -234,15 +234,29 @@ export function EmailAuthModal({ open, onClose, onSuccess, onSocialLogin }: Emai
         {!submitted && (
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
-              <div style={{ flex: 1, height: 1, background: 'var(--ink-12)' }}/>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-caption)', color: 'var(--ink-40)' }}>
-                or 
+              <div style={{ flex: 1, height: 1, background: 'var(--ink-12)' }} />
+              <span
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--type-caption)',
+                  color: 'var(--ink-40)',
+                }}
+              >
+                or
               </span>
-              <div style={{ flex: 1, height: 1, background: 'var(--ink-12)' }}/>
+              <div style={{ flex: 1, height: 1, background: 'var(--ink-12)' }} />
             </div>
 
             {bioError && (
-              <p role="alert" style={{ color: 'var(--ember)', fontFamily: 'var(--font-body)', fontSize: 'var(--type-small)', margin: '0 0 8px' }}>
+              <p
+                role="alert"
+                style={{
+                  color: 'var(--ember)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--type-small)',
+                  margin: '0 0 8px',
+                }}
+              >
                 {bioError}
               </p>
             )}

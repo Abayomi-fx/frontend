@@ -2,19 +2,28 @@ import { formatPoolCounters } from './lib/format'
 
 export type ProjectType = 'Solar' | 'Wind' | 'Hydro'
 
-type BondStatus = 'open' | 'upcoming' | 'funded'
-
+export type BondStatus = 'open' | 'upcoming' | 'funded'
 
 export interface Project {
   id: number
   name: string
   location: string
   type: ProjectType
+  /** Credit Quality, oracle-verified, 0–100. */
   credit: number
+  /** Green Impact, oracle-verified, 0–100. */
   green: number
+  /** Capital deployed to this project from the pool (display string). */
   funded: string
+  /** Capital deployed, as a number. */
   fundedAmount: number
+  /** Stated funding goal. */
   fundingGoal: number
+  /**
+   * Funding availability. Optional so remote API rows without it stay valid;
+   * `getBondStatus()` in `src/lib/watchlist.ts` derives a fallback from the
+   * funding numbers.
+   */
   status?: BondStatus
 }
 
@@ -68,9 +77,109 @@ export interface HeliobondData {
   search: (query: string) => Project[]
 }
 
-const INITIAL_PROJECTS: Project[] = []
-const OFF_SCREEN_PROJECTS_COUNT = 8
+const INITIAL_PROJECTS: Project[] = [
+  {
+    id: 1,
+    name: 'Sokoto community solar',
+    location: 'Sokoto, Nigeria',
+    type: 'Solar',
+    credit: 82,
+    green: 91,
+    funded: '$420,000',
+    fundedAmount: 420000,
+    fundingGoal: 600000,
+    status: 'open',
+  },
+  {
+    id: 2,
+    name: 'Ría de Vigo tidal array',
+    location: 'Galicia, Spain',
+    type: 'Hydro',
+    credit: 74,
+    green: 88,
+    funded: '$1,180,000',
+    fundedAmount: 1180000,
+    fundingGoal: 1500000,
+    status: 'upcoming',
+  },
+  {
+    id: 3,
+    name: 'Atacama agrivoltaics',
+    location: 'Antofagasta, Chile',
+    type: 'Solar',
+    credit: 88,
+    green: 79,
+    funded: '$640,000',
+    fundedAmount: 640000,
+    fundingGoal: 800000,
+    status: 'open',
+  },
+  {
+    id: 4,
+    name: 'Jämtland wind co-op',
+    location: 'Östersund, Sweden',
+    type: 'Wind',
+    credit: 91,
+    green: 84,
+    funded: '$960,000',
+    fundedAmount: 960000,
+    fundingGoal: 1200000,
+    status: 'open',
+  },
+  {
+    id: 5,
+    name: 'Kerala micro-hydro',
+    location: 'Idukki, India',
+    type: 'Hydro',
+    credit: 69,
+    green: 93,
+    funded: '$310,000',
+    fundedAmount: 310000,
+    fundingGoal: 400000,
+    status: 'upcoming',
+  },
+  {
+    id: 6,
+    name: 'Oaxaca rooftop network',
+    location: 'Oaxaca, Mexico',
+    type: 'Solar',
+    credit: 77,
+    green: 86,
+    funded: '$520,000',
+    fundedAmount: 520000,
+    fundingGoal: 700000,
+    status: 'open',
+  },
+]
+
+// The pool has 14 funded projects in total: 6 active demo projects in the local
+// registry, plus 8 historical or off-screen projects funded in the past.
+export const OFF_SCREEN_PROJECTS_COUNT = 8
 const PROJECTS_FUNDED = INITIAL_PROJECTS.length + OFF_SCREEN_PROJECTS_COUNT
+
+// Helper to derive the portfolio risk indicator from the bond mix.
+// Credit scores are 0–100; higher credit = lower risk.
+function getRiskIndicator(projects: Project[]): {
+  riskScore: number
+  riskLevel: 'conservative' | 'moderate' | 'aggressive'
+} {
+  const totalFunded = projects.reduce((sum, p) => sum + p.fundedAmount, 0)
+  if (totalFunded === 0) return { riskScore: 0, riskLevel: 'conservative' }
+  const weightedCredit =
+    projects.reduce((sum, p) => sum + p.credit * p.fundedAmount, 0) / totalFunded
+  const riskScore = Math.round(weightedCredit * 10) / 10
+  let riskLevel: 'conservative' | 'moderate' | 'aggressive'
+  if (riskScore >= 75) {
+    riskLevel = 'conservative'
+  } else if (riskScore >= 60) {
+    riskLevel = 'moderate'
+  } else {
+    riskLevel = 'aggressive'
+  }
+  return { riskScore, riskLevel }
+}
+
+const { riskScore, riskLevel } = getRiskIndicator(INITIAL_PROJECTS)
 
 const POOL = {
   totalAssets: 4862014.55,
@@ -93,11 +202,39 @@ export const HB_DATA: HeliobondData = {
     poolSharePct: 0.49,
     weightedGreen: 88,
     backed: PROJECTS_FUNDED,
-    riskScore: 0,
-    riskLevel: 'conservative',
+    riskScore,
+    riskLevel,
     referralLink: 'https://heliobond.fi/ref/HB24041',
   },
-  projects: INITIAL_PROJECTS, 
-  activity: [],
-  search: (_query: string) => INITIAL_PROJECTS,
+  projects: INITIAL_PROJECTS,
+  activity: [
+    {
+      kind: 'Deposit',
+      amount: '+$5,000.00',
+      shares: '+4,971.06 HBS',
+      when: '2 days ago',
+      hash: 'a91f…c3c0d',
+    },
+    {
+      kind: 'Score update',
+      amount: 'Sokoto solar green 89 → 91',
+      shares: '',
+      when: '2 days ago',
+      hash: 'd44b…c77a2',
+    },
+    {
+      kind: 'Deposit',
+      amount: '+$12,000.00',
+      shares: '+11,950.12 HBS',
+      when: '3 weeks ago',
+      hash: '7c1e…b8f5',
+    },
+  ],
+  search: (query: string) => {
+    if (!query) return INITIAL_PROJECTS
+    const q = query.toLowerCase()
+    return INITIAL_PROJECTS.filter((p) => {
+      return p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q)
+    })
+  },
 }

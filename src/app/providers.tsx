@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { ThemeProvider } from '../theme/ThemeProvider'
@@ -64,7 +64,7 @@ function OfflineBanner() {
       try {
         const horizonUrl =
           process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://horizon.stellar.org'
-        const response = await fetch(`horizonUrl/`, { signal: controller.signal })
+        const response = await fetch(`${horizonUrl}/`, { signal: controller.signal })
         if (!response.ok) throw new Error('Stellar node unreachable')
         if (active && currentController === controller) setStellarReachable(true)
       } catch {
