@@ -12,6 +12,7 @@ export interface Project {
   name: string;
   location: string;
   type: string;
+  referralLink: string | null;
 }
 
 export interface ProjectFilters {
@@ -34,6 +35,7 @@ export interface Portfolio {
   name: string;
   holdings: Bond[];
   riskScore: RiskScore;
+  referralLink: string | null;
 }
 
 export const KYC_ALLOWED_DOCUMENT_TYPES = ['image/jpeg', 'application/pdf'] as const;

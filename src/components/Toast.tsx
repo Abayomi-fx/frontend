@@ -7,32 +7,41 @@ import {
   useCallback,
   type CSSProperties,
   type ReactNode,
-} from 'react'
-import { CloseIcon } from './icons'
+} from 'react';
+import { CloseIcon } from './icons';
 
-export type ToastTone = 'neutral' | 'success' | 'error' | 'solar'
+export type ToastTone = 'neutral' | 'success' | 'error' | 'solar';
 
 export interface ToastProps {
-  tone?: ToastTone
-  title?: string
-  message?: string
-  action?: ReactNode
-  undo?: () => void
-  onDismiss?: () => void
-  href?: string
-  style?: CSSProperties
+  tone?: ToastTone;
+  title?: string;
+  message?: string;
+  action?: ReactNode;
+  undo?: () => void;
+  onDismiss?: () => void;
+  href?: string;
+  style?: CSSProperties;
 }
 
-export function Toast({ tone = 'neutral', title, message, action, undo, onDismiss, href, style }: ToastProps) {
+export function Toast({
+  tone = 'neutral',
+  title,
+  message,
+  action,
+  undo,
+  onDismiss,
+  href,
+  style,
+}: ToastProps) {
   const accents: Record<ToastTone, string> = {
     neutral: 'var(--ink)',
     success: 'var(--growth)',
     error: 'var(--ember)',
     solar: 'var(--solar)',
-  }
-  const accent = accents[tone] || accents.neutral
+  };
+  const accent = accents[tone] || accents.neutral;
 
-  const hasActions = Boolean(action) || Boolean(undo)
+  const hasActions = Boolean(action) || Boolean(undo);
 
   const content = (
     <>
@@ -77,8 +86,8 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
             <button
               type="button"
               onClick={() => {
-                undo()
-                onDismiss?.()
+                undo();
+                onDismiss?.();
               }}
               style={{
                 fontFamily: 'var(--font-body)',
@@ -99,7 +108,7 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
         {action && <div style={{ marginTop: 10 }}>{action}</div>}
       </div>
     </>
-  )
+  );
 
   return (
     <div
@@ -160,49 +169,56 @@ export function Toast({ tone = 'neutral', title, message, action, undo, onDismis
         </button>
       )}
     </div>
-  )
+  );
 }
 
 export interface ToastContextType {
-  toast: (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => void
-  dismiss: (id?: string) => void
+  toast: (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => void;
+  dismiss: (id?: string) => void;
 }
 
-const ToastContext = createContext<ToastContextType | null>(null)
+const ToastContext = createContext<ToastContextType | null>(null);
 
-const MAX_ACTIVE_TOACTS = 3
+const MAX_ACTIVE_TOASTS = 3;
+const DEFAULT_TOAST_DURATION = 5000;
+const MIN_SUCCESS_TOAST_DURATION = 10000;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [activeToasts, setActiveToasts] = useState<
     (ToastProps & { id: string; duration?: number })[]
-  >([])
+  >([]);
 
   const showToast = useCallback(
-    (options: Omit<ToastProps, 'onDismiss'> & { duration?: number }) => {
-      const id = Math.random().toString(36).substring(2, 9)
-      const hasActions = Boolean(options.action) || Boolean(options.undo)
-      const duration = options.duration ?? (hasActions ? 0 : 5000)
+    (
+      options: Omit<ToastProps, 'onDismiss'> & { duration?: number }
+    ) => {
+      const id = Math.random().toString(36).substring(2, 9);
       setActiveToasts((prev) => {
-        const next = [...prev, { ...options, id, duration }]
-        return next.length > MAX_ACTIVE_TOACTS ? next.slice(next.length - MAX_ACTIVE_TOACTS) : next
-      })
-
-      if (duration > 0) {
+        const next = [...prev, { ...options, id }];
+        return next.length > MAX_ACTIVE_TOASTS
+          ? next.slice(next.length - MAX_ACTIVE_TOASTS)
+          : next;
+      });
+      const ms = Math.max(
+        options.duration ?? DEFAULT_TOAST_DURATION,
+        options.tone === 'success' ? MIN_SUCCESS_TOAST_DURATION : 0,
+      );
+      if (ms > 0) {
         setTimeout(() => {
-          setActiveToasts((prev) => prev.filter((t) => t.id !== id))
-        }, duration)
+          setActiveToasts((prev) => prev.filter((t) => t.id !== id));
+        }, ms);
       }
     },
     [],
-  )
+  );
 
   const dismiss = useCallback((id?: string) => {
     if (id) {
-      setActiveToasts((prev) => prev.filter((t) => t.id !== id))
+      setActiveToasts((prev) => prev.filter((t) => t.id !== id));
     } else {
-      setActiveToasts([])
+      setActiveToasts([]);
     }
-  }, [])
+  }, []);
 
   return (
     <ToastContext.Provider value={{ toast: showToast, dismiss }}>
@@ -225,13 +241,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         </div>
       )}
     </ToastContext.Provider>
-  )
+  );
 }
 
 export function useToast() {
-  const context = useContext(ToastContext)
+  const context = useContext(ToastContext);
   if (!context) {
-    throw new Error('useToast must be used within a ToastProvider')
+    throw new Error('useToast must be used within a ToastProvider');
   }
-  return context
+  return context;
 }

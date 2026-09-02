@@ -1,8 +1,7 @@
 import { useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 
 /**
- * Heliobond Tag — a selectable filter/category pill. Selected state uses a
- * solar-tint fill paired with an ink label (color never alone).
+ * Heliobond Tag — a selectable filter/category pill. Selected state uses a solar-tint fill paired with an ink label (color never alone).
  */
 export interface TagProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean
@@ -20,7 +19,7 @@ export function Tag({ selected = false, onClick, children, style, ...rest }: Tag
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      style={{
+      style={
         display: 'inline-flex',
         alignItems: 'center',
         gap: 6,
@@ -29,19 +28,19 @@ export function Tag({ selected = false, onClick, children, style, ...rest }: Tag
         fontFamily: 'var(--font-body)',
         fontWeight: 500,
         fontSize: 'var(--type-small)',
-        color: 'var(--ink)',
+        color: selected ? 'var(--ink-strong, #1a1a1a)' : 'var(--ink)',
         background: selected
           ? 'var(--solar-12)'
           : hover && interactive
             ? 'var(--ink-06)'
             : 'transparent',
-        border: selected ? '1px solid var(--solar)' : '1px solid var(--ink-12)',
+        border: selected ? '1px solid var(--solar-strong, #0b6e45)' : '1px solid var(--ink-12)',
         borderRadius: 'var(--radius-pill)',
         cursor: interactive ? 'pointer' : 'default',
         transition: 'background var(--dur-press) var(--ease-out)',
         whiteSpace: 'nowrap',
         ...style,
-      }}
+      },
       {...rest}
     >
       {children}
