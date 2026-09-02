@@ -1,14 +1,21 @@
 'use client'
 
-import { useState, type CSSProperties, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, Tag, Card, CheckBoldIcon, FormField, FormInput } from '@/components'
+import { cardTitle, subtle } from '@/theme'
 import {
   PROJECT_TYPES,
   WHITELIST_CRITERIA,
   type ApplicationStage,
   type ProjectType,
 } from '@/data/creator'
+
+const CREATOR_APPLICATION_LIMITS = {
+  orgName: 2000,
+  location: 5000,
+  links: 10000,
+} as const
 
 /**
  * CreatorApplication — the whitelist door for project creators. Plain criteria
@@ -124,6 +131,7 @@ export function CreatorApplication({
             type="text"
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
+            maxLength={CREATOR_APPLICATION_LIMITS.orgName}
           />
         </FormField>
 
@@ -144,6 +152,7 @@ export function CreatorApplication({
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            maxLength={CREATOR_APPLICATION_LIMITS.location}
           />
         </FormField>
 
@@ -157,6 +166,7 @@ export function CreatorApplication({
               setLinks(e.target.value)
               if (linkError) setLinkError(null)
             }}
+            maxLength={CREATOR_APPLICATION_LIMITS.links}
             aria-invalid={linkError != null}
           />
           {linkError && (
@@ -394,19 +404,4 @@ function Label({ htmlFor, children }: { htmlFor: string; children: ReactNode }) 
       {children}
     </label>
   )
-}
-
-const cardTitle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: 700,
-  fontSize: 'var(--type-h5)',
-  margin: '0 0 8px',
-  color: 'var(--ink)',
-  letterSpacing: '-0.01em',
-}
-const subtle: CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-small)',
-  lineHeight: 1.5,
-  color: 'var(--ink-60)',
 }

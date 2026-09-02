@@ -59,6 +59,10 @@ export function useSessionTimeout({
 
   const lastActivityRef = useRef<number>(Date.now())
   const lastThrottleRef = useRef<number>(0)
+  // Mirrors `isWarningOpen` for the activity listener, so the listener stays
+  // stable while the warning state changes (re-scheduling on every open/close
+  // would clear the countdown and re-arm the warning timer).
+  const isWarningOpenRef = useRef(false)
   const warningTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -72,6 +76,10 @@ export function useSessionTimeout({
   useEffect(() => {
     onWarningRef.current = onWarning
   }, [onWarning])
+
+  useEffect(() => {
+    isWarningOpenRef.current = isWarningOpen
+  }, [isWarningOpen])
 
   const clearTimers = useCallback(() => {
     if (warningTimerRef.current) {
@@ -143,7 +151,7 @@ export function useSessionTimeout({
     const handleUserActivity = () => {
       // Do not reset activity automatically while the warning modal is actively open
       // (user must explicitly click Extend Session)
-      if (isWarningOpen) return
+      if (isWarningOpenRef.current) return
 
       const now = Date.now()
       if (now - lastThrottleRef.current > throttleMs) {
@@ -162,7 +170,7 @@ export function useSessionTimeout({
         window.removeEventListener(event, handleUserActivity)
       })
     }
-  }, [enabled, isWarningOpen, scheduleWarning, clearTimers, throttleMs])
+  }, [enabled, scheduleWarning, clearTimers, throttleMs])
 
   // Format MM:SS for countdown display
   const minutes = Math.floor(remainingSeconds / 60)

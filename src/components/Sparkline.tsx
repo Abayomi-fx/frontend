@@ -20,7 +20,7 @@ function Sparkline({
   points,
   width = 132,
   height = 36,
-  color = 'var---ink-40)',
+  color = 'var(--ink-40)',
   'aria-label': ariaLabel,
   style,
 }: SparklineProps) {
@@ -48,7 +48,7 @@ function Sparkline({
     <svg
       width={width}
       height={height}
-      viewBox={`0 0 ${width} ${height}}`
+      viewBox={`0 0 ${width} ${height}`}
       role="img"
       aria-label={ariaLabel}
       style={{ display: 'block', ...style }}

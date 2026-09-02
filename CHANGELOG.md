@@ -37,6 +37,8 @@ once it cuts its first tagged release (it currently ships continuously from
 
 ### Changed
 
+- Webfonts now preconnect to the Fontshare and Google CDNs and load with a
+  `swap` display strategy, so text appears sooner and shifts less (#385).
 - Auth login now detects existing social accounts during email login to
   prevent duplicate accounts (#353).
 

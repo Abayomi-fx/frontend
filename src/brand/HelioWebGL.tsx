@@ -15,6 +15,8 @@
  *   · prefers-reduced-motion → renders a fully STATIC orb (no useFrame work).
  *   · No WebGL support → renders `null` so the parent can show the static
  *     <Helio> fallback instead.
+ *   · Save-Data / low-end device → caps DPR at 1× and asks for a 'low-power'
+ *     context, so constrained hardware never pays for 2× + high-performance.
  *
  * aria-hidden decoration — every datum it encodes is present as text elsewhere.
  */
@@ -47,6 +49,51 @@ export interface HelioWebGLProps {
 }
 
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n)
+
+/* ------------------------------------------------------------------------- *
+ * Constrained-device detection — Save-Data or low-end hardware? Render light.
+ * ------------------------------------------------------------------------- */
+
+/** Minimal NetworkInformation surface (Chromium / Safari expose `connection`). */
+interface NetworkHints {
+  /** User has opted into data-saving (browser or OS setting). */
+  saveData?: boolean
+  /** Rough connection category: 'slow-2g' | '2g' | '3g' | '4g'. */
+  effectiveType?: string
+}
+
+/**
+ * True when the canvas should render light — Save-Data is on, or the device /
+ * connection looks low-end. Every signal is an optional client hint, so
+ * browsers that expose none of them (or undefined values) fall through to
+ * `false`, keeping the full-quality path on standard hardware.
+ *
+ * Any one of these marks the device constrained:
+ *   · `navigator.connection.saveData` — the user asked sites to save data
+ *   · `navigator.deviceMemory` ≤ 4 GiB (Chromium)
+ *   · `navigator.hardwareConcurrency` ≤ 4
+ *   · `navigator.connection.effectiveType` ∈ { 'slow-2g', '2g' }
+ */
+export function isConstrainedCanvas(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const nav = navigator as Navigator & {
+    connection?: NetworkHints
+    deviceMemory?: number
+  }
+
+  if (nav.connection?.saveData) return true
+
+  const memory = nav.deviceMemory
+  if (typeof memory === 'number' && memory > 0 && memory <= 4) return true
+
+  const cores = nav.hardwareConcurrency
+  if (typeof cores === 'number' && cores > 0 && cores <= 4) return true
+
+  const effectiveType = nav.connection?.effectiveType
+  if (effectiveType === 'slow-2g' || effectiveType === '2g') return true
+
+  return false
+}
 
 /* ------------------------------------------------------------------------- *
  * WebGL canvas — loaded through next/dynamic so three and R3F are split into
@@ -311,10 +358,18 @@ function Scene({
       onReady,
     }: HelioCanvasProps) {
       const specs = useMemo(() => buildMotes(motes), [motes])
+      // Client-only module — loaded through dynamic({ ssr: false }) — so it is
+      // safe to read client hints here. Save-Data / low-end devices render at a
+      // 1× DPR cap under a low-power context instead of 2× high-performance.
+      const constrained = isConstrainedCanvas()
       return (
         <Canvas
-          dpr={[1, 2]}
-          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+          dpr={constrained ? [1, 1] : [1, 2]}
+          gl={{
+            antialias: true,
+            alpha: true,
+            powerPreference: constrained ? 'low-power' : 'high-performance',
+          }}
           style={{ width: size, height: size, background: 'transparent' }}
           // Frame loop pauses entirely in reduced-motion (single render).
           frameloop={animate ? 'always' : 'demand'}
@@ -362,6 +417,7 @@ export function HelioWebGL({ size = 360, motes = 14, intensity = 1, onReady }: H
   const [ready, setReady] = useState(false)
   const [webgl, setWebgl] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -373,15 +429,28 @@ export function HelioWebGL({ size = 360, motes = 14, intensity = 1, onReady }: H
     // addEventListener is supported in all R19-era browsers.
     mq.addEventListener('change', onChange)
 
+    const onVisibilityChange = () => {
+      setVisible(document.visibilityState === 'visible')
+    }
+    if (typeof document !== 'undefined') {
+      setVisible(document.visibilityState === 'visible')
+      document.addEventListener('visibilitychange', onVisibilityChange)
+    }
+
     setReady(true)
-    return () => mq.removeEventListener('change', onChange)
+    return () => {
+      mq.removeEventListener('change', onChange)
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', onVisibilityChange)
+      }
+    }
   }, [])
 
   // Until we've probed the client, render nothing — the parent's static
   // <Helio> fallback covers this window (and SSR). No WebGL → stay null.
   if (!ready || !webgl) return null
 
-  const animate = !reducedMotion
+  const animate = !reducedMotion && visible
 
   return (
     <div aria-hidden="true" style={{ width: size, height: size, position: 'relative' }}>

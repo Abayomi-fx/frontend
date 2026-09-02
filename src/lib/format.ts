@@ -16,11 +16,20 @@ export function roundToCents(value: number): number {
 
 /**
  * Formats a number to a fixed number of decimals, rounding once with
- * {roundToDecimals} first so every caller displays the same rounded
+ * {@link roundToDecimals} first so every caller displays the same rounded
  * value instead of re-rounding raw floating-point results independently (#369).
  */
 export function formatDecimal(value: number, decimals: number): string {
   return roundToDecimals(value, decimals).toFixed(decimals)
+}
+
+/**
+ * Formats the vault share price with the shared precision used everywhere
+ * the figure appears (deposit preview, admin stat cell, data source) so the
+ * same value reads identically across screens (#394).
+ */
+export function formatSharePrice(value: number): string {
+  return formatDecimal(value, 4)
 }
 
 /**
@@ -80,9 +89,9 @@ export function formatSharePrice(value: number): string {
 
 /** Data shape for the landing pool counters. */
 export interface PoolData {
-  tvl: number
-  investors: number
-  apy: number
+  totalAssets: number
+  projectsFunded: number
+  projectedRate: number
 }
 
 /**
@@ -91,13 +100,13 @@ export interface PoolData {
  * hardcoded strings, preventing drift from the data source.
  */
 export function formatPoolCounters(pool: PoolData): {
-  tvl: string
-  investors: string
-  apy: string
+  totalAssets: string
+  projectsFunded: string
+  projectedRate: string
 } {
   return {
-    tvl: formatMoney(pool.tvl, { includeSymbol: true }),
-    investors: String(pool.investors),
-    apy: formatDecimal(pool.apy, 1),
+    totalAssets: formatMoney(pool.totalAssets, { includeSymbol: true }),
+    projectsFunded: String(pool.projectsFunded),
+    projectedRate: formatDecimal(pool.projectedRate, 1),
   }
 }

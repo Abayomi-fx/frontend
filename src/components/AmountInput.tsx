@@ -3,7 +3,6 @@ import { sanitizeAmount } from '../lib/format'
 
 export { sanitizeAmount }
 
-
 /**
  * Heliobond AmountInput — the heart of deposit & withdraw. Mono numerals, a
  * visible balance, quick chips (25/50/100/Max), a live on-chain preview slot,
@@ -57,7 +56,7 @@ export function AmountInput({
 
   const liveMsg = overCap && !wasOverCap ? (capMessage ?? '') : ''
 
-  const set = (v: number) => onChange?(String(v))
+  const set = (v: number) => onChange?.(String(v))
 
   return (
     <div style={{ position: 'relative', ...style }}>
@@ -99,7 +98,7 @@ export function AmountInput({
           alignItems: 'center',
           gap: 10,
           background: 'var(--surface)',
-          border: `p1px solid ${overCap ? 'var(--solar)' : 'var(--ink-12)'}`,
+          border: `1px solid ${overCap ? 'var(--solar)' : 'var(--ink-12)'}`,
           borderRadius: 'var(--radius-input)',
           padding: '0 16px',
           height: 64,
@@ -108,8 +107,9 @@ export function AmountInput({
       >
         <input
           id={id}
-          type="number"
+          type="text"
           inputMode="decimal"
+          pattern="[0-9.]*"
           placeholder="0.00"
           value={value}
           onFocus={(e) => e.target.select()}
@@ -117,12 +117,12 @@ export function AmountInput({
             e.preventDefault()
             const pastedText = e.clipboardData.getData('text')
             const sanitized = sanitizeAmount(pastedText)
-            onChange?(sanitized)
+            onChange?.(sanitized)
           }}
           onChange={(e) => {
             const v = sanitizeAmount(e.target.value)
             // If editing existing value, typing should replace not append when field was pre-filled
-            onChange?(v)
+            onChange?.(v)
           }}
           style={{
             flex: 1,
@@ -134,7 +134,7 @@ export function AmountInput({
             fontWeight: 600,
             fontSize: 'var(--type-data-display)',
             color: 'var(--ink)',
-            fontFeatureSettings: '"tnum' 1',
+            fontFeatureSettings: '"tnum" 1',
           }}
         />
         <span
@@ -157,14 +157,14 @@ export function AmountInput({
           margin: '8px 0 0',
         }}
       >
-        Min 1 USDC — Max {cap ?? ‘⁊7} USDC
+        Min 1 USDC — Max {cap ?? '—'} USDC
       </p>
       <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
         {chips.map((c) => (
           <button key={c} type="button" onClick={() => set(c)} style={chipStyle}>
             {c}
           </button>
-        )}
+        ))}
         {cap != null && maxChipLabel && (
           <button
             key="max"

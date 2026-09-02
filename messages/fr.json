@@ -2,6 +2,7 @@
   "Common": {
     "copyAddress": "Copier {label}",
     "copied": "Copié",
+    "viewInvestment": "Voir votre investissement",
     "viewOnExplorer": "Voir {label} sur Stellar Expert"
   },
   "Nav": {
@@ -11,7 +12,7 @@
     "creator": "Créateurs",
     "connect": "Se connecter",
     "testnet": "Testnet (actif)",
-    "networkStatus": "Réseau : Testnet actif",
+    "networkStatus": "Réseau : Testnet actif",
     "portfolio": "Votre portefeuille",
     "switchToDark": "Passer en sombre",
     "switchToLight": "Passer en clair",
@@ -20,12 +21,16 @@
     "watchlist": "Liste de suivi",
     "copyAddress": "Copier l'adresse",
     "copied": "Copié",
+    "viewInvestment": "Voir votre investissement",
     "viewOnExplorer": "Voir sur Stellar Expert",
     "disconnect": "Se déconnecter",
     "disconnectConfirm": "Oui, se déconnecter",
     "disconnectConfirmBody": "La déconnexion termine votre session. Vos actifs sur la chaîne sont en sécurité sur Stellar, mais vous devrez reconnecter votre portefeuille pour accéder à votre portefeuille, investir ou retirer.",
     "disconnectCancel": "Annuler",
-    "demoSession": "Session démo"
+    "demoSession": "Session démo",
+    "referral": "Referral",
+    "shareLink": "Share your referral link",
+    "viewInvestment": "View your investment"
   },
   "Footer": {
     "trustLinks": "Liens de confiance",
@@ -159,8 +164,10 @@
     "pendingTx": "tx a91f…3c0d · voir sur Stellar Expert ↗",
     "successH1": "Bienvenue dans le pool",
     "successBody": "Vous avez reçu <num>{shares} HBS</num> et soutenez désormais <b>{count} projets vérifiés</b>.",
+    "viewInvestment": "Voir votre investissement",
     "viewExpert": "Voir sur Stellar Expert",
-    "goPortfolio": "Aller au portefeuille"
+    "goPortfolio": "Aller au portefeuille",
+    "viewInvestment": "View your investment"
   },
   "Portfolio": {
     "eyebrow": "Votre portefeuille",
@@ -175,8 +182,23 @@
     "impactBody": "Votre participation aide à financer <b>{count} projets vérifiés</b> dans 6 pays.",
     "projectsBacked": "Projets soutenus",
     "weightedGreen": "Score vert pondéré",
+    "riskScore": "Score de risque du portefeuille",
+    "riskTierConservative": "Conservateur",
+    "riskTierModerate": "Modéré",
+    "riskTierAggressive": "Agressif",
+    "riskCaption": "Basé sur la répartition des notations d'obligations dans vos avoirs.",
     "activityTitle": "Activité",
-    "activityNote": "chaque entrée → Stellar Expert"
+    "activityNote": "chaque entrée → Stellar Expert",
+    "riskScore": "Portfolio risk score",
+    "riskTierConservative": "Conservative",
+    "riskTierModerate": "Moderate",
+    "riskTierAggressive": "Aggressive",
+    "riskCaption": "Based on the mix of bond ratings in your holdings.",
+    "referralProgram": "Referral program",
+    "referralLink": "Your referral link",
+    "referralCaption": "Share your link to invite friends. You both get rewards when they invest.",
+    "copyLink": "Copy link",
+    "copied": "Copied"
   },
   "Withdraw": {
     "h1": "Retirer du pool",
@@ -221,14 +243,8 @@
     "rejectionReason": "Raison",
     "actionRevoke": "Révoquer",
     "revokeConfirm": "Oui, révoquer",
-    "revokeConfirmBody": "Cette action révoque l'accès du créateur au registre. Voulez-vous continuer ?",
-    "revokeCancel": "Annuler",
-    "revokeToast": "Créateur révoqué",
-    "revokeUndo": "Annuler"voquer",
     "revokeConfirmBody": "La révocation retirera immédiatement l'accès de ce créateur. Vous pourrez annuler cette action.",
     "revokeCancel": "Annuler",
-    "revokeToast": "Créateur révoqué",
-    "revokeUndo": "Annuler",
     "actionApprove": "Approuver",
     "toastScoresTitle": "Scores écrits sur la chaîne",
     "toastScoresMsg": "{name} re-vérifié : crédit {credit}, vert {green}.",
@@ -239,8 +255,6 @@
     "toastRevokedTitle": "Créateur révoqué",
     "toastRevokedMsg": "{name} ne peut plus enregistrer de nouveaux projets.",
     "revokeConfirmTitle": "Révoquer ce créateur ?",
-    "revokeConfirmBody": "{name} ne pourra plus enregistrer de nouveaux projets. Vous pourrez annuler.",
-    "toastRevokedUndo": "Annuler la révocation",
     "panelPushTitle": "Envoyer une mise à jour de scores",
     "panelPushHint": "Écrit une nouvelle lecture oracle dans le ProjectRegistry.",
     "panelFundTitle": "Financer un projet",
@@ -272,7 +286,8 @@
     "scoreFieldCredit": "Qualité de crédit",
     "scoreFieldGreen": "Impact vert",
     "actionCancel": "Annuler",
-    "actionSave": "Enregistrer"
+    "actionSave": "Enregistrer",
+    "actionUndo": "Undo"
   },
   "Creator": {
     "goalInvalid": "Entrez un objectif de financement supérieur à 0",
@@ -405,5 +420,33 @@
     "sendLinkAnyway": "Lier cet e-mail à mon compte",
     "linkSentMessage": "Un lien magique de connexion a été envoyé à {email}.",
     "close": "Fermer"
+  },
+  "YieldAlert": {
+    "modalTitle": "Set yield alert",
+    "editTitle": "Edit yield alert",
+    "conditionLabel": "Alert when yield goes",
+    "thresholdLabel": "Threshold",
+    "operatorAbove": "Above",
+    "operatorBelow": "Below",
+    "previewText": "Alert me when {name} yield goes {direction} {threshold}%",
+    "saveCta": "Save alert",
+    "deleteCta": "Delete",
+    "cancelCta": "Cancel",
+    "addLabel": "Set yield alert for {name}",
+    "editLabel": "Edit yield alert for {name}",
+    "createdToastTitle": "Yield alert set",
+    "createdToastMessage": "You'll be notified when {name} yield crosses {threshold}%.",
+    "updatedToastTitle": "Yield alert updated",
+    "updatedToastMessage": "Alert for {name} updated to {threshold}%.",
+    "deletedToastTitle": "Yield alert removed",
+    "triggeredToastTitle": "🔔 Yield alert triggered",
+    "triggeredToastMessage": "{name} yield is {yield}% — {direction} your {threshold}% threshold."
+  },
+  "Referral": {
+    "title": "Referral program",
+    "shareLink": "Share your referral link",
+    "yourReferralLink": "Your referral link",
+    "copyLink": "Copy referral link",
+    "copied": "Copied"
   }
 }

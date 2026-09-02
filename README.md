@@ -72,6 +72,34 @@ bun run start      # serve the production build
 bun run typecheck  # tsc --noEmit
 ```
 
+## Local environment
+
+Copy `.env.example` to `.env.local` before running against a backend or Soroban
+vault:
+
+```bash
+cp .env.example .env.local
+```
+
+The app runs without a `.env.local` file and falls back to bundled demo data. Set
+only the values needed for the mode you are testing.
+
+| Variable | Required? | Default / fallback | Purpose |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | No | Demo fixture data | Backend API base URL, for example `http://localhost:3001`. |
+| `NEXT_PUBLIC_STELLAR_NETWORK` | No | `public` | Stellar network for wallet and Soroban helpers. Use `testnet` for local/dev testing. |
+| `NEXT_PUBLIC_VAULT_CONTRACT_ID` | No | Demo vault mode | Soroban vault contract ID for live vault reads and transactions. |
+| `NEXT_PUBLIC_SOROBAN_RPC_URL` | No | Network-specific Stellar RPC URL | Override the Soroban RPC endpoint. |
+| `NEXT_PUBLIC_HORIZON_URL` | No | Network-specific Horizon URL | Override the Horizon endpoint used for transaction account loading. |
+
+For backend configuration, see the backend repository's `.env.example`.
+
+## Error codes
+
+Frontend-friendly error messages are mapped in `src/lib/errorMessages.ts`.
+Developers can find the supported codes, API response shape, and guidance for
+opaque provider codes such as `ERR_008` in [ERROR_CODES.md](ERROR_CODES.md).
+
 ## Features
 
 - **Wallet wiring** — `src/wallet/WalletProvider.tsx` connects a real Stellar

@@ -102,7 +102,12 @@ export function Landing({ onConnect, onExplore }: LandingProps) {
             />
           </div>
           <div style={counterCell}>
-            <StatBlock label={t('returnRate')} value={formatNumber(d.pool.returnRate)} unit="%" size="lg" />
+            <StatBlock
+              label={t('returnRate')}
+              value={formatNumber(d.pool.projectedRate)}
+              unit="%"
+              size="lg"
+            />
           </div>
         </div>
         <p

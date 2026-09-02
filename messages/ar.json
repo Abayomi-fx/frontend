@@ -2,7 +2,16 @@
   "Common": {
     "copyAddress": "نسخ {label}",
     "copied": "تم النسخ",
-    "viewOnExplorer": "عرض {label} على Stellar Expert"
+    "viewInvestment": "عرض استثمارك",
+    "viewOnExplorer": "عرض {label} على Stellar Expert",
+    "viewInvestment": "View your investment"
+  },
+  "Referral": {
+    "title": "برنامج الإحالة",
+    "shareLink": "مشاركة رابط الإحالة",
+    "copyLink": "نسخ رابط الإحالة",
+    "copied": "تم نسخ رابط الإحالة",
+    "yourReferralLink": "Your referral link"
   },
   "Nav": {
     "explore": "استكشاف",
@@ -13,18 +22,25 @@
     "testnet": "شبكة الاختبار (نشطة)",
     "networkStatus": "الشبكة: شبكة الاختبار نشطة",
     "portfolio": "محفظتك",
+    "watchlist": "قائمة المراقبة",
     "switchToDark": "التبديل إلى الوضع الداكن",
     "switchToLight": "التبديل إلى الوضع الفاتح",
     "language": "اللغة",
     "account": "الحساب",
+    "watchlist": "قائمة المراقبة",
     "copyAddress": "نسخ العنوان",
     "copied": "تم النسخ",
+    "viewInvestment": "عرض استثمارك",
     "viewOnExplorer": "عرض على Stellar Expert",
+    "shareLink": "مشاركة رابط الإحالة",
     "disconnect": "قطع الاتصال",
     "disconnectConfirm": "نعم، قطع الاتصال",
     "disconnectConfirmBody": "قطع الاتصال ينهي جلستك الحالية. أصولك على السلسلة آمنة على Stellar، لكن ستحتاج إلى إعادة توصيل محفظتك للوصول إلى محفظتك أو الاستثمار أو السحب.",
     "disconnectCancel": "إلغاء",
-    "demoSession": "جلسة تجريبية"
+    "demoSession": "جلسة تجريبية",
+    "referral": "Referral",
+    "watchlist": "Watchlist",
+    "viewInvestment": "View your investment"
   },
   "Footer": {
     "trustLinks": "روابط الثقة",
@@ -101,16 +117,32 @@
   "Explore": {
     "title": "أين يعمل المجمع",
     "sub": "كل مشروع يموله المجمع، مع درجات مؤكدة من Oracle. استكشف بحرية — توصيل المحفظة يأتي لاحقاً.",
-    "filterAll": "الكل",
+    "searchLabel": "ابحث في المشاريع",
     "searchPlaceholder": "ابحث بالاسم أو الموقع",
-    "searchAriaLabel": "ابحث في المشاريع بالاسم أو الموقع",
+    "filterAll": "الكل",
     "countSorted": "{count} مشاريع",
     "cardFundedFromPool": "ممول من المجمع",
     "cardVerifiedAgo": "تم التحقق قبل {ago}",
     "emptyTitle": "لم يتم العثور على مشاريع",
     "emptySub": "لا توجد مشاريع تطابق فئة \"{filter}\" في المجمع حالياً.",
     "loadMore": "عرض {count} المزيد",
-    "showingCount": "عرض {shown} من {total} مشاريع"
+    "showingCount": "عرض {shown} من {total} مشاريع",
+    "searchLabel": "Search projects"
+  },
+  "Watchlist": {
+    "title": "قائمة المراقبة الخاصة بك",
+    "sub": "السندات التي تتابعها. حفظ سند لا يعني الاستثمار — بل يبقيه في متناول اليد ويشير إلى وقت فتحه للتمويل.",
+    "cardFundedFromPool": "ممول من المجمع",
+    "emptyTitle": "لا شيء محفوظ حتى الآن",
+    "emptySub": "افتح سنداً من استكشف وانقر على النجمة لإضافته هنا. سنشير هنا عندما يكون السند المحفوظ مفتوحاً للتمويل.",
+    "added": "تمت الإضافة إلى قائمة المراقبة",
+    "removed": "تمت الإزالة من قائمة المراقبة",
+    "saveLabel": "إضافة {name} إلى قائمة المراقبة",
+    "removeLabel": "إزالة {name} من قائمة المراقبة",
+    "availableBanner": "{count, plural, one {سند واحد متابع مفتوح للتمويل الآن.} other {# سندات متابعة مفتوحة للتمويل الآن.}}",
+    "statusOpen": "مفتوح للتمويل",
+    "statusUpcoming": "غير متاح بعد",
+    "notYetAvailable": "سنشير هنا بمجرد فتحه."
   },
   "Deposit": {
     "stepAmount": "المبلغ",
@@ -143,8 +175,10 @@
     "pendingTx": "tx a91f…3c0d · عرض على Stellar Expert ↗",
     "successH1": "مرحباً بك في المجمع",
     "successBody": "حصلت على <num>{shares} HBS</num> وتدعم الآن <b>{count} مشاريع مؤكدة</b>.",
+    "viewInvestment": "عرض استثمارك",
     "viewExpert": "عرض على Stellar Expert",
-    "goPortfolio": "انتقل إلى المحفظة"
+    "goPortfolio": "انتقل إلى المحفظة",
+    "viewInvestment": "View your investment"
   },
   "Portfolio": {
     "eyebrow": "محفظتك",
@@ -159,8 +193,23 @@
     "impactBody": "حصتك تساعد في تمويل <b>{count} مشاريع مؤكدة</b> في 6 دول.",
     "projectsBacked": "المشاريع المدعومة",
     "weightedGreen": "الدرجة الخضراء المرجحة",
+    "riskScore": "درجة مخاطر المحفظة",
+    "riskTierConservative": "محافظ",
+    "riskTierModerate": "معتدل",
+    "riskTierAggressive": "عالي المخاطر",
+    "riskCaption": "بناءً على مزيج تصنيفات السندات في حيازاتك.",
     "activityTitle": "النشاط",
-    "activityNote": "كل إدخال → Stellar Expert"
+    "activityNote": "كل إدخال → Stellar Expert",
+    "riskScore": "Portfolio risk score",
+    "riskTierConservative": "Conservative",
+    "riskTierModerate": "Moderate",
+    "riskTierAggressive": "Aggressive",
+    "riskCaption": "Based on the mix of bond ratings in your holdings.",
+    "referralProgram": "Referral program",
+    "referralLink": "Your referral link",
+    "referralCaption": "Share your link to invite friends. You both get rewards when they invest.",
+    "copyLink": "Copy link",
+    "copied": "Copied"
   },
   "Withdraw": {
     "h1": "سحب من المجمع",
@@ -215,7 +264,6 @@
     "toastApprovedMsg": "يمكن لـ {name} تسجيل المشاريع الآن.",
     "toastRevokedTitle": "تم إلغاء اعتماد المبدع",
     "toastRevokedMsg": "لم يعد {name} قادراً على تسجيل مشاريع جديدة.",
-    "toastRevokedUndo": "تراجع",
     "panelPushTitle": "إرسال تحديث درجات",
     "panelPushHint": "يكتب قراءة Oracle جديدة في ProjectRegistry.",
     "panelFundTitle": "تمويل مشروع",
@@ -247,7 +295,10 @@
     "scoreFieldCredit": "جودة الائتمان",
     "scoreFieldGreen": "التأثير الأخضر",
     "actionCancel": "إلغاء",
-    "actionSave": "حفظ"
+    "actionSave": "حفظ",
+    "revokeConfirm": "Yes, revoke",
+    "revokeCancel": "Cancel",
+    "actionUndo": "Undo"
   },
   "Creator": {
     "goalInvalid": "أدخل هدف تمويل أكبر من 0",
@@ -380,5 +431,41 @@
     "sendLinkAnyway": "ربط هذا البريد الإلكتروني بحسابي",
     "linkSentMessage": "تم إرسال رابط تسجيل الدخول إلى {email}.",
     "close": "إغلاق"
+  },
+  "YieldAlert": {
+    "modalTitle": "Set yield alert",
+    "editTitle": "Edit yield alert",
+    "conditionLabel": "Alert when yield goes",
+    "thresholdLabel": "Threshold",
+    "operatorAbove": "Above",
+    "operatorBelow": "Below",
+    "previewText": "Alert me when {name} yield goes {direction} {threshold}%",
+    "saveCta": "Save alert",
+    "deleteCta": "Delete",
+    "cancelCta": "Cancel",
+    "addLabel": "Set yield alert for {name}",
+    "editLabel": "Edit yield alert for {name}",
+    "createdToastTitle": "Yield alert set",
+    "createdToastMessage": "You'll be notified when {name} yield crosses {threshold}%.",
+    "updatedToastTitle": "Yield alert updated",
+    "updatedToastMessage": "Alert for {name} updated to {threshold}%.",
+    "deletedToastTitle": "Yield alert removed",
+    "triggeredToastTitle": "🔔 Yield alert triggered",
+    "triggeredToastMessage": "{name} yield is {yield}% — {direction} your {threshold}% threshold."
+  },
+  "Watchlist": {
+    "title": "Your watchlist",
+    "sub": "Bonds you're tracking. Saving one doesn't invest — it just keeps it close, and flags when it opens for funding.",
+    "cardFundedFromPool": "Funded from the pool",
+    "emptyTitle": "Nothing saved yet",
+    "emptySub": "Open a bond from Explore and tap the star to add it here. We'll show you when a saved bond is open for funding.",
+    "added": "Added to watchlist",
+    "removed": "Removed from watchlist",
+    "saveLabel": "Add {name} to watchlist",
+    "removeLabel": "Remove {name} from watchlist",
+    "availableBanner": "{count, plural, one {# saved bond is open for funding right now.} other {# saved bonds are open for funding right now.}}",
+    "statusOpen": "Open for funding",
+    "statusUpcoming": "Not yet available",
+    "notYetAvailable": "We'll flag it here when it opens."
   }
 }

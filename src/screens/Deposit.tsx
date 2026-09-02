@@ -13,6 +13,8 @@ import { HB_DATA } from '../data'
 import { roundToCents, formatDecimal, formatSharePrice, parseAmount } from '../lib/format'
 import { projectedReturn } from '../lib/bondUtils'
 import { useDepositGuard } from '../hooks/useDepositGuard'
+import { RecurringInvestmentOptions } from '../components/RecurringInvestmentOptions'
+import { saveRecurringInvestment } from '../lib/recurringInvestments'
 
 /**
  * Deposit — the flow that must be perfect. One column, one decision per step:
@@ -31,6 +33,12 @@ const num = (chunks: ReactNode) => (
   </b>
 )
 const strong = (chunks: ReactNode) => <b style={{ color: 'var(--ink)' }}>{chunks}</b>
+const MIN_DEPOSIT_USDC = 1
+const USER_BALANCE_USDC = 240
+const DEFAULT_DEPOSIT_USDC = '100'
+const QUICK_DEPOSIT_AMOUNTS_USDC = [25, 50, 100]
+const DEPOSIT_FEE_USDC = 0.01
+const RATE_STALE_AFTER_SECONDS = 30
 
 export function Deposit({ onDone }: DepositProps) {
   const t = useTranslations('Deposit')
@@ -44,9 +52,11 @@ export function Deposit({ onDone }: DepositProps) {
     refresh: refreshVault,
   } = useVault()
   const [step, setStep] = useState<DepositStep>('amount')
-  const [amount, setAmount] = useState('100')
+  const [amount, setAmount] = useState(DEFAULT_DEPOSIT_USDC)
   const [investmentId, setInvestmentId] = useState<string | null>(null)
   const [txError, setTxError] = useState<string | null>(null)
+  const [recurring, setRecurring] = useState(false)
+  const [recurrenceDay, setRecurrenceDay] = useState(1)
   const priceFetchedAt = fetchedAt ?? new Date()
   const [now, setNow] = useState(() => Date.now())
 
@@ -56,7 +66,7 @@ export function Deposit({ onDone }: DepositProps) {
   }, [])
 
   const rateAgeSeconds = Math.floor((now - priceFetchedAt.getTime()) / 1000)
-  const isRateStale = rateAgeSeconds > 30
+  const isRateStale = rateAgeSeconds > RATE_STALE_AFTER_SECONDS
 
   const mountedRef = useRef(true)
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -91,7 +101,7 @@ export function Deposit({ onDone }: DepositProps) {
 
   const handleDone = () => {
     setAmount('')
-    setTxHash(null)
+    setInvestmentId(null)
     setTxError(null)
     changeStep('amount')
     onDone()
@@ -100,7 +110,7 @@ export function Deposit({ onDone }: DepositProps) {
   // Consolidate amount parsing with parseAmount helper (#417).
   const n = parseAmount(amount)
   const price = livePrice
-  const balance = 240
+  const balance = USER_BALANCE_USDC
 
   const renderStep = (currentStep: DepositStep) => {
     switch (currentStep) {
@@ -131,8 +141,8 @@ export function Deposit({ onDone }: DepositProps) {
               label={t('amountLabel')}
               currency="USDC"
               balanceLabel={t('balanceLabel')}
-              balance="240.00"
-              chips={[25, 50, 100]}
+              balance={USER_BALANCE_USDC.toFixed(2)}
+              chips={QUICK_DEPOSIT_AMOUNTS_USDC}
               cap={balance}
               capMessage={t('capMessage', { cap: balance })}
               maxChipLabel={t('maxChip')}
@@ -180,10 +190,11 @@ export function Deposit({ onDone }: DepositProps) {
                         color: 'var(--ink-60)',
                       }}
                     >
-                      Fee: &lt; $0.01 · Net proceeds: ≈ {formatDecimal(roundToCents(n - 0.01), 2)}{' '}
-                      USDC worth {formatDecimal(n / price, 4)} HBS (real-time)
+                      Fee: &lt; $0.01 · Net proceeds: ≈{' '}
+                      {formatDecimal(roundToCents(n - DEPOSIT_FEE_USDC), 2)} USDC worth{' '}
+                      {formatDecimal(n / price, 4)} HBS (real-time)
                     </span>
-                    {n >= 1 && (
+                    {n >= MIN_DEPOSIT_USDC && (
                       <div
                         style={{
                           display: 'flex',
@@ -220,14 +231,23 @@ export function Deposit({ onDone }: DepositProps) {
               }
             />
             <p style={liqLine}>{t.rich('liquidLine', { b: strong })}</p>
+            <RecurringInvestmentOptions
+              enabled={recurring}
+              amount={n}
+              dayOfMonth={recurrenceDay}
+              onEnabledChange={setRecurring}
+              onDayChange={setRecurrenceDay}
+            />
             <Button
               variant="primary"
               size="lg"
               style={{ width: '100%', marginTop: 20 }}
-              disabled={n < 1 || n > balance}
-              reason={n > balance ? t('reasonExceeds') : n < 1 ? t('reasonMin') : undefined}
+              disabled={n < MIN_DEPOSIT_USDC || n > balance}
+              reason={
+                n > balance ? t('reasonExceeds') : n < MIN_DEPOSIT_USDC ? t('reasonMin') : undefined
+              }
               onClick={() => {
-                if (n < 1 || n > balance) {
+                if (n < MIN_DEPOSIT_USDC || n > balance) {
                   setTxError(n > balance ? 'amount_exceeds_balance' : 'amount_too_low')
                   setTimeout(() => scrollToFirstError(document), 50)
                   return
@@ -235,7 +255,9 @@ export function Deposit({ onDone }: DepositProps) {
                 changeStep('review')
               }}
             >
-              {n >= 1 && n <= balance ? t('investCta', { amount: n }) : t('investCtaEmpty')}
+              {n >= MIN_DEPOSIT_USDC && n <= balance
+                ? t('investCta', { amount: n })
+                : t('investCtaEmpty')}
             </Button>
           </Panel>
         )
@@ -266,10 +288,9 @@ export function Deposit({ onDone }: DepositProps) {
                 <span style={{ fontFamily: 'var(--font-data)', fontWeight: 600 }}>
                   {formatDecimal(pendingDeposit.amount, 2)} USDC
                 </span>{' '}
-                (started{' '}
-                {Math.floor((Date.now() - pendingDeposit.startedAt) / 1000)}s ago) has not yet
-                confirmed. Submitting again before it settles may result in a duplicate investment.
-                Check your portfolio before proceeding.{' '}
+                (started {Math.floor((Date.now() - pendingDeposit.startedAt) / 1000)}s ago) has not
+                yet confirmed. Submitting again before it settles may result in a duplicate
+                investment. Check your portfolio before proceeding.{' '}
                 <button
                   type="button"
                   onClick={clearPending}
@@ -361,10 +382,17 @@ export function Deposit({ onDone }: DepositProps) {
                   color: 'var(--ember)',
                 }}
               >
-                Exchange rate is more than 30 seconds old — please refresh to get the latest price
-                before confirming.
+                Exchange rate is more than {RATE_STALE_AFTER_SECONDS} seconds old — please refresh
+                to get the latest price before confirming.
               </div>
             )}
+            <RecurringInvestmentOptions
+              enabled={recurring}
+              amount={n}
+              dayOfMonth={recurrenceDay}
+              onEnabledChange={setRecurring}
+              onDayChange={setRecurrenceDay}
+            />
             <p
               style={{
                 fontFamily: 'var(--font-body)',
@@ -393,22 +421,20 @@ export function Deposit({ onDone }: DepositProps) {
                   const controller = new AbortController()
                   abortControllerRef.current = controller
                   try {
-                    const { investmentId } = await submitDeposit(n, address ?? '', sign, controller.signal)
+                    const hash = await submitDeposit(n, address ?? '', sign, controller.signal)
                     if (mountedRef.current) {
-                      setInvestmentId(investmentId)
+                      setInvestmentId(hash)
                       // Confirmed success — safe to clear the pending guard.
                       clearPending()
-                      setTxHash(hash)
+                      if (recurring) {
+                        saveRecurringInvestment({ bondId: 'HBS', amount: n, dayOfMonth: recurrenceDay })
+                      }
                       changeStep('success')
                       toast({
                         tone: 'success',
                         title: 'Deposit confirmed',
-                        message: (
-                          <>
-                            Successfully invested {n} USDC in the pool.{' '}
-                            <a href={`/investments/${investmentId}`}>View investment</a>
-                          </>
-                        ),
+                        message: `Successfully invested ${n} USDC in the pool.`,
+                        href: `/investments/${hash}`,
                       })
                     }
                   } catch (e) {

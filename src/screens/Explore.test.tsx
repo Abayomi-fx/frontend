@@ -10,7 +10,7 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(mockSearch),
 }))
 
-vi.mock('@/lib/api', () => ({ getProjects: vi.fn() }))
+vi.mock('@/lib/api', () => ({ getProjectsPaginated: vi.fn() }))
 
 vi.mock('../components', async () => {
   const actual = await vi.importActual<typeof import('../components')>('../components')
@@ -20,17 +20,17 @@ vi.mock('../components', async () => {
   }
 })
 
-import { getProjects } from '@/lib/api'
+import { getProjectsPaginated } from '@/lib/api'
 import { Explore } from './Explore'
 import type { Project, ProjectType } from '../data'
 
-const mockGetProjects = vi.mocked(getProjects)
+const mockGetProjectsPaginated = vi.mocked(getProjectsPaginated)
 
 /** A registry large enough to span several pages. */
-function makeProjects(count: number, type: ProjectType = 'Solar'): Project[] {
+function makeProjects(count: number, type: ProjectType = 'Solar', offset = 0): Project[] {
   return Array.from({ length: count }, (_, i) => ({
-    id: String(i + 1),
-    name: `Project ${i + 1}`,
+    id: String(i + 1 + offset),
+    name: `Project ${i + 1 + offset}`,
     location: 'Nowhere',
     type,
     credit: 80,
@@ -43,14 +43,32 @@ function makeProjects(count: number, type: ProjectType = 'Solar'): Project[] {
 
 const cards = () => screen.queryAllByTestId('card')
 
-describe('Explore — incremental loading', () => {
+/** The "load more" control, labeled with the chunk size it will add. */
+const loadMoreButton = (count: number) =>
+  screen.getByRole('button', { name: `Show ${count} more` })
+
+describe('Explore — pagination', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockSearch = ''
   })
 
+  /** Serve `all` through the paginated API, as the real backend would. */
+  function mockPaginated(all: Project[]) {
+    mockGetProjectsPaginated.mockImplementation((page = 1, pageSize = 12) => {
+      const start = (page - 1) * pageSize
+      return Promise.resolve({
+        projects: all.slice(start, start + pageSize),
+        total: all.length,
+        page,
+        pageSize,
+        hasMore: start + pageSize < all.length,
+      })
+    })
+  }
+
   it('renders only the first page of a large registry', async () => {
-    mockGetProjects.mockResolvedValue(makeProjects(40))
+    mockPaginated(makeProjects(40))
     render(<Explore onOpen={vi.fn()} />)
     // The whole point of the change: 40 projects must not all mount at once.
     await waitFor(() => expect(cards().length).toBe(12))
@@ -58,47 +76,51 @@ describe('Explore — incremental loading', () => {
 
   it('grows a page at a time when asked for more', async () => {
     const user = userEvent.setup()
-    mockGetProjects.mockResolvedValue(makeProjects(40))
+    mockPaginated(makeProjects(40))
     render(<Explore onOpen={vi.fn()} />)
-    await waitFor(() => expect(cards().length).toBe(12))
+    await waitFor(() => expect(cards()[0]).toHaveTextContent('Project 1'))
 
-    await user.click(screen.getByRole('button', { name: /show 12 more/i }))
-    expect(cards().length).toBe(24)
+    await user.click(loadMoreButton(12))
+    await waitFor(() => expect(cards().length).toBe(24))
+    expect(cards()[12]).toHaveTextContent('Project 13')
 
-    await user.click(screen.getByRole('button', { name: /show 12 more/i }))
-    expect(cards().length).toBe(36)
+    await user.click(loadMoreButton(12))
+    await waitFor(() => expect(cards().length).toBe(36))
+    expect(cards()[24]).toHaveTextContent('Project 25')
   })
 
   it('offers only the remainder on the final page, then stops', async () => {
     const user = userEvent.setup()
-    mockGetProjects.mockResolvedValue(makeProjects(14))
+    mockPaginated(makeProjects(28))
     render(<Explore onOpen={vi.fn()} />)
     await waitFor(() => expect(cards().length).toBe(12))
 
-    // 2 left, so the control must not promise a full page of 12.
-    const more = screen.getByRole('button', { name: /show 2 more/i })
-    await user.click(more)
+    await user.click(loadMoreButton(12))
+    await waitFor(() => expect(cards().length).toBe(24))
 
-    expect(cards().length).toBe(14)
+    // Final chunk only has the 4 remaining projects.
+    await user.click(loadMoreButton(4))
+    await waitFor(() => expect(cards().length).toBe(28))
+
     // Nothing left to load — the control retires rather than sitting there inert.
-    expect(screen.queryByRole('button', { name: /show .* more/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /more/i })).not.toBeInTheDocument()
   })
 
   it('does not show the control when everything already fits', async () => {
-    mockGetProjects.mockResolvedValue(makeProjects(5))
+    mockPaginated(makeProjects(5))
     render(<Explore onOpen={vi.fn()} />)
     await waitFor(() => expect(cards().length).toBe(5))
-    expect(screen.queryByRole('button', { name: /show .* more/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /more/i })).not.toBeInTheDocument()
   })
 
   it('reports progress through the list as text', async () => {
-    mockGetProjects.mockResolvedValue(makeProjects(40))
+    mockPaginated(makeProjects(40))
     render(<Explore onOpen={vi.fn()} />)
-    await waitFor(() => expect(screen.getByText(/showing 12 of 40 projects/i)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/Showing 12 of 40 projects/i)).toBeInTheDocument())
   })
 
   it('falls back to the bundled registry when the API fails', async () => {
-    mockGetProjects.mockRejectedValue(new Error('offline'))
+    mockGetProjectsPaginated.mockRejectedValue(new Error('offline'))
     render(<Explore onOpen={vi.fn()} />)
     // The fallback path must still paginate rather than dumping the list.
     await waitFor(() => expect(cards().length).toBeGreaterThan(0))
@@ -107,16 +129,17 @@ describe('Explore — incremental loading', () => {
 
   it('restarts at the first page when the filter changes', async () => {
     const user = userEvent.setup()
-    mockGetProjects.mockResolvedValue([...makeProjects(20, 'Solar'), ...makeProjects(20, 'Wind')])
+    mockPaginated([...makeProjects(20, 'Solar'), ...makeProjects(20, 'Wind', 20)])
     render(<Explore onOpen={vi.fn()} />)
     await waitFor(() => expect(cards().length).toBe(12))
 
-    await user.click(screen.getByRole('button', { name: /show 12 more/i }))
-    expect(cards().length).toBe(24)
+    await user.click(loadMoreButton(12))
+    await waitFor(() => expect(cards().length).toBe(24))
 
-    // Switching filter yields a different list; carrying the old depth over
+    // Switching filter yields a different list; carrying the old page over
     // would reveal more of the new list than a first page should.
     await user.click(screen.getByRole('button', { name: 'Wind' }))
     await waitFor(() => expect(cards().length).toBe(12))
+    expect(cards()[0]).toHaveTextContent('Project 21')
   })
 })

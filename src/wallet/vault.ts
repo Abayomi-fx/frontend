@@ -69,14 +69,17 @@ export const vault = {
 // ---------------------------------------------------------------------------
 
 const CONTRACT_ID = process.env.NEXT_PUBLIC_VAULT_CONTRACT_ID
-const STELLAR_NETWORK =
-  process.env.NEXT_PUBLIC_STELLAR_NETWORK ?? 'public'
+const STELLAR_NETWORK = process.env.NEXT_PUBLIC_STELLAR_NETWORK ?? 'public'
 const RPC_URL =
   process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ??
-  (STELLAR_NETWORK === 'public' ? 'https://soroban.stellar.org' : 'https://soroban-testnet.stellar.org')
+  (STELLAR_NETWORK === 'public'
+    ? 'https://soroban.stellar.org'
+    : 'https://soroban-testnet.stellar.org')
 const HORIZON_URL =
   process.env.NEXT_PUBLIC_HORIZON_URL ??
-  (STELLAR_NETWORK === 'public' ? 'https://horizon.stellar.org' : 'https://horizon-testnet.stellar.org')
+  (STELLAR_NETWORK === 'public'
+    ? 'https://horizon.stellar.org'
+    : 'https://horizon-testnet.stellar.org')
 
 /** Max time to wait for a Stellar RPC/Horizon response before treating it as offline. */
 const RPC_TIMEOUT_MS = 5000
@@ -129,16 +132,24 @@ async function withTimeout<T>(promise: Promise<T>, message: string): Promise<T> 
 }
 
 /** Call a Soroban view function (no state mutation) and return the raw ScVal. */
-async function sorobanSimulate(sourceAddress: string, method: string, args: unknown[] = []) {
+async function sorobanSimulate(
+  sourceAddress: string,
+  method: string,
+  args: unknown[] = [],
+  network = STELLAR_NETWORK,
+) {
   const { rpc, Contract, TransactionBuilder, Networks, Account, nativeToScVal } =
     await import('@stellar/stellar-sdk')
 
-  const server = new rpc.Server(RPC_URL, { allowHttp: false })
+  const rpcUrl =
+    process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ??
+    (network === 'testnet' ? 'https://soroban-testnet.stellar.org' : 'https://soroban.stellar.org')
+  const server = new rpc.Server(rpcUrl, { allowHttp: false })
   const contract = new Contract(CONTRACT_ID!)
   // Sequence '0' is fine for simulation — only the address format matters.
   const source = new Account(sourceAddress, '0')
   const scArgs = args.map((a) => nativeToScVal(a))
-  const networkPassphrase = STELLAR_NETWORK === 'public' ? Networks.PUBLIC : Networks.TESTNET
+  const networkPassphrase = network === 'public' ? Networks.PUBLIC : Networks.TESTNET
 
   const tx = new TransactionBuilder(source, { fee: '100', networkPassphrase })
     .addOperation(contract.call(method, ...scArgs))
@@ -177,12 +188,15 @@ export async function fetchSharePrice(sourceAddress: string): Promise<string> {
  * Read total_assets from the on-chain vault.
  * Throws when NEXT_PUBLIC_VAULT_CONTRACT_ID is not set.
  */
-export async function fetchTotalAssets(sourceAddress: string): Promise<number> {
+export async function fetchTotalAssets(
+  sourceAddress: string,
+  network = STELLAR_NETWORK,
+): Promise<number> {
   if (!CONTRACT_ID) throw new Error('NEXT_PUBLIC_VAULT_CONTRACT_ID not set')
   if (offline) return cachedTotalAssets ?? 0
   const { scValToNative } = await import('@stellar/stellar-sdk')
   try {
-    const retval = await sorobanSimulate(sourceAddress, 'total_assets')
+    const retval = await sorobanSimulate(sourceAddress, 'total_assets', [], network)
     cachedTotalAssets = Number(scValToNative(retval))
     return cachedTotalAssets
   } catch {

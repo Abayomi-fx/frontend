@@ -1,11 +1,24 @@
-"use client"
+'use client'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { ThemeProvider } from '../theme/ThemeProvider'
 import { WalletProvider, useWallet } from '../wallet/WalletProvider'
 import { ToastProvider, SessionTimeoutModal, useToast } from '../components'
 import { WatchlistProvider } from '../watchlist/WatchlistProvider'
+import { YieldAlertProvider } from '../alerts/YieldAlertProvider'
 import { useSessionTimeout } from '../hooks/useSessionTimeout'
+import { usePathname } from 'next/navigation'
+import { track } from '../lib/analytics'
+
+function Analytics() {
+  const pathname = usePathname()
+
+  useEffect(() => {
+    void track('page_view', { path: pathname })
+  }, [pathname])
+
+  return null
+}
 
 function SessionWatcher() {
   const { connected, disconnect } = useWallet()
@@ -63,7 +76,7 @@ function OfflineBanner() {
       try {
         const horizonUrl =
           process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://horizon.stellar.org'
-        const response = await fetch(`horizonUrl/`, { signal: controller.signal })
+        const response = await fetch(`${horizonUrl}/`, { signal: controller.signal })
         if (!response.ok) throw new Error('Stellar node unreachable')
         if (active && currentController === controller) setStellarReachable(true)
       } catch {
@@ -140,9 +153,12 @@ export function Providers({ children }: { children: ReactNode }) {
       <WalletProvider>
         <ToastProvider>
           <WatchlistProvider>
-            <SessionWatcher />
-            <OfflineBanner />
-            {children}
+            <YieldAlertProvider>
+              <Analytics />
+              <SessionWatcher />
+              <OfflineBanner />
+              {children}
+            </YieldAlertProvider>
           </WatchlistProvider>
         </ToastProvider>
       </WalletProvider>

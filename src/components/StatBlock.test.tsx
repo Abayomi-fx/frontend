@@ -35,6 +35,20 @@ describe('StatBlock delta direction inference', () => {
     expect(screen.getByText(/↑/)).toBeInTheDocument()
   })
 
+  it('adds a mobile stacking class when stackOnMobile is requested', () => {
+    const { container } = render(
+      <StatBlock
+        label="Value"
+        value="$24,180"
+        delta="++$612.18 (2.6%) since deposit + $320 pending"
+        size="lg"
+        stackOnMobile
+      />,
+    )
+
+    expect(container.querySelector('.hb-stat-block-row--stack')).toBeInTheDocument()
+  })
+
   it('does not render delta span when delta is undefined', () => {
     const { container } = render(<StatBlock label="Price" value="$100" />)
     expect(container.textContent).not.toContain('↑')
