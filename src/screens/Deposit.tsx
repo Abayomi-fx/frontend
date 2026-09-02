@@ -13,6 +13,8 @@ import { HB_DATA } from '../data'
 import { roundToCents, formatDecimal, formatSharePrice, parseAmount } from '../lib/format'
 import { projectedReturn } from '../lib/bondUtils'
 import { useDepositGuard } from '../hooks/useDepositGuard'
+import { RecurringInvestmentOptions } from '../components/RecurringInvestmentOptions'
+import { saveRecurringInvestment } from '../lib/recurringInvestments'
 
 /**
  * Deposit — the flow that must be perfect. One column, one decision per step:
@@ -53,6 +55,8 @@ export function Deposit({ onDone }: DepositProps) {
   const [amount, setAmount] = useState(DEFAULT_DEPOSIT_USDC)
   const [investmentId, setInvestmentId] = useState<string | null>(null)
   const [txError, setTxError] = useState<string | null>(null)
+  const [recurring, setRecurring] = useState(false)
+  const [recurrenceDay, setRecurrenceDay] = useState(1)
   const priceFetchedAt = fetchedAt ?? new Date()
   const [now, setNow] = useState(() => Date.now())
 
@@ -226,6 +230,13 @@ export function Deposit({ onDone }: DepositProps) {
               }
             />
             <p style={liqLine}>{t.rich('liquidLine', { b: strong })}</p>
+            <RecurringInvestmentOptions
+              enabled={recurring}
+              amount={n}
+              dayOfMonth={recurrenceDay}
+              onEnabledChange={setRecurring}
+              onDayChange={setRecurrenceDay}
+            />
             <Button
               variant="primary"
               size="lg"
@@ -371,6 +382,13 @@ export function Deposit({ onDone }: DepositProps) {
                 before confirming.
               </div>
             )}
+            <RecurringInvestmentOptions
+              enabled={recurring}
+              amount={n}
+              dayOfMonth={recurrenceDay}
+              onEnabledChange={setRecurring}
+              onDayChange={setRecurrenceDay}
+            />
             <p
               style={{
                 fontFamily: 'var(--font-body)',
@@ -404,6 +422,9 @@ export function Deposit({ onDone }: DepositProps) {
                       setInvestmentId(hash)
                       // Confirmed success — safe to clear the pending guard.
                       clearPending()
+                      if (recurring) {
+                        saveRecurringInvestment({ bondId: 'HBS', amount: n, dayOfMonth: recurrenceDay })
+                      }
                       changeStep('success')
                       toast({
                         tone: 'success',
