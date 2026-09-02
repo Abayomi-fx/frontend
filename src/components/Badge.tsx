@@ -7,7 +7,7 @@ import { type CSSProperties, type HTMLAttributes, type ReactNode } from 'react'
  */
 export type BadgeTone = 'neutral' | 'solar' | 'growth' | 'ember' | 'testnet'
 
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+export interface BadgeProps extends HTMLAttributes<HSTANSpanElement> {
   tone?: BadgeTone
   icon?: ReactNode
   children: ReactNode
@@ -17,30 +17,30 @@ export function Badge({ tone = 'neutral', icon = null, children, style, ...rest 
   const tones: Record<BadgeTone, CSSProperties> = {
     neutral: {
       background: 'var(--ink-06)',
-      color: 'var(--ink)',
+      color: 'var(--ink-strong, #1a1a1a)',
       border: '1px solid var(--ink-12)',
     },
     solar: {
       background: 'var(--solar-12)',
-      color: 'var(--ink)',
+      color: 'var(--ink-strong, #1a1a1a)',
       border: '1px solid var(--solar-24)',
     },
     growth: {
-      background: 'var(--growth-12)',
-      color: 'var(--growth)',
-      border: '1px solid transparent',
+      background: 'color-mix(in srgb, var(--growth-strong, #0b6e45) 12%, white)',
+      color: 'var(--ink-strong, #1a1a1a)',
+      border: '1px solid var(--growth-strong, #0b6e45)',
     },
     ember: {
       background: 'var(--ember-12)',
-      color: 'var(--ember)',
-      border: '1px solid transparent',
+      color: 'var(--ink-strong, #1a1a1a)',
+      border: '1px solid var(--ember-strong, #b45309)',
     },
-    testnet: { background: 'var(--solar)', color: 'var(--ink)', border: '1px solid transparent' },
+    testnet: { background: 'var(--solar)', color: 'var(--ink-strong, #1a1a1a)', border: '1px solid transparent' },
   }
 
   return (
     <span
-      style={{
+      style={
         display: 'inline-flex',
         alignItems: 'center',
         gap: 5,
@@ -55,7 +55,7 @@ export function Badge({ tone = 'neutral', icon = null, children, style, ...rest 
         whiteSpace: 'nowrap',
         ...tones[tone],
         ...style,
-      }}
+      }
       {...rest}
     >
       {icon}
