@@ -1,8 +1,18 @@
 'use client'
 
-import { useId, useState, useEffect, type CSSProperties, type ReactNode } from 'react'
+import { useId, useState, useEffect, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { ProjectCard, Tag, Card, UploadIcon } from '@/components'
+import {
+  cardTitle,
+  subtle,
+  inputStyle,
+  labelText,
+  fieldLabel,
+  fieldSpacing,
+  hintText,
+  errorText,
+} from '@/theme'
 import { PROJECT_TYPES, DRAFT_PROJECT, type ProjectType } from '@/data/creator'
 import { formatMoney } from '@/lib/format'
 
@@ -155,11 +165,7 @@ export function ProjectBuilder() {
             />
           </div>
           {goalError && (
-            <p
-              id={goalErrorId}
-              role="alert"
-              style={errorText}
-            >
+            <p id={goalErrorId} role="alert" style={errorText}>
               {goalError}
             </p>
           )}
@@ -189,11 +195,7 @@ export function ProjectBuilder() {
               border: '1px solid var(--ink)',
             }}
           />
-          <span
-            style={labelText}
-          >
-            {t('previewLabel')}
-          </span>
+          <span style={labelText}>{t('previewLabel')}</span>
           <span style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'var(--ink-60)' }}>
             {t('previewSub')}
           </span>
@@ -278,15 +280,8 @@ function DropZone({
         }}
       />
       <UploadIcon style={{ color: 'var(--ink)' }} />
-      <div
-        style={labelText}
-      >
-        {label}
-      </div>
-      <div
-        id={hintId}
-        style={hintText}
-      >
+      <div style={labelText}>{label}</div>
+      <div id={hintId} style={hintText}>
         {selectedFiles || hint}
       </div>
     </label>
@@ -312,66 +307,9 @@ function Field({
 
 function Label({ htmlFor, children }: { htmlFor?: string; children: ReactNode }) {
   return (
-    <label
-      htmlFor={htmlFor}
-      style={fieldLabel}
-    >
+    <label htmlFor={htmlFor} style={fieldLabel}>
       {children}
     </label>
   )
 }
 
-const cardTitle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: 700,
-  fontSize: 'var(--type-h5)',
-  margin: '0 0 8px',
-  color: 'var(--ink)',
-  letterSpacing: '-0.01em',
-}
-const subtle: CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-small)',
-  lineHeight: 1.5,
-  color: 'var(--ink-60)',
-}
-const inputStyle: CSSProperties = {
-  width: '100%',
-  height: 44,
-  padding: '0 14px',
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-data)',
-  color: 'var(--ink)',
-  background: 'var(--surface)',
-  border: '1px solid var(--ink-12)',
-  borderRadius: 'var(--radius-input)',
-  outline: 'none',
-  boxSizing: 'border-box',
-}
-
-const labelText: CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-caption)',
-  fontWeight: 600,
-  color: 'var(--ink)',
-}
-const fieldLabel: CSSProperties = {
-  ...labelText,
-  display: 'block',
-  marginBottom: 8,
-}
-const fieldSpacing: CSSProperties = {
-  marginBottom: 'var(--form-gap)',
-}
-const hintText: CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-eyebrow)',
-  color: 'var(--ink-60)',
-  lineHeight: 1.4,
-}
-const errorText: CSSProperties = {
-  margin: '8px 0 0',
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-caption)',
-  color: 'var(--ember)',
-}

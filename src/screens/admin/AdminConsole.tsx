@@ -1,8 +1,28 @@
 'use client'
 
-import { useState, type CSSProperties, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Badge, Button, AddressChip, useToast } from '@/components'
+import {
+  sectionCard,
+  statRow,
+  subtext,
+  consolePage,
+  header,
+  pageTitle,
+  sectionTitle,
+  statCell,
+  statCellLabel,
+  statValueRow,
+  statValue,
+  statUnit,
+  whitelistRow,
+  whitelistName,
+  whitelistNameText,
+  whitelistMeta,
+  whitelistData,
+  whitelistActions,
+} from '@/theme'
 import { VAULT_STATS, REGISTRY, WHITELIST, type RegistryEntry, type Creator } from '@/data/admin'
 import { RegistryTable } from './RegistryTable'
 import { OracleForms } from './OracleForms'
@@ -269,121 +289,4 @@ export { parseFundedNum }
 
 export function formatFunded(n: number): string {
   return sharedFormatMoney(n, { includeSymbol: true })
-}
-
-const sectionCard: CSSProperties = {
-  background: 'var(--surface)',
-  border: '1px solid var(--ink-12)',
-  borderRadius: 'var(--radius-card)',
-  padding: 16,
-  boxShadow: 'var(--shadow-sm)',
-}
-
-const statRow: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-}
-
-const subtext: CSSProperties = {
-  margin: 0,
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-caption)',
-  lineHeight: 1.5,
-  color: 'var(--ink-60)',
-}
-
-const consolePage: CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  color: 'var(--ink)',
-}
-
-const header: CSSProperties = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
-  gap: 16,
-  flexWrap: 'wrap',
-  marginBottom: 20,
-}
-
-const pageTitle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: 700,
-  fontSize: 'var(--type-h2)',
-  margin: 0,
-  color: 'var(--ink)',
-}
-
-const sectionTitle: CSSProperties = {
-  fontFamily: 'var(--font-display)',
-  fontWeight: 700,
-  fontSize: 'var(--type-h5)',
-  margin: 0,
-  color: 'var(--ink)',
-}
-
-const statCell: CSSProperties = {
-  flex: '1 1 0',
-  minWidth: 140,
-  padding: '14px 16px',
-}
-
-const statCellLabel: CSSProperties = {
-  marginBottom: 6,
-}
-
-const statValueRow: CSSProperties = {
-  display: 'flex',
-  alignItems: 'baseline',
-  gap: 5,
-  flexWrap: 'wrap',
-}
-
-const statValue: CSSProperties = {
-  fontFamily: 'var(--font-data)',
-  fontWeight: 600,
-  fontSize: 'var(--type-h4)',
-  color: 'var(--ink)',
-  fontFeatureSettings: '"tnum" 1',
-  lineHeight: 1.1,
-}
-
-const statUnit: CSSProperties = {
-  fontFamily: 'var(--font-data)',
-  fontSize: 'var(--type-fine)',
-  color: 'var(--ink-60)',
-}
-
-const whitelistRow: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 14,
-  flexWrap: 'wrap',
-  padding: '12px 0',
-}
-
-const whitelistName: CSSProperties = {
-  minWidth: 180,
-  flex: '1 1 200px',
-}
-
-const whitelistNameText: CSSProperties = {
-  fontWeight: 600,
-  fontSize: 'var(--type-small)',
-}
-
-const whitelistMeta: CSSProperties = {
-  ...subtext,
-  fontSize: 'var(--type-eyebrow)',
-}
-
-const whitelistData: CSSProperties = {
-  fontFamily: 'var(--font-data)',
-  fontFeatureSettings: '"tnum" 1',
-}
-
-const whitelistActions: CSSProperties = {
-  display: 'flex',
-  gap: 8,
-  marginInlineStart: 'auto',
 }

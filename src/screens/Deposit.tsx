@@ -97,7 +97,6 @@ export function Deposit({ onDone }: DepositProps) {
 
   const handleDone = () => {
     setAmount('')
-    setTxHash(null)
     setTxError(null)
     changeStep('amount')
     onDone()
@@ -399,22 +398,17 @@ export function Deposit({ onDone }: DepositProps) {
                   const controller = new AbortController()
                   abortControllerRef.current = controller
                   try {
-                    const { investmentId } = await submitDeposit(n, address ?? '', sign, controller.signal)
+                    const hash = await submitDeposit(n, address ?? '', sign, controller.signal)
                     if (mountedRef.current) {
-                      setInvestmentId(investmentId)
+                      setInvestmentId(hash)
                       // Confirmed success — safe to clear the pending guard.
                       clearPending()
-                      setTxHash(hash)
                       changeStep('success')
                       toast({
                         tone: 'success',
                         title: 'Deposit confirmed',
-                        message: (
-                          <>
-                            Successfully invested {n} USDC in the pool.{' '}
-                            <a href={`/investments/${investmentId}`}>View investment</a>
-                          </>
-                        ),
+                        message: `Successfully invested ${n} USDC in the pool.`,
+                        href: `/investments/${hash}`,
                       })
                     }
                   } catch (e) {

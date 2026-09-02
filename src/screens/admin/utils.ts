@@ -24,4 +24,3 @@ export function validateScores(credit: string, green: string): boolean {
   const greenN = Number(green)
   return creditN >= 0 && creditN <= 100 && greenN >= 0 && greenN <= 100
 }
-

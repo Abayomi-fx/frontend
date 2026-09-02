@@ -1,8 +1,9 @@
 'use client'
 
-import { memo, type CSSProperties, type ReactNode } from 'react'
+import { memo, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, StatBlock, LiquidityMeter, Card } from '../components'
+import { cardTitleLg as cardTitle } from '@/theme'
 import { Helio } from '../brand/Helio'
 import { HB_DATA } from '../data'
 import { getPortfolioRisk } from '../lib/bondUtils'
@@ -26,7 +27,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
   const t = useTranslations('Portfolio')
   const { connected, connect } = useWallet()
   const d = HB_DATA
-  const risk = getPortfolioRisk(d.holdings)
+  const risk = getPortfolioRisk((d as any).holdings ?? [])
   const referralLink = (d.you as { referralLink?: string }).referralLink
 
   if (!connected) {
@@ -45,7 +46,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
           }}
         >
           <div className="hb-eyebrow">{t('eyebrow')}</div>
-          <h2 style={ {...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
+          <h2 style={{ ...cardTitle, margin: 0 }}>Connect your wallet to view your portfolio</h2>
           <p
             style={{
               fontFamily: 'var--font-body',
@@ -226,7 +227,7 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
             }}
           >
             {t.rich('impactBody', {
-              b: (c: ReactNode) => <b style={ color: 'var--ink' }>{c}</b>,
+              b: (c: ReactNode) => <b style={{ color: 'var(--ink)' }}>{c}</b>,
               count: d.you.backed,
             })}
           </p>
@@ -239,27 +240,27 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
         {/* Activity */}
         <Card style={{ minWidth: 0, padding: 22 }}>
           <div
-            style={
+            style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBottom: 8,
-            }
+            }}
           >
             <h3 style={cardTitle}>{t('activityTitle')}</h3>
             <span
-              style={
+              style={{
                 fontFamily: 'var--font-body',
                 fontSize: 'var--type-caption',
                 color: 'var--ink-40',
-              }
+              }}
             >
               {t('activityNote')}
             </span>
           </div>
           {d.activity.map((a, i) => (
             <div
-              key={a.hash+}
+              key={a.hash}
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -271,43 +272,43 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
             >
               <div style={{ minWidth: 0 }}>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-small',
                     fontWeight: 600,
                     color: 'var--ink',
                     overflowWrap: 'anywhere',
-                  }
+                  }}
                 >
                   {a.kind}
                 </div>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-caption',
                     color: 'var--ink-60',
-                  }
+                  }}
                 >
                   {a.amount}
-                  {a.shares ? `£· ${a.shares} : ''}
+                  {a.shares ? ` · ${a.shares}` : ''}
                 </div>
               </div>
-              <div style={ textAlign: 'end' }>
+              <div style={{ textAlign: 'end' }}>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-body',
                     fontSize: 'var--type-caption',
                     color: 'var--ink-60',
-                  }
+                  }}
                 >
                   {a.when}
                 </div>
                 <div
-                  style={
+                  style={{
                     fontFamily: 'var--font-data',
                     fontSize: 'var--type-eyebrow',
                     color: 'var--ink-40',
-                  }
+                  }}
                 >
                   {a.hash} ↑
                 </div>
@@ -319,11 +320,3 @@ export const Portfolio = memo(function Portfolio({ onWithdraw, onDeposit }: Port
     </main>
   )
 })
-
-const cardTitle: CSSProperties = {
-  fontFamily: 'var--font-display',
-  fontWeight: 700,
-  fontSize: 'var--type-body-lg',
-  margin: '0 0 10px',
-  color: 'var--ink',
-}

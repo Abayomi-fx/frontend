@@ -1,8 +1,18 @@
-export const card = { color: 'var(--text-strong)' };
-export const input = { color: 'var(--text-strong)' };
-export const primaryButton = {
-  background: 'var(--primary-button-color)',
-  color: 'var(--button-primary-fg, #FFFFFF)',
-  border: '1px solid transparent',
-  borderRadius: 'var(--radius-pill)',
-};
+/**
+ * Re-exports theme style definitions for backward compatibility.
+ * All new styles and tokens should be imported directly from `@/theme`.
+ */
+
+export * from '@/theme/styles'
+export { theme, colors, spacing, radii, fonts, fontSizes, fontWeights } from '@/theme'
+
+export const card = {
+  background: 'var(--surface)',
+  border: '1px solid var(--ink-12)',
+  borderRadius: 'var(--radius-card)',
+}
+
+export const input = {
+  borderRadius: 'var(--radius-input)',
+  border: '1px solid var(--ink-12)',
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, effect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HB_DATA } from '../data'
 import { fetchSharePrice, fetchTotalAssets } from './vault'
 import { useWallet } from './WalletProvider'
@@ -42,7 +42,7 @@ export function useVault(): VaultState {
     setLoading(true)
     setError(null)
 
-    Promise.all([fetchSharePrice(address, network), fetchTotalAssets(address, network)])
+    Promise.all([fetchSharePrice(network), fetchTotalAssets(network)])
       .then(([price, assets]) => {
         setSharePrice(price)
         setTotalAssets(assets)
